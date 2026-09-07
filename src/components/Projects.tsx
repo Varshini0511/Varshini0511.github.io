@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Github, ExternalLink, Lock, Check, Sparkles } from "lucide-react";
+import { Github, ExternalLink, Lock, Check, Sparkles, Clock } from "lucide-react";
 import { profile } from "@/data/profile";
 
 const FILTERS = ["All", "Agents", "RAG", "Vector Search", "Multimodal", "Full-Stack", ".NET"] as const;
@@ -10,7 +10,8 @@ type Proj = (typeof profile.projects)[number];
 
 function RepoLinks({ p }: { p: Proj }) {
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-wrap items-center gap-2">
       {p.demo ? (
         <a
           href={p.demo}
@@ -38,6 +39,14 @@ function RepoLinks({ p }: { p: Proj }) {
         >
           <Github size={14} /> Source
         </a>
+      )}
+      </div>
+
+      {p.demoNote && (
+        <p className="flex max-w-md gap-1.5 text-[0.72rem] leading-snug text-[var(--faint)]">
+          <Clock size={12} className="mt-[2px] shrink-0" />
+          <span>{p.demoNote}</span>
+        </p>
       )}
     </div>
   );

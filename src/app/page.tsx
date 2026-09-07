@@ -19,7 +19,7 @@ export default function Home() {
           id="work"
           eyebrow="Selected work"
           title="AI systems, built end to end"
-          intro="Seven systems I designed and shipped over the past year while teaching myself AI engineering. Each one goes past the demo layer into the parts that decide whether something is production-worthy: retrieval quality, evaluation, guardrails and cost."
+          intro="Seven systems I designed and shipped over the past year while teaching myself AI engineering — every one of them deployed and live, not just a repo. Each goes past the demo layer into the parts that decide whether something is production-worthy: retrieval quality, evaluation, guardrails and cost."
         >
           <Projects />
         </Section>
