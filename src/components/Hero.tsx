@@ -4,7 +4,7 @@ import { profile } from "@/data/profile";
 export default function Hero() {
   return (
     <section id="top" className="hero-glow grid-bg relative overflow-hidden">
-      <div className="relative z-10 mx-auto max-w-6xl px-5 pb-20 pt-32 sm:px-8 sm:pb-28 sm:pt-40">
+      <div className="relative z-10 mx-auto max-w-6xl px-5 pb-16 pt-28 sm:px-8 sm:pb-24 sm:pt-32">
         {/* Current role first — it's the credibility line recruiters scan for. */}
         <div
           className="rise flex flex-wrap items-center gap-x-3 gap-y-2 text-sm"
@@ -21,14 +21,14 @@ export default function Hero() {
         </div>
 
         <h1
-          className="rise mt-6 max-w-4xl text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-6xl lg:text-7xl"
+          className="rise mt-5 max-w-4xl text-[1.85rem] leading-[1.15] sm:text-[2.25rem] lg:text-[2.6rem]"
           style={{ animationDelay: "140ms" }}
         >
           {profile.name}
         </h1>
 
         <p
-          className="rise mt-6 max-w-3xl text-lg leading-[1.65] text-[var(--muted)] sm:text-xl"
+          className="rise mt-5 max-w-3xl text-[1.02rem] leading-[1.7] text-[var(--muted)] sm:text-lg"
           style={{ animationDelay: "220ms" }}
         >
           {profile.tagline}
