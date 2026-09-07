@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Moon, Sun, Github, Linkedin, Menu, X } from "lucide-react";
 import { profile } from "@/data/profile";
 
+/** Root-relative so they work from project detail pages as well as the home page. */
 const LINKS = [
-  { href: "#work", label: "Work" },
-  { href: "#experience", label: "Experience" },
-  { href: "#skills", label: "Skills" },
-  { href: "#about", label: "About" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#work", label: "Work" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#skills", label: "Skills" },
+  { href: "/#about", label: "About" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export default function Nav() {
@@ -45,12 +47,12 @@ export default function Nav() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <a href="#top" className="group flex items-center gap-2.5 text-sm font-medium tracking-tight">
+        <Link href="/" className="group flex items-center gap-2.5 text-sm font-medium tracking-tight">
           <span className="grid h-7 w-7 place-items-center rounded-md border border-[var(--accent-line)] bg-[var(--accent-soft)] font-mono text-[11px] font-semibold text-[var(--accent)]">
             VK
           </span>
           <span className="hidden text-[var(--text)] sm:inline">{profile.name}</span>
-        </a>
+        </Link>
 
         <div className="hidden items-center gap-1 md:flex">
           {LINKS.map((l) => (
