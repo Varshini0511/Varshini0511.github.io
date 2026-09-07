@@ -18,6 +18,7 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
 
   useEffect(() => {
     const current = document.documentElement.getAttribute("data-theme");
@@ -26,7 +27,30 @@ export default function Nav() {
     const onScroll = () => setScrolled(window.scrollY > 16);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    // Highlight whichever section is currently in the upper part of the viewport.
+    const sections = LINKS.map((l) => document.getElementById(l.href.replace("/#", ""))).filter(
+      (el): el is HTMLElement => el !== null,
+    );
+
+    let io: IntersectionObserver | undefined;
+    if (sections.length && typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+          if (visible) setActive(visible.target.id);
+        },
+        { rootMargin: "-20% 0px -65% 0px" },
+      );
+      sections.forEach((s) => io!.observe(s));
+    }
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      io?.disconnect();
+    };
   }, []);
 
   const toggle = () => {
@@ -55,15 +79,24 @@ export default function Nav() {
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">
-          {LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="rounded-md px-3 py-2 text-sm text-[var(--muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
-            >
-              {l.label}
-            </a>
-          ))}
+          {LINKS.map((l) => {
+            const isActive = active === l.href.replace("/#", "");
+            return (
+              <a
+                key={l.href}
+                href={l.href}
+                aria-current={isActive ? "true" : undefined}
+                className={`relative rounded-md px-3 py-2 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)] ${
+                  isActive ? "text-[var(--text)]" : "text-[var(--muted)]"
+                }`}
+              >
+                {l.label}
+                {isActive && (
+                  <span className="absolute inset-x-3 -bottom-px h-px bg-[var(--accent)]" />
+                )}
+              </a>
+            );
+          })}
         </div>
 
         <div className="flex items-center gap-1">

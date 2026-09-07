@@ -38,7 +38,7 @@ function Block({
 }) {
   return (
     <section className="mt-14">
-      <h2 className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
+      <h2 className="label flex items-center gap-2 text-[var(--accent)]">
         <Icon size={14} /> {title}
       </h2>
       <div className="mt-5">{children}</div>
@@ -181,7 +181,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
             className="card card-hover group flex items-center justify-between gap-4 p-5"
           >
             <div>
-              <p className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--faint)]">Next project</p>
+              <p className="label text-[var(--faint)]">Next project</p>
               <p className="mt-1.5 text-lg font-semibold tracking-tight">{next.name}</p>
               <p className="mt-0.5 text-sm text-[var(--muted)]">{next.subtitle}</p>
             </div>

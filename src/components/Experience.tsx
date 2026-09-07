@@ -21,7 +21,7 @@ export default function Experience() {
               </div>
               <div className="text-right">
                 <p className="font-mono text-xs text-[var(--muted)]">{job.period}</p>
-                <p className="mt-1 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-[var(--faint)]">
+                <p className="label mt-1 text-[var(--faint)]">
                   {job.domain}
                 </p>
               </div>

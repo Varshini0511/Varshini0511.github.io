@@ -17,6 +17,7 @@ export default function Home() {
 
         <Section
           id="work"
+          index="01"
           eyebrow="Selected work"
           title="AI systems, built end to end"
           intro="Five systems I designed and shipped over the past year while teaching myself AI engineering — every one deployed and live, not just a repo. Each goes past the demo layer into the parts that decide whether something is production-worthy: retrieval quality, evaluation, guardrails and cost. Open any of them for the architecture and the reasoning behind it."
@@ -28,6 +29,7 @@ export default function Home() {
 
         <Section
           id="experience"
+          index="02"
           eyebrow="Experience"
           title={`${profile.yearsExperience} years of production engineering`}
           intro="Security-sensitive enterprise platforms — digital forensics, energy and insurance — across .NET, Angular and Azure."
@@ -39,6 +41,7 @@ export default function Home() {
 
         <Section
           id="skills"
+          index="03"
           eyebrow="Toolkit"
           title="What I work with"
           intro="Depth in the .NET and Azure stack, with a year of hands-on AI engineering layered on top."
@@ -48,7 +51,7 @@ export default function Home() {
 
         <div className="border-t" />
 
-        <Section id="about" eyebrow="About" title="A bit of background">
+        <Section id="about" index="04" eyebrow="About" title="A bit of background">
           <About />
         </Section>
 
@@ -56,6 +59,7 @@ export default function Home() {
 
         <Section
           id="contact"
+          index="05"
           eyebrow="Contact"
           title="Let's talk"
           intro="I'm open to Full-Stack and AI Engineering roles. The fastest way to reach me is email or LinkedIn."

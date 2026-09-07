@@ -30,7 +30,7 @@ export default function Contact() {
               />
             </div>
             <div>
-              <p className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--faint)]">{c.label}</p>
+              <p className="label text-[var(--faint)]">{c.label}</p>
               <p className="mt-1 break-all text-[0.875rem] text-[var(--text)]">{c.value}</p>
             </div>
           </a>

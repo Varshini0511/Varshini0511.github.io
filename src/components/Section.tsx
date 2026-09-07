@@ -1,5 +1,8 @@
+import Reveal from "./Reveal";
+
 export default function Section({
   id,
+  index,
   eyebrow,
   title,
   intro,
@@ -7,6 +10,7 @@ export default function Section({
   className = "",
 }: {
   id: string;
+  index: string;
   eyebrow: string;
   title: string;
   intro?: string;
@@ -15,12 +19,23 @@ export default function Section({
 }) {
   return (
     <section id={id} className={`mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28 ${className}`}>
-      <header className="max-w-2xl">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent)]">{eyebrow}</p>
-        <h2 className="mt-3 text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">{title}</h2>
-        {intro && <p className="mt-4 text-[0.95rem] leading-relaxed text-[var(--muted)]">{intro}</p>}
-      </header>
-      <div className="mt-12">{children}</div>
+      <Reveal>
+        <header className="max-w-2xl">
+          <div className="flex items-center gap-3">
+            <span className="label text-[var(--faint)]">{index}</span>
+            <span className="h-px w-8 bg-[var(--border-strong)]" />
+            <span className="label text-[var(--accent)]">{eyebrow}</span>
+          </div>
+
+          <h2 className="mt-5 text-[2rem] leading-[1.12] sm:text-[2.6rem]">{title}</h2>
+
+          {intro && <p className="mt-5 text-[0.95rem] leading-[1.7] text-[var(--muted)]">{intro}</p>}
+        </header>
+      </Reveal>
+
+      <Reveal delay={80}>
+        <div className="mt-12">{children}</div>
+      </Reveal>
     </section>
   );
 }

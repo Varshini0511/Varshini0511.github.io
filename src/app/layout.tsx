@@ -1,10 +1,33 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/data/profile";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+/**
+ * Three roles, three faces:
+ *  - Jakarta Sans for headings — geometric and confident at large sizes
+ *  - Inter for body — the most legible workhorse at small sizes
+ *  - JetBrains Mono for labels, metrics and diagrams
+ */
+const display = Plus_Jakarta_Sans({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+  display: "swap",
+});
+
+const body = Inter({
+  variable: "--font-body",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  variable: "--font-mono-face",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
 
 const description = `${profile.title} with ${profile.yearsExperience} years building secure .NET and Next.js platforms, now building production-grade AI systems — RAG, tool-calling agents, hybrid search and multi-agent orchestration.`;
 
@@ -42,13 +65,17 @@ export const metadata: Metadata = {
  */
 const themeScript = `
 (function(){
+  var d = document.documentElement;
   try {
     var s = localStorage.getItem('theme');
     var t = s || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    document.documentElement.setAttribute('data-theme', t);
+    d.setAttribute('data-theme', t);
   } catch (e) {
-    document.documentElement.setAttribute('data-theme', 'dark');
+    d.setAttribute('data-theme', 'dark');
   }
+  // Opts scroll-reveal in. Without this class every section stays visible,
+  // so a JS failure degrades to a plain page rather than a blank one.
+  d.classList.add('js');
 })();
 `;
 
@@ -58,7 +85,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}>
         {children}
       </body>
     </html>

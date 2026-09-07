@@ -14,7 +14,7 @@ export default function About() {
 
       <div className="space-y-5">
         <div className="card p-5">
-          <h3 className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)]">
+          <h3 className="label flex items-center gap-2 text-[var(--accent)]">
             <Award size={14} /> Recognition
           </h3>
           <ul className="mt-4 space-y-2.5">
@@ -30,7 +30,7 @@ export default function About() {
         </div>
 
         <div className="card p-5">
-          <h3 className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)]">
+          <h3 className="label flex items-center gap-2 text-[var(--accent)]">
             <GraduationCap size={14} /> Education
           </h3>
           <p className="mt-3 text-[0.9rem] font-medium text-[var(--text)]">{profile.education.degree}</p>
@@ -38,7 +38,7 @@ export default function About() {
         </div>
 
         <div className="card p-5">
-          <h3 className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)]">
+          <h3 className="label flex items-center gap-2 text-[var(--accent)]">
             <Languages size={14} /> Languages
           </h3>
           <ul className="mt-3 flex flex-wrap gap-1.5">
