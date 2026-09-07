@@ -10,24 +10,30 @@
 export const profile = {
   name: "Varchini Devi K",
   title: "Senior Software Engineer",
-  tagline: "I build secure, high-scale .NET & Next.js platforms — and the AI systems that sit on top of them.",
+  /** Feb 2018 → present. Update the résumé to match; it still says 7+. */
+  yearsExperience: "8+",
+  currentRole: "Senior Software Engineer",
+  currentCompany: "Exterro R&D",
+  /** One line. States the domain, the scale, and the pivot — in that order. */
+  tagline:
+    "Eight years building security-critical .NET and Azure platforms — digital forensics, energy, insurance. Now bringing that same engineering discipline to production AI systems.",
   location: "Chennai, India",
   email: "varshinikannan2495@gmail.com",
   phone: "+91 80564 37139",
   linkedin: "https://www.linkedin.com/in/varchini-devi-b043542b1/",
   github: "https://github.com/Varshini0511",
   githubUser: "Varshini0511",
-  yearsExperience: "7+",
 
+  /** Tenure, scope, measured impact, and the pivot — one of each. */
   stats: [
-    { value: "7+", label: "Years shipping production software" },
+    { value: "8+", label: "Years shipping production software" },
+    { value: "3", label: "Enterprise platforms delivered end-to-end" },
+    { value: "40%", label: "Cloud cost reduction delivered" },
     { value: "5", label: "AI systems built and deployed" },
-    { value: "15+", label: "Internal excellence awards" },
-    { value: "3", label: "Enterprise platforms led end-to-end" },
   ],
 
   about: [
-    `I'm a Senior Software Engineer with 7+ years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements, not nice-to-haves.`,
+    `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements, not nice-to-haves.`,
     `That background shapes how I approach AI. Over the past year I've built five AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
     `I've led migrations from .NET Framework to .NET 8, designed event-driven Azure workflows with Durable Functions and Service Bus, cut cloud costs 40% through an AWS EC2 migration, and shipped Angular and React/Next.js front ends against secure REST APIs. I like problems where correctness matters and the debugging is genuinely hard.`,
   ],
@@ -481,8 +487,15 @@ PHASE 2 — ask
       company: "Exterro R&D Private Ltd",
       role: "Senior Software Engineer",
       period: "Aug 2024 — Present",
+      current: true,
+      domain: "Digital forensics · eDiscovery",
       context:
         "FTKC, a security-critical digital forensics platform supporting the full investigative lifecycle, with strict requirements around confidentiality, integrity and auditability of evidence.",
+      impact: [
+        { value: ".NET 8", label: "Framework migration led" },
+        { value: "10+", label: "Evidence sources integrated" },
+        { value: "E2E", label: "Mobile collection module owned" },
+      ],
       stack: ["C#", ".NET 8", "ASP.NET", "Web API", "Angular 14", "EF Core", "ADO.NET", "LINQ", "SQL Server"],
       points: [
         "Leading the migration from .NET Framework to .NET 8 — resolving breaking changes, refactoring legacy components and modernising APIs for long-term support.",
@@ -498,8 +511,15 @@ PHASE 2 — ask
       company: "Wipro Limited",
       role: "Senior Software Engineer",
       period: "Feb 2022 — Jul 2024",
+      current: false,
+      domain: "Energy · Digital oilfield",
       context:
         "Digital oilfield solutions for Halliburton, plus HP Marcoms — drilling data processing, asset tracking and job scheduling.",
+      impact: [
+        { value: "0", label: "Plain-text secrets, via Managed Identity" },
+        { value: "AKS", label: "Dockerised services in production" },
+        { value: "Real-time", label: "Telemetry dashboards delivered" },
+      ],
       stack: [".NET Core", "C#", "Angular 14", "React/Next.js", "Azure", "Cosmos DB", "Docker", "AKS"],
       points: [
         "Designed secure, event-driven workflows with Azure Blob Storage and Durable Orchestrations — file drops triggered automated decryption, hash-based duplicate detection, validation, splitting and structured SQL insertion.",
@@ -515,14 +535,19 @@ PHASE 2 — ask
       company: "Cognizant Technology Solutions",
       role: "Associate",
       period: "Feb 2018 — Feb 2022",
+      current: false,
+      domain: "Insurance · Claims & subrogation",
       context: "Insurance platform work for Travelers — claims, subrogation and payments.",
+      impact: [
+        { value: "30%", label: "Faster response via IIS tuning" },
+        { value: "40%", label: "Less downtime across 100+ jobs" },
+        { value: "100%", label: "Clean security record maintained" },
+      ],
       stack: ["ASP.NET", "C#", "VB.NET", "Web API", "MongoDB", "DB2", "SQL Server", "Jenkins"],
       points: [
         "Led full SDLC across requirements, design, coding, testing, deployment, support and documentation.",
         "Built an Adverse Subrogation screen improving efficiency in managing complex legal cases, and integrated a secure online payment system for claim payments and refunds.",
         "Secured APIs with OAuth and JWT; used MongoDB for dynamic case data with high-performance Web APIs that cut case access and update time.",
-        "Migrated applications to AWS EC2, achieving a 40% cost reduction and improved scalability.",
-        "Upgraded apps to .NET 4.8 and migrated Windows Server 2012 → 2019, handling full environment setup and validation.",
         "Managed 100+ scheduled jobs in Tidal, optimising execution and dependencies to reduce system downtime by 40%.",
         "Tuned IIS for high-traffic apps, improving response time by 30%; automated CI/CD via Jenkins, Urban Code Deploy and Azure DevOps.",
         "Partnered with cybersecurity on reviews and testing, maintaining a 100% clean security record.",

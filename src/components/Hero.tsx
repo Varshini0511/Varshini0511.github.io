@@ -1,53 +1,40 @@
-import { ArrowRight, MapPin, Mail, FileText } from "lucide-react";
+import { ArrowRight, MapPin, Mail, FileText, Building2 } from "lucide-react";
 import { profile } from "@/data/profile";
 
 export default function Hero() {
   return (
     <section id="top" className="hero-glow grid-bg relative overflow-hidden">
       <div className="relative z-10 mx-auto max-w-6xl px-5 pb-20 pt-32 sm:px-8 sm:pb-28 sm:pt-40">
-        <div className="rise" style={{ animationDelay: "60ms" }}>
-          <span className="chip chip-accent font-mono">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-            </span>
-            Open to Full-Stack & AI Engineering roles
+        {/* Current role first — it's the credibility line recruiters scan for. */}
+        <div
+          className="rise flex flex-wrap items-center gap-x-3 gap-y-2 text-sm"
+          style={{ animationDelay: "60ms" }}
+        >
+          <span className="inline-flex items-center gap-1.5 font-medium text-[var(--text)]">
+            <Building2 size={14} className="text-[var(--accent)]" />
+            {profile.currentRole} at {profile.currentCompany}
+          </span>
+          <span className="text-[var(--border-strong)]">·</span>
+          <span className="inline-flex items-center gap-1.5 text-[var(--faint)]">
+            <MapPin size={13} /> {profile.location}
           </span>
         </div>
 
         <h1
-          className="rise mt-7 max-w-4xl text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-6xl lg:text-7xl"
+          className="rise mt-6 max-w-4xl text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-6xl lg:text-7xl"
           style={{ animationDelay: "140ms" }}
         >
           {profile.name}
         </h1>
 
         <p
-          className="rise mt-5 max-w-2xl text-lg leading-relaxed text-[var(--muted)] sm:text-xl"
+          className="rise mt-6 max-w-3xl text-lg leading-[1.65] text-[var(--muted)] sm:text-xl"
           style={{ animationDelay: "220ms" }}
         >
-          <span className="font-medium text-[var(--text)]">
-            {profile.title} · {profile.yearsExperience} years
-          </span>
-          <br className="hidden sm:block" /> {profile.tagline}
+          {profile.tagline}
         </p>
 
-        <div
-          className="rise mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[var(--faint)]"
-          style={{ animationDelay: "290ms" }}
-        >
-          <span className="inline-flex items-center gap-1.5">
-            <MapPin size={14} /> {profile.location}
-          </span>
-          <a
-            href={`mailto:${profile.email}`}
-            className="link-underline inline-flex items-center gap-1.5 transition-colors hover:text-[var(--text)]"
-          >
-            <Mail size={14} /> {profile.email}
-          </a>
-        </div>
-
-        <div className="rise mt-9 flex flex-wrap items-center gap-3" style={{ animationDelay: "360ms" }}>
+        <div className="rise mt-9 flex flex-wrap items-center gap-3" style={{ animationDelay: "300ms" }}>
           <a
             href="#work"
             className="group inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--bg)] transition-opacity hover:opacity-90"
@@ -63,15 +50,21 @@ export default function Hero() {
           >
             <FileText size={16} /> Résumé
           </a>
+          <a
+            href={`mailto:${profile.email}`}
+            className="link-underline inline-flex items-center gap-2 px-1 py-2.5 text-sm text-[var(--muted)] transition-colors hover:text-[var(--text)]"
+          >
+            <Mail size={15} /> {profile.email}
+          </a>
         </div>
 
         <dl
           className="rise mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-xl border bg-[var(--border)] sm:grid-cols-4"
-          style={{ animationDelay: "440ms" }}
+          style={{ animationDelay: "400ms" }}
         >
           {profile.stats.map((s) => (
             <div key={s.label} className="bg-[var(--surface)] px-5 py-5">
-              <dt className="font-mono text-2xl font-semibold tracking-tight text-[var(--accent)] sm:text-3xl">
+              <dt className="font-mono text-2xl font-semibold tracking-tight text-[var(--accent)] sm:text-[1.75rem]">
                 {s.value}
               </dt>
               <dd className="mt-1.5 text-[0.8rem] leading-snug text-[var(--muted)]">{s.label}</dd>

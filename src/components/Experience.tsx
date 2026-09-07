@@ -2,41 +2,66 @@ import { profile } from "@/data/profile";
 
 export default function Experience() {
   return (
-    <ol className="relative space-y-10 border-l pl-6 sm:pl-8">
+    <div className="space-y-6">
       {profile.experience.map((job) => (
-        <li key={job.company} className="relative">
-          <span className="absolute -left-[calc(1.5rem+5px)] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-[var(--bg)] bg-[var(--accent)] sm:-left-[calc(2rem+5px)]" />
+        <article key={job.company} className="card card-hover overflow-hidden">
+          {/* Header band */}
+          <div className="border-b bg-[var(--surface-2)] px-6 py-5 sm:px-7">
+            <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="text-lg font-semibold tracking-tight sm:text-xl">{job.company}</h3>
+                  {job.current && (
+                    <span className="chip chip-accent font-mono">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Current
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-sm text-[var(--accent)]">{job.role}</p>
+              </div>
+              <div className="text-right">
+                <p className="font-mono text-xs text-[var(--muted)]">{job.period}</p>
+                <p className="mt-1 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-[var(--faint)]">
+                  {job.domain}
+                </p>
+              </div>
+            </div>
 
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h3 className="text-lg font-semibold tracking-tight">
-              {job.role}
-              <span className="text-[var(--muted)]"> · {job.company}</span>
-            </h3>
-            <span className="font-mono text-xs text-[var(--faint)]">{job.period}</span>
+            <p className="mt-4 max-w-3xl text-[0.875rem] leading-relaxed text-[var(--muted)]">{job.context}</p>
           </div>
 
-          <p className="mt-2 text-[0.9rem] leading-relaxed text-[var(--muted)]">{job.context}</p>
-
-          <ul className="mt-4 space-y-2">
-            {job.points.map((pt) => (
-              <li
-                key={pt}
-                className="relative pl-4 text-[0.875rem] leading-relaxed text-[var(--muted)] before:absolute before:left-0 before:top-[0.6em] before:h-1 before:w-1 before:rounded-full before:bg-[var(--faint)]"
-              >
-                {pt}
-              </li>
+          {/* Measured outcomes, up front */}
+          <dl className="grid grid-cols-1 gap-px border-b bg-[var(--border)] sm:grid-cols-3">
+            {job.impact.map((m) => (
+              <div key={m.label} className="bg-[var(--surface)] px-6 py-4 sm:px-7">
+                <dt className="font-mono text-lg font-semibold tracking-tight text-[var(--accent)]">{m.value}</dt>
+                <dd className="mt-1 text-[0.78rem] leading-snug text-[var(--muted)]">{m.label}</dd>
+              </div>
             ))}
-          </ul>
+          </dl>
 
-          <ul className="mt-4 flex flex-wrap gap-1.5">
-            {job.stack.map((t) => (
-              <li key={t} className="chip font-mono">
-                {t}
-              </li>
-            ))}
-          </ul>
-        </li>
+          <div className="px-6 py-6 sm:px-7">
+            <ul className="space-y-2.5">
+              {job.points.map((pt) => (
+                <li
+                  key={pt}
+                  className="relative pl-4 text-[0.875rem] leading-relaxed text-[var(--muted)] before:absolute before:left-0 before:top-[0.62em] before:h-1 before:w-1 before:rounded-full before:bg-[var(--faint)]"
+                >
+                  {pt}
+                </li>
+              ))}
+            </ul>
+
+            <ul className="mt-5 flex flex-wrap gap-1.5">
+              {job.stack.map((t) => (
+                <li key={t} className="chip font-mono">
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </article>
       ))}
-    </ol>
+    </div>
   );
 }
