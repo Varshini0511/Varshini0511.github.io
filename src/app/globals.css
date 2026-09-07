@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   Design tokens. Dark is the default; [data-theme] overrides win
+   so the toggle works in both directions.
+   --------------------------------------------------------------- */
+:root,
+:root[data-theme="dark"] {
+  --bg: #08090b;
+  --bg-glow: #0d1014;
+  --surface: #0e1014;
+  --surface-2: #14171d;
+  --surface-3: #1a1e26;
+  --border: #1e222b;
+  --border-strong: #2c323d;
+  --text: #e7e9ed;
+  --muted: #949cab;
+  --faint: #626a78;
+  --accent: #2dd4bf;
+  --accent-soft: rgba(45, 212, 191, 0.12);
+  --accent-line: rgba(45, 212, 191, 0.32);
+  --amber: #f0b429;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.7);
+}
+
+:root[data-theme="light"] {
+  --bg: #fcfcfd;
+  --bg-glow: #f4f6f8;
+  --surface: #ffffff;
+  --surface-2: #f7f8fa;
+  --surface-3: #eef1f5;
+  --border: #e3e7ec;
+  --border-strong: #cdd4dd;
+  --text: #14171d;
+  --muted: #59616e;
+  --faint: #838b98;
+  --accent: #0d9488;
+  --accent-soft: rgba(13, 148, 136, 0.1);
+  --accent-line: rgba(13, 148, 136, 0.3);
+  --amber: #b45309;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px -12px rgba(16, 24, 40, 0.16);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-amber: var(--amber);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01";
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* Subtle ambient glow behind the hero. */
+.hero-glow::before {
+  content: "";
+  position: absolute;
+  inset: -30% 0 auto -10%;
+  height: 620px;
+  background:
+    radial-gradient(ellipse 50% 45% at 22% 30%, var(--accent-soft), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 78% 12%, var(--accent-soft), transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Faint grid, masked to fade out downward. */
+.grid-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.5;
+  mask-image: linear-gradient(to bottom, black, transparent 75%);
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  border-radius: 9999px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  line-height: 1.1rem;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.chip-accent {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.link-underline {
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.25s ease;
+}
+
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* Entrance animation, applied progressively via inline delay. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .rise {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 9999px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--faint);
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
