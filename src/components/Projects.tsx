@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles, ExternalLink, Radio } from "lucide-react";
 import { profile, type Project } from "@/data/profile";
 
-const FILTERS = ["All", "Agents", "RAG", "Vector Search", "Multimodal", "Full-Stack", ".NET"] as const;
+const FILTERS = ["All", "Agents", "RAG", "Vector Search", "Multimodal", "Automation", "Full-Stack", ".NET"] as const;
 
 function Card({ p }: { p: Project }) {
   return (
@@ -102,7 +102,8 @@ export default function Projects() {
 
       <p className="mt-8 flex items-center gap-1.5 text-sm text-[var(--faint)]">
         <ExternalLink size={14} />
-        Every project is deployed — each write-up links to a live demo you can use.
+        {profile.projects.filter((p) => p.demo).length} of {profile.projects.length} projects have a live demo — the
+        rest explain how to run them.
       </p>
     </>
   );

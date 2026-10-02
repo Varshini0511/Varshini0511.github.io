@@ -29,12 +29,12 @@ export const profile = {
     { value: "8+", label: "Years shipping production software" },
     { value: "3", label: "Enterprise platforms delivered end-to-end" },
     { value: "40%", label: "Cloud cost reduction delivered" },
-    { value: "5", label: "AI systems built and deployed" },
+    { value: "6", label: "AI systems built from scratch" },
   ],
 
   about: [
     `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements, not nice-to-haves.`,
-    `That background shapes how I approach AI. Over the past year I've built five AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
+    `That background shapes how I approach AI. Over the past year I've built six AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, browser-automation booking — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
     `I've led migrations from .NET Framework to .NET 8, designed event-driven Azure workflows with Durable Functions and Service Bus, cut cloud costs 40% through an AWS EC2 migration, and shipped Angular and React/Next.js front ends against secure REST APIs. I like problems where correctness matters and the debugging is genuinely hard.`,
   ],
 
@@ -478,6 +478,105 @@ PHASE 2 — ask
         "Similarity thresholds matter as much as the embedding model — nearest is not the same as relevant.",
         "Forcing structured output turns model text into something a typed language can trust.",
         "Assume models will emit malformed tool calls and handle it, rather than hoping they won't.",
+      ],
+    },
+
+    /* ---------------------------------------------------------------- */
+    {
+      id: "ridesmart",
+      flagship: false,
+      name: "RideSmartAgent",
+      subtitle: "Ride-hailing price comparison and race booking for India",
+      period: "2026",
+      role: "Solo — provider automation, decision engine, booking orchestrator, AI layer",
+      blurb:
+        "An agent that compares live prices across Uber, Ola, Rapido and Namma Yatri, decides between a cab and an auto, and then books by racing the cheapest providers against each other — first driver confirmation wins. It learns from your ride history to flag unusual prices and predict surge.",
+      problem:
+        "Getting the cheapest ride in India means opening four apps, comparing by eye, and then hoping the driver you chose actually accepts. Prices move by the minute, and the cheapest quote is worthless if nobody confirms it. I wanted to automate the whole loop — compare, decide, book, and fall back — and make it smarter the more it is used.",
+      repo: "https://github.com/Varshini0511/RideSmartAgent",
+      repoPrivate: false,
+      demo: null,
+      demoNote:
+        "No hosted demo: it drives real, logged-in Uber and Ola browser sessions, so it runs locally on your own accounts. Happy to walk through it live.",
+      stack: ["Python", "Playwright", "asyncio", "Streamlit", "Groq", "SQLite", "Folium", "Pydantic"],
+      tags: ["Agents", "Automation"],
+      architecture: `pickup + drop-off (free text)
+        │
+        ▼  geocode   (Google Maps, falls back to Nominatim)
+        │
+        ▼  fetch quotes — all providers at once, each time-boxed
+ ┌───────────┬───────────┬──────────────┬──────────────┐
+ Uber        Ola         Rapido         Namma Yatri
+ Playwright  Playwright  distance-based fare estimate
+ live scrape live scrape
+ └───────────┴───────────┴──────────────┴──────────────┘
+        │   a provider that fails or times out → [] , not a crash
+        ▼
+ comparator   cheapest cab ≤ ₹ threshold ?  rank cabs, autos as fallback
+                                      else  switch to auto, cabs as fallback
+        │
+        ▼
+ AI layer  (SQLite ride history)
+   anomaly detection · price prediction · surge probability
+   best time to book · preference learning · Groq chat assistant
+        │
+        ▼
+ race booking   providers within ₹50 of the best price
+   initiate on each ─▶ poll together ─▶ first confirmed wins ─▶ rest closed`,
+      capabilities: [],
+      highlights: [
+        "Live price comparison across Uber and Ola via Playwright, with distance-based fare estimates for Rapido and Namma Yatri",
+        "Cab-versus-auto decision logic with a configurable price threshold and a plain-English reason for every recommendation",
+        "Race booking: providers priced within ₹50 of the cheapest are booked at once, and the first confirmed driver wins",
+        "Sequential fallback booking as an alternative — try the top pick, move to the next on failure or timeout",
+        "Anomaly detection using z-scores against your own route history, with warning and alert severities",
+        "Price prediction, surge probability and best-time-to-book from historical patterns",
+        "Groq-powered chat assistant grounded in your frequent routes, provider preferences and current quotes",
+      ],
+      deepDive: [
+        {
+          title: "Browser automation as the integration layer",
+          body: "Each provider sits behind one abstract RideProvider class — fetch_quotes, initiate_booking, check_booking_status, get_deep_link — so adding a fifth is a matter of implementing four methods. Underneath, each provider drives its own Playwright browser context with a persistent login session saved to disk, so you sign in once and the agent reuses it. Contexts present a mobile viewport and user agent so the mobile web flows render. The honest cost of this approach is fragility: selectors change, and a scraper is only as stable as the page it reads.",
+          points: [],
+        },
+        {
+          title: "One slow provider can't sink the comparison",
+          body: "Quotes are fetched from every provider concurrently with asyncio.gather, and each fetch is wrapped in a timeout and a catch-all. A provider that times out or throws returns an empty list and a logged reason rather than an exception, and the failure is recorded against that provider so the UI can say what happened. Treating the least reliable component as expected-to-fail is what keeps the whole flow usable.",
+          points: [],
+        },
+        {
+          title: "Decision logic, not just sorting",
+          body: "The comparator makes a real product decision. If the cheapest cab is within the budget threshold (₹380 by default, configurable), cabs are ranked first with autos as the fallback. If every cab exceeds it, the ranking flips to autos first. Whichever way it goes, the output is a full ranked list plus a human-readable reason, so a failed first choice always has a next one ready and the user can see why it was picked.",
+          points: [],
+        },
+        {
+          title: "Race booking",
+          body: "The cheapest quote is worthless if no driver accepts it, so booking races. The orchestrator takes the cheapest option per provider within ₹50 of the overall best, initiates a booking on each, then polls them together. The first to report a confirmed driver wins and the others are closed down; a provider that reports no drivers drops out of the race on its own, and a global timeout (120s by default) ends it if nobody confirms.",
+          points: [],
+        },
+        {
+          title: "Learning from history, with honest statistics",
+          body: "Every comparison is written to a SQLite history. Price prediction averages past prices for the same route, provider and hour, widening to adjacent hours, the same weekday, then the whole route when data is thin — and the confidence it reports falls accordingly. Anomaly detection flags a quote more than two standard deviations from that route's history, and needs at least three samples before it will say anything. These are statistical methods rather than trained models, which is deliberate: with one person's ride history there isn't enough data to train anything, but there is enough for simple, explainable numbers.",
+          points: [],
+        },
+        {
+          title: "An assistant grounded in your data",
+          body: "The Groq chat assistant doesn't answer from a generic prompt. Its system prompt is assembled per request from your most frequent routes, how often you've chosen each provider, the historical price stats for the route in question, and the quotes currently on screen — so “should I wait?” gets an answer based on your own patterns.",
+          points: [],
+        },
+      ],
+      tryThis: [
+        "pip install -r requirements.txt && python -m playwright install chromium",
+        "cp .env.example .env — add GROQ_API_KEY and GOOGLE_API_KEY (both optional)",
+        "python -m ride_smart.login_setup uber — one-time login, repeat for ola",
+        "streamlit run ride_smart/streamlit_app.py --server.port 8502",
+        "Compare a route twice at different times — anomaly detection and prediction start to fill in",
+      ],
+      learnings: [
+        "The least reliable component — here, scraping — should be isolated, time-boxed and expected to fail.",
+        "With a single user's data, simple statistics with an explicit confidence beat a model with nothing to learn from.",
+        "Fallback order is a product decision; putting it in one function with a readable reason keeps it debuggable.",
+        "Some systems can't be hosted as a demo, and saying so plainly is better than faking one.",
       ],
     },
   ],

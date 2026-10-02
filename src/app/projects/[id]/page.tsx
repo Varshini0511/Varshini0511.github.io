@@ -136,7 +136,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
         {/* ---------- Try it ---------- */}
         {p.tryThis.length > 0 && (
-          <Block icon={Terminal} title="Try it yourself">
+          <Block icon={Terminal} title={p.demo ? "Try it yourself" : "Run it locally"}>
             <div className="card overflow-hidden">
               <ul className="divide-y">
                 {p.tryThis.map((t) => (
