@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles, ExternalLink, Radio } from "lucide-react";
 import { profile, type Project } from "@/data/profile";
 
-const FILTERS = ["All", "Agents", "RAG", "Vector Search", "Multimodal", "Automation", "Full-Stack", ".NET"] as const;
+const FILTERS = ["All", "Agents", "RAG", "Vector Search", "Multimodal", "MCP", "Automation", "Full-Stack", ".NET"] as const;
 
 function Card({ p }: { p: Project }) {
   return (

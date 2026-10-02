@@ -20,7 +20,7 @@ export default function Home() {
           index="01"
           eyebrow="Selected work"
           title="AI systems, built end to end"
-          intro="Six systems I designed and built over the past year while teaching myself AI engineering — five deployed and live, and one (RideSmartAgent) that runs locally because it drives real logged-in browser sessions. Each goes past the demo layer into the parts that decide whether something is production-worthy: retrieval quality, evaluation, guardrails and cost. Open any of them for the architecture and the reasoning behind it."
+          intro="Seven systems I designed and built over the past year while teaching myself AI engineering — six deployed and live, and one (RideSmartAgent) that runs locally because it drives real logged-in browser sessions. Each goes past the demo layer into the parts that decide whether something is production-worthy: retrieval quality, evaluation, guardrails and cost. Open any of them for the architecture and the reasoning behind it."
         >
           <Projects />
         </Section>

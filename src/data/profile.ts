@@ -29,12 +29,12 @@ export const profile = {
     { value: "8+", label: "Years shipping production software" },
     { value: "3", label: "Enterprise platforms delivered end-to-end" },
     { value: "40%", label: "Cloud cost reduction delivered" },
-    { value: "6", label: "AI systems built from scratch" },
+    { value: "7", label: "AI systems built from scratch" },
   ],
 
   about: [
     `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements, not nice-to-haves.`,
-    `That background shapes how I approach AI. Over the past year I've built six AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, browser-automation booking — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
+    `That background shapes how I approach AI. Over the past year I've built seven AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
     `I've led migrations from .NET Framework to .NET 8, designed event-driven Azure workflows with Durable Functions and Service Bus, cut cloud costs 40% through an AWS EC2 migration, and shipped Angular and React/Next.js front ends against secure REST APIs. I like problems where correctness matters and the debugging is genuinely hard.`,
   ],
 
@@ -314,6 +314,107 @@ tsvector + GIN  gte-small 384d    ms-marco-MiniLM           reasons per item
         "A critic that can send work backwards beats a longer prompt almost every time.",
         "Parallel subagents need narrow context, or they drift toward each other's jobs.",
         "Provider fallback isn't optional once you depend on a free tier.",
+      ],
+    },
+
+    /* ---------------------------------------------------------------- */
+    {
+      id: "github-agent",
+      flagship: false,
+      name: "GitHub Agent",
+      subtitle: "A multi-agent assistant built on an MCP server",
+      period: "2026",
+      role: "Solo — MCP server, agent wiring, RAG, approval flow, evals, UI",
+      blurb:
+        "An MCP server exposes GitHub as 14 tools; LangGraph agents use them to answer questions about repositories, search code semantically, triage issues and open pull requests — with a human approval gate on every write and an evaluation suite that tests for hallucination.",
+      problem:
+        "Letting a model act on a real GitHub account is useful and risky in equal measure. I wanted to build the whole thing the careful way: tools exposed through a proper protocol instead of ad-hoc glue, every write behind human approval, answers that cite the code they came from, and an evaluation set that checks the agent says “not found” instead of inventing a file.",
+      repo: "https://github.com/Varshini0511/github-agent-mcp",
+      repoPrivate: false,
+      demo: "https://git-agent-mcp-ev2a38ht4j3yb4ungtummq.streamlit.app/",
+      demoNote:
+        "Streamlit Community Cloud sleeps after inactivity — click “wake” if you see a sleep screen. It runs on Groq's free tier, so Supervisor mode can occasionally pause on a rate limit.",
+      stack: ["Python", "MCP", "LangGraph", "LangChain", "Groq", "Gemini embeddings", "FAISS", "SQLite", "Streamlit"],
+      tags: ["Agents", "RAG", "MCP", "Orchestration", "Evaluation", "Safety"],
+      architecture: `user
+  │
+  ├─ single agent        one model, every tool
+  ├─ supervisor team     delegates to three specialists, each seeing only its own tools
+  │     ├─ repo_qa         read + semantic search
+  │     ├─ issue_triage    issues, labels, comments
+  │     └─ code_writer     branch → edit → open PR
+  └─ Streamlit UI        both modes, with Approve / Reject buttons
+        │
+        ▼  tools discovered over MCP (stdio subprocess)
+ MCP server  — 14 tools
+   ├─ github_client.py   retry · backoff + jitter · LLM-readable errors ──▶ GitHub REST API
+   └─ rag.py             repo tarball → chunk → Gemini embeddings → FAISS
+                         search_code returns path:line citations
+
+ memory   SQLite checkpointer, one thread_id per conversation
+ context  summarisation middleware keeps the window bounded
+ safety   approval interrupt + ALLOW_WRITES flag on every write
+          model-call limit · corrective retry on malformed tool calls`,
+      capabilities: [],
+      highlights: [
+        "MCP server exposing 14 GitHub tools over stdio, discovered by the agents rather than hard-coded",
+        "Supervisor agent delegating to repo_qa, issue_triage and code_writer specialists — “agent as tool”",
+        "RAG over any repository: tarball → chunks → Gemini embeddings → FAISS, with path:line citations",
+        "Human-in-the-loop: the graph interrupts before every state-changing call; approve or reject in the UI",
+        "Per-conversation memory in a SQLite checkpointer, surviving restarts, with summarisation to bound context",
+        "Evaluation suite scored by deterministic checks and an LLM judge, including a hallucination guard",
+        "Offline tests that mock the GitHub API at the HTTP boundary",
+      ],
+      deepDive: [
+        {
+          title: "Tools through a protocol, not glue",
+          body: "GitHub operations live in an MCP server rather than inside the agent. The agents launch it as a subprocess over stdio and discover its tools at startup, so adding a tool means editing one file, and any MCP-capable client could use the same server. The code is layered to match: github_client.py knows nothing about MCP or agents, server.py turns it into tools, and agent_core.py wires tools to a model — each layer testable on its own.",
+          points: [],
+        },
+        {
+          title: "Two locks on every write",
+          body: "The seven state-changing tools are gated twice. A human-in-the-loop interrupt pauses the graph before any of them runs, and the Streamlit UI shows Approve and Reject buttons. Separately, an ALLOW_WRITES switch is checked inside the tool itself, so even an approved call does nothing unless writes are enabled. The code-writing specialist is also told never to touch the default branch: create a branch, write on it, open a pull request. Approval you can only trust in one place isn't approval.",
+          points: [],
+        },
+        {
+          title: "Why a supervisor instead of one big agent",
+          body: "A single agent holding every tool makes each model call larger and gives smaller models more ways to choose wrongly — and one system prompt can't be good at both reviewing code and triaging issues. So three specialists each get a focused prompt and only the tools they need, and the supervisor calls each as a single tool with a task string. Specialists share no memory with the supervisor or each other, so the task string has to carry everything — repo, issue numbers, file paths — which is context engineering in its plainest form.",
+          points: [],
+        },
+        {
+          title: "Errors written for a model to read",
+          body: "The GitHub client retries what is worth retrying — rate limits and 5xx — with exponential backoff and jitter, and turns what isn't worth retrying (404, 401, 403) into messages that say what went wrong and what to try next. A second failure mode is subtler: the model occasionally emits a tool call that violates the schema, and a blind retry usually repeats the same mistake. A middleware hook instead parses the rejection, names exactly which arguments were missing or invalid, and feeds that back before retrying, up to three times.",
+          points: [],
+        },
+        {
+          title: "RAG over a codebase, with citations",
+          body: "A repository is far bigger than a context window, so index_repo downloads the tarball, skips dependency and build directories, splits text files into overlapping chunks, embeds them with Gemini and saves a FAISS index per repo. search_code embeds the question and returns the nearest chunks with their path and starting line, so every answer can point at the code it came from. The honest limits are a chunk cap that can leave an index partial and no incremental re-indexing yet.",
+          points: [],
+        },
+        {
+          title: "Evaluating the failure mode, not just the happy path",
+          body: "A golden set scores real questions two ways, and a case passes only if both agree: deterministic checks (did it call the expected tool, does the answer contain or avoid specific strings) and a separate LLM judge scoring against a plain-English rubric. One case asks for the source of a file that doesn't exist and fails the agent if any code appears in the answer. The runner exits non-zero on any failure, so it doubles as a CI gate.",
+          points: [],
+        },
+        {
+          title: "Bridging an async agent into Streamlit",
+          body: "Streamlit reruns the whole script on every click, but the agent's MCP subprocess and async SQLite connection both need the same asyncio task to stay alive for the whole session. A naive bridge that opens the agent in one call and reuses it in later calls breaks silently — the connection's worker thread is torn down once nothing references it. The fix is to hold the entire session inside one long-lived task on a dedicated background thread, fed by a queue, so any rerun can submit work and wait for the result.",
+          points: [],
+        },
+      ],
+      tryThis: [
+        "Where is the language model initialised in Varshini0511/multi-agent-travel-planner? — indexes the repo, answers with a file citation",
+        "What is the exact text in the README of octocat/Hello-World? — reads the real file",
+        "Show me the source of src/does_not_exist_42.py in octocat/Hello-World — it should say not found, not invent code",
+        "Switch the sidebar to Supervisor team and ask it to triage the open issues on a repo",
+        "Ask it to open an issue — nothing runs until you press Approve",
+      ],
+      learnings: [
+        "A protocol layer like MCP separates what an agent can do from how the agent is built.",
+        "Approvals are only trustworthy when they're enforced in more than one place.",
+        "A blind retry repeats a systematic mistake; telling the model what was wrong fixes it.",
+        "An evaluation set should test the failure you're most afraid of — here, inventing code.",
+        "Free-tier rate limits are an architectural constraint, so they belong in the design, not a footnote.",
       ],
     },
 
