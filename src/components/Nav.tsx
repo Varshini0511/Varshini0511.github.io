@@ -7,9 +7,10 @@ import { profile } from "@/data/profile";
 
 /** Root-relative so they work from project detail pages as well as the home page. */
 const LINKS = [
-  { href: "/#work", label: "Work" },
-  { href: "/#experience", label: "Experience" },
-  { href: "/#skills", label: "Skills" },
+  { href: "/#career", label: "Career" },
+  { href: "/#systems", label: "Systems" },
+  { href: "/#ai", label: "AI work" },
+  { href: "/#stack", label: "Stack" },
   { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];

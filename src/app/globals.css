@@ -1,42 +1,43 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------
-   Design tokens. Dark is the default; [data-theme] overrides win
-   so the toggle works in both directions.
+   Tokens. Warm neutrals with a single restrained accent (brass).
+   Dark is the default; [data-theme] overrides win so the toggle
+   works in both directions.
    --------------------------------------------------------------- */
 :root,
 :root[data-theme="dark"] {
-  --bg: #090a0d;
-  --surface: #101217;
-  --surface-2: #15181f;
-  --surface-3: #1c2028;
-  --border: #1f232c;
-  --border-strong: #2e3441;
-  --text: #edeff3;
-  --muted: #9aa2b1;
-  --faint: #69707e;
-  --accent: #2dd4bf;
-  --accent-soft: rgba(45, 212, 191, 0.11);
-  --accent-line: rgba(45, 212, 191, 0.3);
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -16px rgba(0, 0, 0, 0.8);
-  --card-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.028), transparent 42%);
+  --bg: #0b0b0c;
+  --surface: #111113;
+  --surface-2: #17171a;
+  --surface-3: #1e1e22;
+  --border: #242428;
+  --border-strong: #36363c;
+  --text: #ecebe6;
+  --muted: #a5a39b;
+  --faint: #727069;
+  --accent: #d9a94f;
+  --accent-soft: rgba(217, 169, 79, 0.1);
+  --accent-line: rgba(217, 169, 79, 0.34);
+  --ok: #5fcf8e;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 14px 36px -18px rgba(0, 0, 0, 0.85);
 }
 
 :root[data-theme="light"] {
-  --bg: #fcfcfd;
+  --bg: #faf9f6;
   --surface: #ffffff;
-  --surface-2: #f6f8fa;
-  --surface-3: #eceff3;
-  --border: #e4e8ed;
-  --border-strong: #cbd2dc;
-  --text: #0f1319;
-  --muted: #545c6b;
-  --faint: #7d8593;
-  --accent: #0d9488;
-  --accent-soft: rgba(13, 148, 136, 0.09);
-  --accent-line: rgba(13, 148, 136, 0.28);
-  --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px -16px rgba(16, 24, 40, 0.2);
-  --card-sheen: linear-gradient(180deg, rgba(16, 24, 40, 0.014), transparent 42%);
+  --surface-2: #f4f2ed;
+  --surface-3: #eceae3;
+  --border: #e6e3dc;
+  --border-strong: #cfcbc1;
+  --text: #16150f;
+  --muted: #5d5b53;
+  --faint: #8a877d;
+  --accent: #8e6310;
+  --accent-soft: rgba(142, 99, 16, 0.08);
+  --accent-line: rgba(142, 99, 16, 0.32);
+  --ok: #17803f;
+  --shadow: 0 1px 2px rgba(22, 21, 15, 0.05), 0 14px 36px -18px rgba(22, 21, 15, 0.22);
 }
 
 @theme inline {
@@ -69,24 +70,24 @@ body {
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.003em;
   transition: background-color 0.25s ease, color 0.25s ease;
   overflow-x: hidden;
 }
 
-/* Headings carry the display face and tighter tracking. */
+/* Headings carry the serif display face. */
 h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.028em;
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -0.018em;
   text-wrap: balance;
 }
 
 h1 {
-  letter-spacing: -0.042em;
+  letter-spacing: -0.028em;
 }
 
 p {
@@ -100,73 +101,72 @@ code {
   font-feature-settings: "zero" 1;
 }
 
+/* Serif numerals for big metrics. */
+.numeral {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  font-variant-numeric: lining-nums;
+}
+
 ::selection {
   background: var(--accent-soft);
   color: var(--text);
 }
 
 /* ---------------------------------------------------------------
-   Hero backdrop
+   Hero backdrop: one soft light source and a faint dot field.
    --------------------------------------------------------------- */
-.hero-glow::before {
-  content: "";
-  position: absolute;
-  inset: -30% 0 auto -10%;
-  height: 660px;
+.hero-bg {
   background:
-    radial-gradient(ellipse 48% 44% at 20% 28%, var(--accent-soft), transparent 70%),
-    radial-gradient(ellipse 38% 38% at 80% 10%, var(--accent-soft), transparent 72%);
-  pointer-events: none;
-  z-index: 0;
+    radial-gradient(900px 420px at 82% -12%, var(--accent-soft), transparent 70%),
+    var(--bg);
 }
 
-.grid-bg::after {
+.hero-bg::after {
   content: "";
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(to right, var(--border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: 72px 72px;
-  opacity: 0.45;
-  mask-image: radial-gradient(ellipse 80% 60% at 30% 0%, black, transparent 78%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 30% 0%, black, transparent 78%);
+  background-image: radial-gradient(var(--border-strong) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.4;
+  mask-image: linear-gradient(to bottom, black, transparent 75%);
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent 75%);
   pointer-events: none;
   z-index: 0;
 }
 
 /* ---------------------------------------------------------------
-   Surfaces
+   Surfaces. Small radii and hairlines: precise, not bubbly.
    --------------------------------------------------------------- */
 .card {
   position: relative;
   background: var(--surface);
-  background-image: var(--card-sheen);
   border: 1px solid var(--border);
-  border-radius: 1rem;
-  transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+  border-radius: 0.625rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-hover:hover {
   border-color: var(--border-strong);
-  transform: translateY(-2px);
+  background: var(--surface-2);
   box-shadow: var(--shadow);
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 0.35rem;
   border: 1px solid var(--border);
-  background: var(--surface-2);
+  background: transparent;
   color: var(--muted);
-  border-radius: 9999px;
-  padding: 0.25rem 0.625rem;
-  font-size: 0.7rem;
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  font-size: 0.68rem;
   line-height: 1.15rem;
-  letter-spacing: 0.005em;
   white-space: nowrap;
-  transition: all 0.18s ease;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
 }
 
 .chip-accent {
@@ -187,7 +187,7 @@ code {
   background-size: 100% 1px;
 }
 
-/* Small caps label used for section eyebrows and metric captions. */
+/* Small-caps mono label for eyebrows and captions. */
 .label {
   font-family: var(--font-mono-face), ui-monospace, monospace;
   font-size: 0.68rem;
@@ -202,7 +202,7 @@ code {
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -211,7 +211,7 @@ code {
 }
 
 .rise {
-  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation: rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 /* Scroll-triggered reveal.
@@ -223,7 +223,7 @@ code {
 
 html.js .reveal {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(16px);
 }
 
 html.js .reveal.is-visible {
@@ -242,9 +242,6 @@ html.js .reveal.is-visible {
     opacity: 1;
     transform: none;
     transition: none;
-  }
-  .card-hover:hover {
-    transform: none;
   }
   * {
     transition-duration: 0.01ms !important;

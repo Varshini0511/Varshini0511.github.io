@@ -2,66 +2,55 @@ import { profile } from "@/data/profile";
 
 export default function Experience() {
   return (
-    <div className="space-y-6">
+    <ol className="divide-y border-y">
       {profile.experience.map((job) => (
-        <article key={job.company} className="card card-hover overflow-hidden">
-          {/* Header band */}
-          <div className="border-b bg-[var(--surface-2)] px-6 py-5 sm:px-7">
-            <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
-              <div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="text-lg font-semibold tracking-tight sm:text-xl">{job.company}</h3>
-                  {job.current && (
-                    <span className="chip chip-accent font-mono">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Current
-                    </span>
-                  )}
-                </div>
-                <p className="mt-1 text-sm text-[var(--accent)]">{job.role}</p>
-              </div>
-              <div className="text-right">
-                <p className="font-mono text-xs text-[var(--muted)]">{job.period}</p>
-                <p className="label mt-1 text-[var(--faint)]">
-                  {job.domain}
-                </p>
-              </div>
-            </div>
-
-            <p className="mt-4 max-w-3xl text-[0.875rem] leading-relaxed text-[var(--muted)]">{job.context}</p>
+        <li key={job.company} className="grid gap-6 py-10 lg:grid-cols-[16rem_1fr] lg:gap-14">
+          {/* Meta rail: stays in view while the detail scrolls. */}
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <p className="label text-[var(--accent)]">{job.period}</p>
+            <h3 className="mt-3 text-[1.5rem] leading-tight">{job.company}</h3>
+            <p className="mt-1 text-sm text-[var(--muted)]">{job.role}</p>
+            <p className="label mt-4 text-[0.62rem] text-[var(--faint)]">{job.domain}</p>
+            {job.current && (
+              <p className="label mt-4 inline-flex items-center gap-1.5 text-[0.62rem] text-[var(--ok)]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--ok)]" /> Current role
+              </p>
+            )}
           </div>
 
-          {/* Measured outcomes, up front */}
-          <dl className="grid grid-cols-1 gap-px border-b bg-[var(--border)] sm:grid-cols-3">
-            {job.impact.map((m) => (
-              <div key={m.label} className="bg-[var(--surface)] px-6 py-4 sm:px-7">
-                <dt className="font-mono text-lg font-semibold tracking-tight text-[var(--accent)]">{m.value}</dt>
-                <dd className="mt-1 text-[0.78rem] leading-snug text-[var(--muted)]">{m.label}</dd>
-              </div>
-            ))}
-          </dl>
+          <div>
+            <p className="max-w-3xl text-[0.95rem] leading-[1.75] text-[var(--text)]">{job.context}</p>
 
-          <div className="px-6 py-6 sm:px-7">
-            <ul className="space-y-2.5">
+            <dl className="mt-6 grid gap-px overflow-hidden rounded-md border bg-[var(--border)] sm:grid-cols-3">
+              {job.impact.map((m) => (
+                <div key={m.label} className="bg-[var(--surface)] px-4 py-3.5">
+                  <dt className="numeral text-[1.35rem] leading-none text-[var(--accent)]">{m.value}</dt>
+                  <dd className="mt-1.5 text-[0.75rem] leading-snug text-[var(--muted)]">{m.label}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <ul className="mt-6 space-y-2.5">
               {job.points.map((pt) => (
                 <li
                   key={pt}
-                  className="relative pl-4 text-[0.875rem] leading-relaxed text-[var(--muted)] before:absolute before:left-0 before:top-[0.62em] before:h-1 before:w-1 before:rounded-full before:bg-[var(--faint)]"
+                  className="relative pl-5 text-[0.875rem] leading-[1.7] text-[var(--muted)] before:absolute before:left-0 before:top-[0.78em] before:h-px before:w-2.5 before:bg-[var(--accent)]"
                 >
                   {pt}
                 </li>
               ))}
             </ul>
 
-            <ul className="mt-5 flex flex-wrap gap-1.5">
+            <ul className="mt-6 flex flex-wrap gap-1.5">
               {job.stack.map((t) => (
-                <li key={t} className="chip font-mono">
+                <li key={t} className="chip">
                   {t}
                 </li>
               ))}
             </ul>
           </div>
-        </article>
+        </li>
       ))}
-    </div>
+    </ol>
   );
 }

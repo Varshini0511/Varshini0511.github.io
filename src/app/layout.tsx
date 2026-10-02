@@ -1,18 +1,23 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from "next/font/google";
+import { Newsreader, Inter, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/data/profile";
 import "./globals.css";
 
 /**
  * Three roles, three faces:
- *  - Jakarta Sans for headings — geometric and confident at large sizes
+ *  - Newsreader (serif) for headings and large numerals — editorial and
+ *    measured, the register of a principal engineer rather than a template
  *  - Inter for body — the most legible workhorse at small sizes
  *  - JetBrains Mono for labels, metrics and diagrams
+ *
+ * To go back to a sans heading, swap Newsreader for any other face and keep
+ * the --font-display variable name.
  */
-const display = Plus_Jakarta_Sans({
+const display = Newsreader({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 

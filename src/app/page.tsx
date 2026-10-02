@@ -1,9 +1,12 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Section from "@/components/Section";
-import Projects from "@/components/Projects";
+import CareerArc from "@/components/CareerArc";
 import Experience from "@/components/Experience";
-import Skills from "@/components/Skills";
+import CaseStudies from "@/components/CaseStudies";
+import Projects from "@/components/Projects";
+import Approach from "@/components/Approach";
+import TechMatrix from "@/components/TechMatrix";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import { profile } from "@/data/profile";
@@ -16,54 +19,63 @@ export default function Home() {
         <Hero />
 
         <Section
-          id="work"
+          id="career"
           index="01"
-          eyebrow="Selected work"
+          eyebrow="Career"
+          title="Eight years across three enterprise domains"
+          intro="Digital forensics, energy and insurance — security-sensitive platforms where a wrong answer has a cost. The same fundamentals carried across .NET Framework, .NET Core and .NET 8, on-prem, AWS and Azure."
+        >
+          <CareerArc />
+          <div className="mt-12">
+            <Experience />
+          </div>
+        </Section>
+
+        <Section
+          id="systems"
+          index="02"
+          eyebrow="Systems"
+          title="Enterprise systems, in detail"
+          intro="Three pieces of work told as architecture: what was built, the decisions behind it, and how it is wired. Components are limited to what is in my work history."
+        >
+          <CaseStudies />
+        </Section>
+
+        <Section
+          id="ai"
+          index="03"
+          eyebrow="Applied AI"
           title="AI systems, built end to end"
-          intro="Seven systems I designed and built over the past year while teaching myself AI engineering — six deployed and live, and one (RideSmartAgent) that runs locally because it drives real logged-in browser sessions. Each goes past the demo layer into the parts that decide whether something is production-worthy: retrieval quality, evaluation, guardrails and cost. Open any of them for the architecture and the reasoning behind it."
+          intro="Seven systems I designed and built over the past year while teaching myself AI engineering — six deployed and live, and one (RideSmartAgent) that runs locally because it drives real logged-in browser sessions. Each goes past the demo into what makes something production-worthy: retrieval quality, evaluation, guardrails and cost."
         >
           <Projects />
         </Section>
 
-        <div className="border-t" />
-
         <Section
-          id="experience"
-          index="02"
-          eyebrow="Experience"
-          title={`${profile.yearsExperience} years of production engineering`}
-          intro="Security-sensitive enterprise platforms — digital forensics, energy and insurance — across .NET, Angular and Azure."
+          id="approach"
+          index="04"
+          eyebrow="Approach"
+          title="How I engineer"
+          intro="One set of habits, applied to a forensics platform and to an LLM agent alike. Each principle below points at the work that shows it."
         >
-          <Experience />
+          <Approach />
         </Section>
 
-        <div className="border-t" />
-
         <Section
-          id="skills"
-          index="03"
-          eyebrow="Toolkit"
-          title="What I work with"
-          intro="Depth in the .NET and Azure stack, with a year of hands-on AI engineering layered on top."
+          id="stack"
+          index="05"
+          eyebrow="Technology"
+          title="Depth and continuity"
+          intro="What carried across every role, what each stage added, and where the AI work sits. A technology appears against a role only where it is in that role's stack."
         >
-          <Skills />
+          <TechMatrix />
         </Section>
 
-        <div className="border-t" />
-
-        <Section id="about" index="04" eyebrow="About" title="A bit of background">
+        <Section id="about" index="06" eyebrow="About" title="Background">
           <About />
         </Section>
 
-        <div className="border-t" />
-
-        <Section
-          id="contact"
-          index="05"
-          eyebrow="Contact"
-          title="Let's talk"
-          intro="I'm open to Full-Stack and AI Engineering roles. The fastest way to reach me is email or LinkedIn."
-        >
+        <Section id="contact" index="07" eyebrow="Contact" title="Let's talk">
           <Contact />
         </Section>
       </main>
@@ -73,7 +85,7 @@ export default function Home() {
           <p>
             © {new Date().getFullYear()} {profile.name}
           </p>
-          <p className="font-mono">Built with Next.js, TypeScript &amp; Tailwind</p>
+          <p className="font-mono">Next.js · TypeScript · Tailwind</p>
         </div>
       </footer>
     </>

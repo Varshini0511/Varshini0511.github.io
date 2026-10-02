@@ -59,13 +59,3 @@ export function RepoLinks({ p, size = "md" }: { p: Project; size?: "sm" | "md" }
   );
 }
 
-/** Monospace architecture diagram — scrolls inside its own box on narrow screens. */
-export function Diagram({ children }: { children: string }) {
-  return (
-    <div className="overflow-x-auto rounded-xl border bg-[var(--surface-2)] p-5">
-      <pre className="w-max min-w-full font-mono text-[0.72rem] leading-[1.55] text-[var(--muted)] sm:text-[0.8rem]">
-        {children}
-      </pre>
-    </div>
-  );
-}

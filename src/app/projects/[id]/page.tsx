@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Check, Terminal, Lightbulb, User, Sparkles } from "lucide-react";
 import Nav from "@/components/Nav";
 import Capabilities from "@/components/Capabilities";
-import { RepoLinks, StackRow, Diagram } from "@/components/project-ui";
+import ArchDiagram from "@/components/ArchDiagram";
+import { RepoLinks, StackRow } from "@/components/project-ui";
 import { profile, getProject } from "@/data/profile";
 
 export function generateStaticParams() {
@@ -59,7 +60,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       <Nav />
       <main className="mx-auto max-w-4xl px-5 pb-24 pt-28 sm:px-8 sm:pt-32">
         <Link
-          href="/#work"
+          href="/#ai"
           className="inline-flex items-center gap-1.5 text-sm text-[var(--muted)] transition-colors hover:text-[var(--text)]"
         >
           <ArrowLeft size={15} /> All projects
@@ -98,7 +99,15 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
         {/* ---------- Architecture ---------- */}
         <Block icon={Terminal} title="Architecture">
-          <Diagram>{p.architecture}</Diagram>
+          <figure className="card overflow-hidden">
+            <div className="flex items-center justify-between border-b bg-[var(--surface-2)] px-5 py-2.5">
+              <span className="label text-[0.62rem] text-[var(--faint)]">{p.name}</span>
+              <span className="label text-[0.62rem] text-[var(--faint)]">Simplified</span>
+            </div>
+            <div className="p-4 sm:p-6">
+              <ArchDiagram spec={p.diagram} id={p.id} title={`${p.name} architecture`} />
+            </div>
+          </figure>
         </Block>
 
         {/* ---------- Capabilities (flagship only) ---------- */}

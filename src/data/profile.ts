@@ -7,6 +7,17 @@
  * apply to a given project.
  */
 
+import { azureIngestion, forensicsPlatform, modernisation, type DiagramSpec } from "./diagrams";
+import {
+  advishoppingPipeline,
+  nimbuspayAgent,
+  travelPlanner,
+  githubAgentDiagram,
+  docExplainerDiagram,
+  expenseAgentDiagram,
+  rideSmartDiagram,
+} from "./project-diagrams";
+
 export const profile = {
   name: "Varchini Devi K",
   title: "Senior Software Engineer",
@@ -30,6 +41,266 @@ export const profile = {
     { value: "3", label: "Enterprise platforms delivered end-to-end" },
     { value: "40%", label: "Cloud cost reduction delivered" },
     { value: "7", label: "AI systems built from scratch" },
+  ],
+
+  /** The spec sheet beside the hero. Dense, factual, scannable. */
+  glance: [
+    { k: "Role", v: "Senior Software Engineer, Exterro R&D" },
+    { k: "Experience", v: "8+ years across 3 enterprise domains" },
+    { k: "Domains", v: "Digital forensics · Energy · Insurance" },
+    { k: "Core", v: "C# · .NET 8 · ASP.NET Core · Azure · SQL Server" },
+    { k: "Front end", v: "Angular · React / Next.js · TypeScript" },
+    { k: "Applied AI", v: "RAG · agents · MCP · evals · guardrails" },
+    { k: "Based in", v: "Chennai, India" },
+  ],
+
+  /** Measured outcomes from the résumé, labelled with where they came from. */
+  outcomes: [
+    { value: "−40%", label: "Cloud cost", context: "AWS EC2 migration" },
+    { value: "~35%", label: "Faster processing", context: "SQL stored-procedure and data-model tuning" },
+    { value: "−30%", label: "Response time", context: "IIS tuning on high-traffic apps" },
+    { value: "−40%", label: "System downtime", context: "100+ scheduled jobs managed in Tidal" },
+    { value: "0", label: "Plain-text secrets", context: "Managed Identity with Key Vault" },
+    { value: "100%", label: "Clean security record", context: "Reviews with the cybersecurity team" },
+  ],
+
+  /** Where the effort goes — three lanes, each with evidence rather than adjectives. */
+  focusAreas: [
+    {
+      id: "A",
+      title: "Secure, auditable platforms",
+      lead: "Systems where confidentiality, integrity and traceability are requirements, not features.",
+      points: [
+        "Digital forensics platform: evidence handling, certificate-based encryption, auditability across the investigative lifecycle",
+        "APIs secured with OAuth 2.0, OpenID Connect and JWT; Managed Identities and Key Vault instead of stored secrets",
+        "Encrypted, fault-tolerant collection from endpoints, cloud drives, mail systems and mobile devices",
+      ],
+    },
+    {
+      id: "B",
+      title: "Distributed, cloud-native systems",
+      lead: "Event-driven pipelines that stay consistent when parts of them fail.",
+      points: [
+        "Azure Functions and Durable orchestrations; Service Bus topics with retry policies and dead-letter queues",
+        "Cosmos DB modelling: partitioning, indexing and request-unit tuning for cost and performance",
+        "Docker on AKS; Application Insights telemetry, dependency tracking and KQL",
+        "Framework migration to .NET 8; AWS EC2 migration with a 40% cost reduction",
+      ],
+    },
+    {
+      id: "C",
+      title: "Applied AI, engineered properly",
+      lead: "The same discipline applied to LLM systems: bounded, observable, evaluated.",
+      points: [
+        "RAG and hybrid retrieval: full-text plus vector search, rank fusion, cross-encoder reranking",
+        "Tool-calling agents, multi-agent orchestration and an MCP server",
+        "Evaluation harnesses, LLM-as-judge, guardrails, PII redaction, tracing and cost tracking",
+        "Human approval gates on every state-changing action",
+      ],
+    },
+  ],
+
+  /** Principles stated once, then backed with evidence from both halves of the career. */
+  principles: [
+    {
+      title: "Secrets never live in code or config.",
+      proof: [
+        "Wipro — system- and user-assigned Managed Identities across Function Apps, Blob Storage, Cosmos DB and Key Vault removed plain-text secrets and connection strings.",
+        "NimbusPay — PII is redacted with Presidio before the model, the logs or the database see it.",
+      ],
+    },
+    {
+      title: "Enforce rules in code, not in prompts.",
+      proof: [
+        "NimbusPay — every session is scoped to the signed-in customer at the tool layer, so a jailbroken model still cannot read another account.",
+        "GitHub Agent — writes sit behind an approval interrupt and an ALLOW_WRITES switch.",
+        "ExpenseTracker — the model proposes; the C# layer performs the INSERT.",
+      ],
+    },
+    {
+      title: "Design for the failure, not the demo.",
+      proof: [
+        "Wipro — Service Bus retry policies and dead-letter queues around every downstream notification.",
+        "RideSmartAgent — each provider is time-boxed, so one failing scraper cannot sink a comparison.",
+        "GitHub Agent — rate limits and 5xx errors retry with exponential backoff and jitter.",
+      ],
+    },
+    {
+      title: "Measure before you claim.",
+      proof: [
+        "AdviShopping — keyword, semantic, hybrid and reranked search scored on precision@k, recall@k and NDCG@k.",
+        "NimbusPay and GitHub Agent — golden sets with an LLM judge; one case fails the agent if it invents code for a missing file.",
+        "Production — 40% cloud cost, about 35% processing time and 30% response time, each tracked as a number.",
+      ],
+    },
+  ],
+
+  /**
+   * Technology × career. A cell is filled only where the stack or bullets in my
+   * work history show the technology in use at that stage — nothing aspirational.
+   */
+  techMatrix: {
+    columns: [
+      { key: "cts", label: "Cognizant", span: "2018–22" },
+      { key: "wipro", label: "Wipro", span: "2022–24" },
+      { key: "exterro", label: "Exterro", span: "2024–" },
+      { key: "ai", label: "Applied AI", span: "2026–" },
+    ],
+    groups: [
+      {
+        name: "Backend",
+        rows: [
+          { name: "C# / .NET", note: ".NET 4.x → Core → 8", used: ["cts", "wipro", "exterro", "ai"] },
+          { name: "ASP.NET Web API · REST", note: "microservices, versioned contracts", used: ["cts", "wipro", "exterro", "ai"] },
+          { name: "ADO.NET · EF · LINQ", note: "high-volume data access", used: ["cts", "wipro", "exterro"] },
+          { name: "Web Forms · WCF · VB.NET", note: "legacy enterprise stack", used: ["cts"] },
+          { name: "Python", note: "agents, RAG, evaluation", used: ["ai"] },
+        ],
+      },
+      {
+        name: "Data",
+        rows: [
+          { name: "SQL Server", note: "stored procedures, tuning", used: ["cts", "wipro", "exterro"] },
+          { name: "MongoDB · DB2 · Cosmos DB", note: "NoSQL and legacy stores", used: ["cts", "wipro"] },
+          { name: "PostgreSQL · pgvector", note: "vector search", used: ["ai"] },
+        ],
+      },
+      {
+        name: "Front end",
+        rows: [
+          { name: "Angular", note: "dashboards, evidence review", used: ["wipro", "exterro"] },
+          { name: "React / Next.js", note: "against secure .NET APIs", used: ["wipro", "ai"] },
+        ],
+      },
+      {
+        name: "Cloud & delivery",
+        rows: [
+          { name: "Azure platform services", note: "Functions, Durable, Service Bus, Key Vault", used: ["wipro"] },
+          { name: "Docker · Kubernetes (AKS)", note: "containerised services", used: ["wipro", "ai"] },
+          { name: "CI/CD", note: "Jenkins, Urban Code Deploy", used: ["cts"] },
+        ],
+      },
+      {
+        name: "Security",
+        rows: [
+          { name: "OAuth · OIDC · JWT", note: "API authentication", used: ["cts", "wipro"] },
+          { name: "Certificates · Managed Identity", note: "encryption, secretless auth", used: ["wipro", "exterro"] },
+        ],
+      },
+      {
+        name: "Applied AI",
+        rows: [
+          { name: "RAG · hybrid & vector search", note: "RRF, reranking, FAISS", used: ["ai"] },
+          { name: "Agents · tool calling · MCP", note: "LangGraph, supervisors", used: ["ai"] },
+          { name: "Evals · guardrails · tracing", note: "LLM-as-judge, PII redaction", used: ["ai"] },
+        ],
+      },
+    ],
+  },
+
+  /** Three engagements told as systems: what I built, why, and how it is wired. */
+  caseStudies: [
+    {
+      id: "azure-ingestion",
+      title: "Event-driven ingestion pipeline on Azure",
+      org: "Wipro · digital oilfield",
+      period: "Feb 2022 – Jul 2024",
+      summary:
+        "A file landing in Blob Storage triggers an automated pipeline that decrypts it, rejects duplicates by hash, validates and splits it, then inserts structured rows into SQL Server — orchestrated so the sequence stays consistent and every failure stays recoverable.",
+      decisions: [
+        {
+          title: "Durable orchestration for ordered, recoverable steps",
+          body: "Azure Functions with action triggers sequence the SQL insertions, coordinated by durable orchestration so the pipeline stays consistent and can resume after a failure.",
+        },
+        {
+          title: "Managed Identity instead of secrets",
+          body: "System- and user-assigned identities authenticate Function Apps to Blob Storage, Cosmos DB and Key Vault, eliminating plain-text secrets and connection strings.",
+        },
+        {
+          title: "Service Bus for fan-out, with a safety net",
+          body: "Topics and subscriptions notify downstream services and trigger email workflows; retry policies and dead-letter queues contain failures instead of losing them.",
+        },
+        {
+          title: "Cosmos DB modelled for the UI's reads",
+          body: "Container design, partitioning, indexing and request-unit tuning balance cost against query performance for the dashboards that read from it.",
+        },
+        {
+          title: "Observable and configurable by default",
+          body: "Application Insights custom telemetry, dependency tracking and KQL for proactive analysis; environment settings and feature toggles centralised in App Configuration.",
+        },
+      ],
+      stack: ["Azure Functions", "Durable Functions", "Blob Storage", "Service Bus", "Cosmos DB", "Key Vault", "App Configuration", "Application Insights", "SQL Server", "AKS"],
+      caption: "Simplified architecture — components as named in my work history.",
+      diagramId: "azure",
+      diagramTitle: "Event-driven ingestion pipeline on Azure",
+      diagram: azureIngestion as DiagramSpec,
+    },
+    {
+      id: "forensics-platform",
+      title: "Evidence collection and review for a forensics platform",
+      org: "Exterro R&D · FTKC",
+      period: "Aug 2024 – present",
+      summary:
+        "Collection from endpoints, cloud drives, mail systems and mobile devices into a digital forensics platform where confidentiality, integrity and auditability of evidence are requirements — plus the review interface analysts use on the other side.",
+      decisions: [
+        {
+          title: "Mobile collection as an orchestrated job",
+          body: "An end-to-end module automating job orchestration, secure TCP/IP-based capture and transfer, progress tracking and encrypted output generation, built for robustness and fault tolerance.",
+        },
+        {
+          title: "Integrity by construction",
+          body: "Encryption and certificate-based workflows preserve forensic data integrity and satisfy internal and external security standards.",
+        },
+        {
+          title: "Ingest from everywhere",
+          body: "Microsoft Graph, Google APIs and Export APIs across Google Drive, OneDrive, network shares, Gmail, Outlook, Exchange and Windows, Linux and macOS systems — with ingestion issues traced across cloud and on-prem.",
+        },
+        {
+          title: "macOS artifacts, reviewed in the browser",
+          body: "Apple APIs and macOS/iWork document handling enable secure, browser-based review of macOS-originated evidence.",
+        },
+        {
+          title: "Extraction that stays traceable",
+          body: "Automated entity extraction and classification — people, emails, keywords, metadata — while keeping traceability and correctness of what was extracted.",
+        },
+      ],
+      stack: ["C#", ".NET 8", "ASP.NET", "Web API", "Angular 14", "EF Core", "SQL Server", "Microsoft Graph", "Google APIs"],
+      caption: "Simplified architecture — components as named in my work history.",
+      diagramId: "forensics",
+      diagramTitle: "Evidence collection and review pipeline",
+      diagram: forensicsPlatform as DiagramSpec,
+    },
+    {
+      id: "modernisation",
+      title: "Platform modernisation to .NET 8",
+      org: "Exterro R&D, and earlier platform work",
+      period: "2018 – present",
+      summary:
+        "Leading the move of a long-lived .NET Framework platform onto .NET 8 — breaking changes, legacy refactoring, API modernisation and performance — built on earlier upgrade and migration work that cut cost and processing time.",
+      decisions: [
+        {
+          title: "Align with long-term support",
+          body: "The migration targets .NET 8 for long-term support and platform sustainability, resolving breaking changes and refactoring legacy components along the way.",
+        },
+        {
+          title: "More than a retarget",
+          body: "Modernising APIs and improving performance are part of the migration itself, not a separate phase afterwards.",
+        },
+        {
+          title: "Done before, at smaller scale",
+          body: ".NET 4.8 upgrades, a Windows Server 2012 → 2019 migration with full environment setup and validation, and a move to AWS EC2 that cut cost by 40% and improved scalability.",
+        },
+        {
+          title: "Query-level performance",
+          body: "Tuned SQL stored procedures and data models, improving correlation accuracy and reducing processing time by about 35%.",
+        },
+      ],
+      stack: [".NET Framework", ".NET 4.8", ".NET 8", "SQL Server", "Windows Server", "AWS EC2"],
+      caption: "Simplified view of the migration track.",
+      diagramId: "modernisation",
+      diagramTitle: "Platform modernisation to .NET 8",
+      diagram: modernisation as DiagramSpec,
+    },
   ],
 
   about: [
@@ -58,16 +329,7 @@ export const profile = {
         "Hosted on Render's free tier — the first load can take up to a minute while the server wakes and loads the models.",
       stack: ["Next.js 15", "TypeScript", "Supabase", "pgvector", "Transformers.js", "CLIP", "Groq", "Tailwind"],
       tags: ["Vector Search", "RAG", "Agents", "Multimodal", "Full-Stack"],
-      architecture: `Browser ──▶ Next.js Server Component  (/search)
-                │
-                ▼   src/lib/search-pipeline.ts   — orchestrates 6 stages
-   ┌────────────┼──────────────────────────────────────────────┐
-   │            │                    │                         │
-keyword_search  semantic_search   rerank                    converse
-(Postgres FTS)  (pgvector)        (cross-encoder)           (Groq LLM)
-tsvector + GIN  gte-small 384d    ms-marco-MiniLM           reasons per item
-   │            │                    │                         │
-   └────────────┴─── Supabase (Postgres + pgvector) ───────────┘`,
+      diagram: advishoppingPipeline as DiagramSpec,
       capabilities: [
         {
           name: "Hybrid Search",
@@ -161,28 +423,7 @@ tsvector + GIN  gte-small 384d    ms-marco-MiniLM           reasons per item
         "Streamlit Community Cloud sleeps after inactivity — if you see a sleep screen, click “wake” and give it a moment. Sign in as alex@nimbuspay.demo / demo1234.",
       stack: ["Python", "Streamlit", "Groq", "PostgreSQL", "Presidio", "DeepEval", "LangSmith"],
       tags: ["Agents", "RAG", "Safety", "Evaluation", "Observability"],
-      architecture: `customer message
-      │
-      ▼
- PII redaction (Presidio)        ← secrets never reach the model, logs or DB
-      │
-      ▼
- ┌────────────────────────────────┐
- │  agentic tool-use loop          │  ← traced per stage: latency, tokens, I/O
- │   + conversation memory         │
- │   search_knowledge_base (RAG)   │
- │   get_account_balance      ──────────▶  PostgreSQL
- │   get_recent_transactions  ──────────▶  accounts, cards,
- │   get_card_status          ──────────▶  transactions,
- │   block_card / file_dispute ─────────▶  chat history
- │        ▲ human approval gate    │
- └────────────────────────────────┘
-      │
-      ▼
- output guardrails (regex / schema / semantic LLM-judge)
-      │
-      ▼
- AgentResult { answer, tool_calls, cost, pii_redacted, violations, trace }`,
+      diagram: nimbuspayAgent as DiagramSpec,
       capabilities: [],
       highlights: [
         "Agentic tool-use loop over typed tools — balance, transactions, card status, block card, file dispute, KB search",
@@ -249,29 +490,7 @@ tsvector + GIN  gte-small 384d    ms-marco-MiniLM           reasons per item
         "Streamlit Community Cloud sleeps after inactivity — if you see a sleep screen, click “wake” and give it a moment.",
       stack: ["LangGraph", "LangChain", "Groq", "Google Gemini", "Tavily", "Neon Postgres", "pgvector", "Streamlit"],
       tags: ["Agents", "Orchestration", "RAG", "Evaluation"],
-      architecture: `user request
-     │
-     ▼
- input guardrail  (prompt-injection defense)
-     │
-     ▼
- planner  ◀──── recalls preferences from past trips (pgvector + Gemini)
-     │
-     ▼
- ⏸  human-in-the-loop — approve or edit the research plan
-     │
-     ├───────────┬────────────┬───────────┐
-     ▼           ▼            ▼           ▼
-  flights     hotels     activities     visa      ← parallel subagents,
-     │           │            │           │         each picks its own tools
-     └───────────┴─────┬──────┴───────────┘         (web search / currency)
-                       ▼
-                  synthesizer
-                       ▼
-                    critic ──── over budget? ────▶ back to planner
-                       │
-                       ▼
-                  final plan        state persisted per trip (Postgres)`,
+      diagram: travelPlanner as DiagramSpec,
       capabilities: [],
       highlights: [
         "Parallel fan-out / fan-in across flights, hotels, activities and visa subagents",
@@ -336,25 +555,7 @@ tsvector + GIN  gte-small 384d    ms-marco-MiniLM           reasons per item
         "Streamlit Community Cloud sleeps after inactivity — click “wake” if you see a sleep screen. It runs on Groq's free tier, so Supervisor mode can occasionally pause on a rate limit.",
       stack: ["Python", "MCP", "LangGraph", "LangChain", "Groq", "Gemini embeddings", "FAISS", "SQLite", "Streamlit"],
       tags: ["Agents", "RAG", "MCP", "Orchestration", "Evaluation", "Safety"],
-      architecture: `user
-  │
-  ├─ single agent        one model, every tool
-  ├─ supervisor team     delegates to three specialists, each seeing only its own tools
-  │     ├─ repo_qa         read + semantic search
-  │     ├─ issue_triage    issues, labels, comments
-  │     └─ code_writer     branch → edit → open PR
-  └─ Streamlit UI        both modes, with Approve / Reject buttons
-        │
-        ▼  tools discovered over MCP (stdio subprocess)
- MCP server  — 14 tools
-   ├─ github_client.py   retry · backoff + jitter · LLM-readable errors ──▶ GitHub REST API
-   └─ rag.py             repo tarball → chunk → Gemini embeddings → FAISS
-                         search_code returns path:line citations
-
- memory   SQLite checkpointer, one thread_id per conversation
- context  summarisation middleware keeps the window bounded
- safety   approval interrupt + ALLOW_WRITES flag on every write
-          model-call limit · corrective retry on malformed tool calls`,
+      diagram: githubAgentDiagram as DiagramSpec,
       capabilities: [],
       highlights: [
         "MCP server exposing 14 GitHub tools over stdio, discovered by the agents rather than hard-coded",
@@ -436,29 +637,7 @@ tsvector + GIN  gte-small 384d    ms-marco-MiniLM           reasons per item
       demoNote: null,
       stack: [".NET 8", "C#", "Next.js 14", "TypeScript", "PostgreSQL", "pgvector", "Gemini", "Groq"],
       tags: ["RAG", "Agents", "Full-Stack", ".NET"],
-      architecture: `PHASE 1 — ingest
-  upload (.pdf / .txt / .md)
-        ▼  chunk in browser (~800 chars)
-  POST /api/rag/ingest
-        ▼  Gemini gemini-embedding-001 → 768-dim vector
-  PostgreSQL + pgvector   (chunk text alongside its vector)
-
-PHASE 2 — ask
-  POST /api/agent/ask
-        ▼
-  ┌──────────────────────────────────────────┐
-  │ Thought:      which tool do I need?       │
-  │ Action:       SearchDocuments[query]      │
-  │                    ▼                      │
-  │   C# embeds query → pgvector cosine search│
-  │   returns top 3 nearest chunks            │
-  │                    ▼                      │
-  │ Observation:  [relevant chunks]           │
-  │ Thought:      I have enough                │
-  │ Final Answer: grounded in those chunks    │
-  └──────────────────────────────────────────┘
-        ▼
-  answer in chat UI`,
+      diagram: docExplainerDiagram as DiagramSpec,
       capabilities: [],
       highlights: [
         "Full RAG pipeline in .NET 8 Web API — chunking, embedding, retrieval and generation in C#",
@@ -516,26 +695,7 @@ PHASE 2 — ask
       demoNote: null,
       stack: [".NET 8", "C#", "Next.js", "PostgreSQL", "pgvector", "Groq", "Gemini", "Docker"],
       tags: ["Agents", "RAG", "Full-Stack", ".NET"],
-      architecture: `expense submitted
-      │
-      ▼
- ┌───────────────────────────────────────────────┐
- │  tool-calling agent loop   (max 5 iterations)  │
- │                                                │
- │   CheckPolicy ──▶ Gemini embeds the expense    │
- │                   pgvector cosine search       │
- │                   distance < 0.36 or no match  │
- │                        ▼                       │
- │                   policy text ──▶ LLM verdict  │
- │                                                │
- │   SaveExpense ──▶ real INSERT, executed by C#  │
- │                                                │
- │   finish_reason: "tool_calls" → act again      │
- │   finish_reason: "stop"       → done           │
- └───────────────────────────────────────────────┘
-      │
-      ▼
- structured JSON ──▶ Next.js dashboard`,
+      diagram: expenseAgentDiagram as DiagramSpec,
       capabilities: [],
       highlights: [
         "Tool-calling agent with a JSON-schema tool menu; the model sequences policy check → save autonomously",
@@ -601,29 +761,7 @@ PHASE 2 — ask
         "No hosted demo: it drives real, logged-in Uber and Ola browser sessions, so it runs locally on your own accounts. Happy to walk through it live.",
       stack: ["Python", "Playwright", "asyncio", "Streamlit", "Groq", "SQLite", "Folium", "Pydantic"],
       tags: ["Agents", "Automation"],
-      architecture: `pickup + drop-off (free text)
-        │
-        ▼  geocode   (Google Maps, falls back to Nominatim)
-        │
-        ▼  fetch quotes — all providers at once, each time-boxed
- ┌───────────┬───────────┬──────────────┬──────────────┐
- Uber        Ola         Rapido         Namma Yatri
- Playwright  Playwright  distance-based fare estimate
- live scrape live scrape
- └───────────┴───────────┴──────────────┴──────────────┘
-        │   a provider that fails or times out → [] , not a crash
-        ▼
- comparator   cheapest cab ≤ ₹ threshold ?  rank cabs, autos as fallback
-                                      else  switch to auto, cabs as fallback
-        │
-        ▼
- AI layer  (SQLite ride history)
-   anomaly detection · price prediction · surge probability
-   best time to book · preference learning · Groq chat assistant
-        │
-        ▼
- race booking   providers within ₹50 of the best price
-   initiate on each ─▶ poll together ─▶ first confirmed wins ─▶ rest closed`,
+      diagram: rideSmartDiagram as DiagramSpec,
       capabilities: [],
       highlights: [
         "Live price comparison across Uber and Ola via Playwright, with distance-based fare estimates for Rapido and Namma Yatri",
@@ -687,6 +825,9 @@ PHASE 2 — ask
       company: "Exterro R&D Private Ltd",
       role: "Senior Software Engineer",
       period: "Aug 2024 — Present",
+      short: "Exterro",
+      /** [start, end] as decimal years; null end means "now". */
+      span: [2024.58, null] as [number, number | null],
       current: true,
       domain: "Digital forensics · eDiscovery",
       context:
@@ -711,6 +852,8 @@ PHASE 2 — ask
       company: "Wipro Limited",
       role: "Senior Software Engineer",
       period: "Feb 2022 — Jul 2024",
+      short: "Wipro",
+      span: [2022.08, 2024.58] as [number, number | null],
       current: false,
       domain: "Energy · Digital oilfield",
       context:
@@ -735,6 +878,8 @@ PHASE 2 — ask
       company: "Cognizant Technology Solutions",
       role: "Associate",
       period: "Feb 2018 — Feb 2022",
+      short: "Cognizant",
+      span: [2018.08, 2022.08] as [number, number | null],
       current: false,
       domain: "Insurance · Claims & subrogation",
       context: "Insurance platform work for Travelers — claims, subrogation and payments.",
