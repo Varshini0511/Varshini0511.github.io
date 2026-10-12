@@ -39,12 +39,12 @@ function buildLanes(): Lane[] {
 
   jobs.push({
     key: "ai",
-    name: "Applied AI",
-    role: "Independent systems",
+    name: "Independent",
+    role: "AI & mobile projects",
     start: 2026.0,
     end: NOW,
     current: true,
-    eras: "RAG · agents · MCP · evals · guardrails",
+    eras: "RAG · agents · MCP · evals · Kotlin · Expo",
   });
   return jobs;
 }

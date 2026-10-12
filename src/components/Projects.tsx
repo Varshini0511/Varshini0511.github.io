@@ -99,10 +99,12 @@ function Row({ p, n }: { p: Project; n: string }) {
 export default function Projects() {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
 
+  // Only the AI projects live here; the mobile builds have their own section.
   // Numbering follows the data order, so a project keeps its number under any filter.
+  const aiProjects = useMemo(() => profile.projects.filter((p) => p.kind === "ai"), []);
   const numbered = useMemo(
-    () => profile.projects.map((p, i) => ({ p, n: String(i + 1).padStart(2, "0") })),
-    [],
+    () => aiProjects.map((p, i) => ({ p, n: String(i + 1).padStart(2, "0") })),
+    [aiProjects],
   );
 
   const shown = useMemo(
@@ -145,8 +147,8 @@ export default function Projects() {
       )}
 
       <p className="mt-6 text-[0.8rem] text-[var(--faint)]">
-        {profile.projects.filter((p) => p.demo).length} of {profile.projects.length} projects have a live demo — the rest
-        explain how to run them.
+        {aiProjects.filter((p) => p.demo).length} of {aiProjects.length} projects have a live demo — the rest explain
+        how to run them.
       </p>
     </>
   );

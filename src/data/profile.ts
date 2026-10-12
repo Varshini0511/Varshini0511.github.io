@@ -16,6 +16,8 @@ import {
   docExplainerDiagram,
   expenseAgentDiagram,
   rideSmartDiagram,
+  rideSmartAndroidDiagram,
+  rideSmartMobileDiagram,
 } from "./project-diagrams";
 
 export const profile = {
@@ -51,6 +53,7 @@ export const profile = {
     { k: "Core", v: "C# · .NET 8 · ASP.NET Core · Azure · SQL Server" },
     { k: "Front end", v: "Angular · React / Next.js · TypeScript" },
     { k: "Applied AI", v: "RAG · agents · MCP · evals · guardrails" },
+    { k: "Mobile", v: "Kotlin · Jetpack Compose · React Native / Expo" },
     { k: "Based in", v: "Chennai, India" },
   ],
 
@@ -144,7 +147,7 @@ export const profile = {
       { key: "cts", label: "Cognizant", span: "2018–22" },
       { key: "wipro", label: "Wipro", span: "2022–24" },
       { key: "exterro", label: "Exterro", span: "2024–" },
-      { key: "ai", label: "Applied AI", span: "2026–" },
+      { key: "ai", label: "Independent", span: "2026–" },
     ],
     groups: [
       {
@@ -170,6 +173,13 @@ export const profile = {
         rows: [
           { name: "Angular", note: "dashboards, evidence review", used: ["wipro", "exterro"] },
           { name: "React / Next.js", note: "against secure .NET APIs", used: ["wipro", "ai"] },
+        ],
+      },
+      {
+        name: "Mobile",
+        rows: [
+          { name: "Kotlin · Jetpack Compose", note: "native Android, AccessibilityService", used: ["ai"] },
+          { name: "React Native · Expo", note: "TypeScript, Expo Router, SQLite", used: ["ai"] },
         ],
       },
       {
@@ -314,6 +324,7 @@ export const profile = {
     {
       id: "advishopping",
       flagship: true,
+      kind: "ai",
       name: "AdviShopping",
       subtitle: "Production-shaped retrieval for e-commerce",
       period: "2026",
@@ -408,6 +419,7 @@ export const profile = {
     {
       id: "nimbuspay",
       flagship: false,
+      kind: "ai",
       name: "NimbusPay",
       subtitle: "AI support agent with observability, evals & safety",
       period: "2026",
@@ -475,6 +487,7 @@ export const profile = {
     {
       id: "travel-planner",
       flagship: false,
+      kind: "ai",
       name: "Multi-Agent Travel Planner",
       subtitle: "LangGraph orchestration with a reflection loop",
       period: "2026",
@@ -540,6 +553,7 @@ export const profile = {
     {
       id: "github-agent",
       flagship: false,
+      kind: "ai",
       name: "GitHub Agent",
       subtitle: "A multi-agent assistant built on an MCP server",
       period: "2026",
@@ -623,6 +637,7 @@ export const profile = {
     {
       id: "docexplainer",
       flagship: false,
+      kind: "ai",
       name: "DocExplainer",
       subtitle: "RAG document Q&A with a ReAct agent — on .NET",
       period: "2026",
@@ -681,6 +696,7 @@ export const profile = {
     {
       id: "expense-tracker",
       flagship: false,
+      kind: "ai",
       name: "ExpenseTracker",
       subtitle: "A tool-calling agent that takes real actions",
       period: "2026",
@@ -746,6 +762,7 @@ export const profile = {
     {
       id: "ridesmart",
       flagship: false,
+      kind: "ai",
       name: "RideSmartAgent",
       subtitle: "Ride-hailing price comparison and race booking for India",
       period: "2026",
@@ -818,7 +835,207 @@ export const profile = {
         "Some systems can't be hosted as a demo, and saying so plainly is better than faking one.",
       ],
     },
+
+    /* ---------------------------------------------------------------- */
+    {
+      id: "ridesmart-android",
+      flagship: false,
+      kind: "mobile",
+      name: "RideSmart Android",
+      subtitle: "Native app that reads live fares off the ride apps' own screens",
+      period: "2026",
+      role: "Solo — native Android, accessibility automation, race booking",
+      blurb:
+        "A native Kotlin and Jetpack Compose app that compares live fares across Uber, Ola, Rapido and Namma Yatri by reading each app's own screen through an AccessibilityService — then races bookings across them and cancels the losers.",
+      problem:
+        "On a phone the four ride apps are one tap apart, but their fares can't be compared without opening each, remembering the number and switching back — and there is no fare API to call. The phone already shows the real price on screen, so I built an app that reads it from there, and that survives the aggressive battery managers that kill most background work.",
+      repo: "https://github.com/Varshini0511/RideSmartAndroid",
+      repoPrivate: false,
+      demo: null,
+      demoNote:
+        "No hosted demo: it needs the ride apps installed and the Accessibility permission granted, so it is built from source on a device. Happy to walk through it live.",
+      stack: ["Kotlin", "Jetpack Compose", "Material 3", "AccessibilityService", "Coroutines + Flow", "Foreground Service", "Navigation Compose"],
+      tags: ["Mobile", "Android", "Automation"],
+      diagram: rideSmartAndroidDiagram as DiagramSpec,
+      capabilities: [],
+      highlights: [
+        "Reads live fares from Uber, Ola, Rapido and Namma Yatri off each app's own screen via an AccessibilityService",
+        "Per-app time caps — a render wait, a settle window to catch the whole list and a hard watchdog — so the loop can never hang",
+        "The scrape loop runs inside the accessibility service, so it survives RideSmart being pushed to the background",
+        "A foreground service and disk-persisted route and prices survive aggressive OEM battery managers",
+        "Race booking across up to three apps: pick the exact vehicle, tap Book, watch screen text and notifications for a driver, cancel the rest",
+        "Ranks within a category — autos against autos — as Best Price, Fastest Pickup and Best Value (60% price, 40% wait)",
+        "Live prices override estimates per app and category; the fare model fills gaps and is flagged as an estimate",
+      ],
+      deepDive: [
+        {
+          title: "The phone already shows the price",
+          body: "There is no fare API to call, but the ride apps render their prices on screen, and an AccessibilityService can read another app's window. The service walks the visible nodes for rupee amounts, ETA minutes and vehicle names, and filters out promotional lines such as “save ₹20” so a discount is never mistaken for a fare. The result is the real number the rider would see, not a model of it.",
+          points: [],
+        },
+        {
+          title: "A loop that cannot hang",
+          body: "Reading another app is timing-dependent, so every step is bounded: a cap on waiting for a price list to render, a short settle window after the first price appears so the whole list is captured, and a hard watchdog per app that nothing can exceed. The coroutine scope uses a supervisor job and an exception handler, so an unexpected failure while reading someone else's screen can't take the service down.",
+          points: [],
+        },
+        {
+          title: "Designing for hostile phones",
+          body: "Vivo, iQOO, Xiaomi and Oppo handsets freeze or kill background apps, which would stall a loop driven from an Activity. So the loop runs inside the accessibility service, which the OS keeps alive; a foreground service with an ongoing notification marks the work as active; and the route and captured prices are written to disk, so even a hard process kill restores the results screen without re-entering anything.",
+          points: [],
+        },
+        {
+          title: "Race booking on one screen",
+          body: "Only one app can be on screen at a time, so rides are requested one after another — open on the route, select the exact vehicle, tap Book, confirm the pickup pin — and each app then keeps searching for a driver on its own. The booker watches every app's screen text and notifications for driver-assigned patterns; the first to confirm wins and the other requests are cancelled through each app's own cancel flow, with a five-minute cap and a note for any app it couldn't drive.",
+          points: [],
+        },
+        {
+          title: "Comparing like with like",
+          body: "Comparing an auto with an SUV isn't a saving, so suggestions are computed within each ride category and the headline saving is the largest like-for-like gap. Within a category the comparator picks the cheapest, the fastest pickup, and a best-value option scored 60% on price and 40% on wait, both normalised within the category so the units can't skew it.",
+          points: [],
+        },
+        {
+          title: "Estimates as a labelled fallback",
+          body: "When a live price isn't available, a fare model fills the gap: per-provider, per-vehicle fare cards with a base, a per-kilometre and per-minute rate and a minimum fare, plus time-of-day surge. Every quote carries an isRealPrice flag, and live prices always win for the same app and category, so a modelled number is never silently presented as a real one.",
+          points: [],
+        },
+      ],
+      tryThis: [
+        "Open the project in Android Studio and run it on a device (minSdk 26, Android 8.0+)",
+        "Enable RideSmart under Accessibility settings and allow Display over other apps",
+        "Install the ride apps you want compared and sign in to them",
+        "Enter a pickup and drop — let it cycle the apps, or tap one to capture just its fare",
+        "Select up to three rides and start a race booking",
+      ],
+      learnings: [
+        "When there is no API, the screen is the interface — and then timing and failure handling are the whole job.",
+        "OEM battery managers are a runtime you design for, not an edge case.",
+        "Compare like with like: a saving across different vehicle classes isn't a saving.",
+        "Flag every estimate as one — silently mixing live and modelled numbers is worse than having fewer numbers.",
+        "Reading another app's screen is powerful and sensitive; it belongs on the user's own device, with explicit permission, for their own rides.",
+      ],
+    },
+
+    /* ---------------------------------------------------------------- */
+    {
+      id: "ridesmart-mobile",
+      flagship: false,
+      kind: "mobile",
+      name: "RideSmart Mobile",
+      subtitle: "Cross-platform ride comparison in Expo and React Native",
+      period: "2026",
+      role: "Solo — Expo app, fare model, deep-link hand-off, on-device history",
+      blurb:
+        "The cross-platform sibling: an Expo and React Native app, in TypeScript, that compares estimated fares across the four ride apps and then hands off to the chosen one with the route pre-filled. One codebase configured for Android, iOS and web.",
+      problem:
+        "The Android build needs a sensitive permission and only runs on Android. I wanted the same comparison somewhere it could run anywhere, with a stricter promise: estimate honestly, say it is an estimate, and leave the actual booking to the ride app rather than automating it.",
+      repo: "https://github.com/Varshini0511/RideSmartMobile",
+      repoPrivate: false,
+      demo: null,
+      demoNote: "No hosted demo — run it from source with Expo (npx expo start) on a device, simulator or in the browser.",
+      stack: ["Expo", "React Native", "TypeScript", "Expo Router", "expo-sqlite", "expo-location", "react-native-maps", "Reanimated"],
+      tags: ["Mobile", "Cross-platform", "TypeScript"],
+      diagram: rideSmartMobileDiagram as DiagramSpec,
+      capabilities: [],
+      highlights: [
+        "Expo Router app with three tabs: compare, history and settings",
+        "Estimates fares from per-provider fare cards — base, per-km, per-minute, minimum — with time-of-day and weekend surge, shown as a ±10% range",
+        "Place search through OpenStreetMap Nominatim, plus current-location pickup with reverse geocoding",
+        "Filters by ride type, highlights the best quote and shows the most you could save",
+        "Hands off to Uber, Ola, Rapido or Namma Yatri via deep links with pickup and drop pre-filled, falling back to the Play Store or the web",
+        "On-device SQLite history with per-provider price statistics, with a separate web implementation of the storage layer",
+        "TypeScript throughout, with shared types for providers, ride types and quotes",
+      ],
+      deepDive: [
+        {
+          title: "Honest about estimating",
+          body: "Without the accessibility approach there is no way to see a live price, so this app doesn't pretend to. Fares come from per-provider fare cards, with surge and ETA sampled within time-of-day ranges, and every number is shown as a range with a note in settings saying they are estimates. The comparison is useful for ranking providers against each other; it is deliberately not presented as a quote.",
+          points: [],
+        },
+        {
+          title: "Deep links as the integration",
+          body: "Rather than automate another app, the hand-off is a URL: each provider has its own scheme with the pickup and drop coordinates and addresses filled in. The code checks whether the app can open the link, falls back to the Play Store when it isn't installed and to the provider's website after that, and returns whether the app opened so the UI can offer to install it.",
+          points: [],
+        },
+        {
+          title: "One codebase, platform-specific storage",
+          body: "History lives in expo-sqlite on a device, which doesn't exist on the web, so the storage module has a native implementation and a separate web one that the bundler picks per platform. The schema holds comparisons, their quotes and bookings; route history matches within a small coordinate window, and price statistics aggregate average, minimum, maximum and count per provider and ride type.",
+          points: [],
+        },
+        {
+          title: "Why there are two apps",
+          body: "This and the Android build make opposite trade-offs on purpose. Android sees real prices and can race bookings, at the cost of a permission and a dependence on each app's on-screen labels. This one never sees a live price, but it runs on any platform, asks for nothing sensitive and cannot break when a ride app redesigns its screens.",
+          points: [],
+        },
+      ],
+      tryThis: [
+        "npm install",
+        "npx expo start — then a for Android, i for iOS or w for web",
+        "Enter a pickup and a drop (place search is scoped to Chennai)",
+        "Compare rides, filter by type, and read the savings banner",
+        "Tap Book to open the ride app with the route pre-filled",
+      ],
+      learnings: [
+        "An estimate labelled as an estimate is a feature; a guess dressed as a price is a bug.",
+        "A deep link is a thin, durable integration compared with automating another app's UI.",
+        "Platform-specific modules keep one codebase honest about what only exists on a device.",
+        "Choosing less capability on purpose is a design decision — this build trades live prices for reach and safety.",
+      ],
+    },
   ],
+
+  /**
+   * The three RideSmart builds side by side: one product, three runtimes, and
+   * the trade-off each one makes.
+   */
+  rideSmartFamily: {
+    columns: [
+      { id: "ridesmart", name: "RideSmartAgent", href: "/projects/ridesmart", runtime: "Python · Playwright · Streamlit" },
+      { id: "ridesmart-android", name: "RideSmart Android", href: "/projects/ridesmart-android", runtime: "Kotlin · Jetpack Compose" },
+      { id: "ridesmart-mobile", name: "RideSmart Mobile", href: "/projects/ridesmart-mobile", runtime: "Expo · React Native · TypeScript" },
+    ],
+    rows: [
+      {
+        k: "Runs on",
+        v: [
+          "A desktop, with a Streamlit UI in the browser",
+          "Android 8.0+, native",
+          "Android, iOS and web from one codebase",
+        ],
+      },
+      {
+        k: "Fare source",
+        v: [
+          "Live scrape of Uber and Ola web sessions; modelled fares for Rapido and Namma Yatri",
+          "Live, read off each ride app's own screen by an AccessibilityService; modelled fares as a labelled fallback",
+          "Modelled from per-provider fare cards with time-of-day surge, shown as a range",
+        ],
+      },
+      {
+        k: "Booking",
+        v: [
+          "Race — providers within ₹50 of the cheapest; first confirmed driver wins",
+          "Race — up to three apps requested in turn, every app's screen and notifications watched, losers cancelled",
+          "Hand-off — deep link into the chosen app with the route pre-filled",
+        ],
+      },
+      {
+        k: "Intelligence",
+        v: [
+          "SQLite history: price prediction, z-score anomalies, surge probability, Groq assistant",
+          "Best Price, Fastest Pickup and Best Value scoring within each ride category",
+          "On-device history and per-provider price stats; best-quote highlight and savings banner",
+        ],
+      },
+      {
+        k: "Trade-off",
+        v: [
+          "Needs a desktop and logged-in browser sessions",
+          "Needs the Accessibility permission and depends on each ride app's on-screen labels",
+          "Never sees a live price — it is an estimate, and says so",
+        ],
+      },
+    ],
+  },
 
   experience: [
     {

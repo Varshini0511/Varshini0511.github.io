@@ -10,6 +10,7 @@ const LINKS = [
   { href: "/#career", label: "Career" },
   { href: "/#systems", label: "Systems" },
   { href: "/#ai", label: "AI work" },
+  { href: "/#mobile", label: "Mobile" },
   { href: "/#stack", label: "Stack" },
   { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },

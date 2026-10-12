@@ -52,18 +52,22 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   const p = getProject(id);
   if (!p) notFound();
 
-  const idx = profile.projects.findIndex((x) => x.id === id);
-  const next = profile.projects[(idx + 1) % profile.projects.length];
+  // "Next project" and the back link stay within the same group (AI or mobile).
+  const group = profile.projects.filter((x) => x.kind === p.kind);
+  const idx = group.findIndex((x) => x.id === id);
+  const next = group[(idx + 1) % group.length];
+  const backHref = p.kind === "mobile" ? "/#mobile" : "/#ai";
+  const backLabel = p.kind === "mobile" ? "All mobile builds" : "All projects";
 
   return (
     <>
       <Nav />
       <main className="mx-auto max-w-4xl px-5 pb-24 pt-28 sm:px-8 sm:pt-32">
         <Link
-          href="/#ai"
+          href={backHref}
           className="inline-flex items-center gap-1.5 text-sm text-[var(--muted)] transition-colors hover:text-[var(--text)]"
         >
-          <ArrowLeft size={15} /> All projects
+          <ArrowLeft size={15} /> {backLabel}
         </Link>
 
         {/* ---------- Header ---------- */}

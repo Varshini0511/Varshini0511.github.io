@@ -244,3 +244,71 @@ export const rideSmartDiagram: DiagramSpec = {
     { from: "hist", to: "llm", sides: ["right", "left"] },
   ],
 };
+
+/* RideSmart Android — read live fares off the ride apps' own screens */
+export const rideSmartAndroidDiagram: DiagramSpec = {
+  width: 1000,
+  height: 390,
+  nodes: [
+    { id: "ui", x: 20, y: 133, w: 130, h: 64, label: "Compose UI", sub: "home · results", tone: "accent" },
+    { id: "svc", x: 190, y: 50, w: 430, h: 230, label: "ACCESSIBILITY SERVICE · RUNS THE LOOP", tone: "group" },
+    { id: "open", x: 210, y: 100, w: 190, h: 56, label: "Open app on route", sub: "deep link, else drive UI" },
+    { id: "read", x: 430, y: 100, w: 170, h: 56, label: "Read fare list", sub: "price · ETA · vehicle" },
+    { id: "store", x: 430, y: 190, w: 170, h: 56, label: "Prices state", sub: "StateFlow · persisted" },
+    { id: "next", x: 210, y: 190, w: 190, h: 56, label: "Next app", sub: "10s cap · 35s watchdog" },
+    { id: "est", x: 660, y: 40, w: 140, h: 56, label: "FareEstimator", sub: "fallback model", tone: "muted" },
+    { id: "cmp", x: 660, y: 133, w: 140, h: 64, label: "SmartComparator", sub: "live beats estimate" },
+    { id: "race", x: 825, y: 133, w: 165, h: 64, label: "RaceBooker", sub: "request · watch · cancel", tone: "accent" },
+    { id: "sig", x: 815, y: 250, w: 185, h: 56, label: "Screen text + alerts", sub: "driver-assigned signals", tone: "muted" },
+    {
+      id: "band",
+      x: 20,
+      y: 332,
+      w: 960,
+      h: 34,
+      label: "Route and prices persisted to disk — survive OEM process kills (Vivo / iQOO, Xiaomi, Oppo)",
+      tone: "band",
+    },
+  ],
+  edges: [
+    { from: "ui", to: "svc", sides: ["right", "left"] },
+    { from: "open", to: "read" },
+    { from: "read", to: "store", sides: ["bottom", "top"] },
+    { from: "store", to: "next", sides: ["left", "right"], label: "loop" },
+    { from: "next", to: "open", sides: ["top", "bottom"] },
+    { from: "svc", to: "cmp", sides: ["right", "left"] },
+    { from: "est", to: "cmp", sides: ["bottom", "top"] },
+    { from: "cmp", to: "race" },
+    { from: "sig", to: "race", sides: ["top", "bottom"] },
+  ],
+};
+
+/* RideSmart Mobile — estimate, then hand off */
+export const rideSmartMobileDiagram: DiagramSpec = {
+  width: 980,
+  height: 390,
+  nodes: [
+    { id: "in", x: 20, y: 130, w: 150, h: 64, label: "Location input", sub: "Nominatim · GPS" },
+    { id: "est", x: 200, y: 130, w: 180, h: 64, label: "Fare model", sub: "fare cards · surge" },
+    { id: "res", x: 400, y: 130, w: 195, h: 64, label: "Results", sub: "ranked · filters · savings", tone: "accent" },
+    { id: "dl", x: 620, y: 130, w: 160, h: 64, label: "Deep link", sub: "route pre-filled" },
+    { id: "app", x: 805, y: 130, w: 165, h: 64, label: "Ride app", sub: "Uber · Ola · Rapido", tone: "muted" },
+    { id: "db", x: 417, y: 250, w: 160, h: 56, label: "SQLite", sub: "history · price stats" },
+    {
+      id: "band",
+      x: 20,
+      y: 332,
+      w: 940,
+      h: 34,
+      label: "App not installed? Falls back to the Play Store, then the provider's web page",
+      tone: "band",
+    },
+  ],
+  edges: [
+    { from: "in", to: "est" },
+    { from: "est", to: "res" },
+    { from: "res", to: "dl" },
+    { from: "dl", to: "app" },
+    { from: "res", to: "db", sides: ["bottom", "top"] },
+  ],
+};

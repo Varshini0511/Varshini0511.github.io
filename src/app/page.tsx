@@ -5,6 +5,7 @@ import CareerArc from "@/components/CareerArc";
 import Experience from "@/components/Experience";
 import CaseStudies from "@/components/CaseStudies";
 import Projects from "@/components/Projects";
+import Mobile from "@/components/Mobile";
 import Approach from "@/components/Approach";
 import TechMatrix from "@/components/TechMatrix";
 import About from "@/components/About";
@@ -52,8 +53,18 @@ export default function Home() {
         </Section>
 
         <Section
-          id="approach"
+          id="mobile"
           index="04"
+          eyebrow="Mobile"
+          title="One product, three runtimes"
+          intro="The same problem — find the cheapest ride in India — built three ways, each with a deliberately different trade-off between what it can see, what it asks of the user and where it runs. The comparison is the interesting part."
+        >
+          <Mobile />
+        </Section>
+
+        <Section
+          id="approach"
+          index="05"
           eyebrow="Approach"
           title="How I engineer"
           intro="One set of habits, applied to a forensics platform and to an LLM agent alike. Each principle below points at the work that shows it."
@@ -63,7 +74,7 @@ export default function Home() {
 
         <Section
           id="stack"
-          index="05"
+          index="06"
           eyebrow="Technology"
           title="Depth and continuity"
           intro="What carried across every role, what each stage added, and where the AI work sits. A technology appears against a role only where it is in that role's stack."
@@ -71,11 +82,11 @@ export default function Home() {
           <TechMatrix />
         </Section>
 
-        <Section id="about" index="06" eyebrow="About" title="Background">
+        <Section id="about" index="07" eyebrow="About" title="Background">
           <About />
         </Section>
 
-        <Section id="contact" index="07" eyebrow="Contact" title="Let's talk">
+        <Section id="contact" index="08" eyebrow="Contact" title="Let's talk">
           <Contact />
         </Section>
       </main>
