@@ -37,7 +37,9 @@ const mono = JetBrains_Mono({
 const description = `${profile.title} with ${profile.yearsExperience} years building secure .NET and Next.js platforms, now building production-grade AI systems — RAG, tool-calling agents, hybrid search and multi-agent orchestration.`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://varchini.dev"),
+  // Real address of the deployed site, so link previews resolve correctly.
+  // Change this if you move to a custom domain.
+  metadataBase: new URL("https://varshini0511.github.io"),
   title: {
     default: `${profile.name} — ${profile.title}`,
     template: `%s · ${profile.name}`,
