@@ -368,14 +368,14 @@ export const profile = {
         },
         {
           name: "Voice Shopping Assistant",
-          hook: "A tool-calling agent you can talk to",
+          hook: "A tool-calling agent that takes real actions",
           detail:
-            "A conversational agent wired to the catalogue through typed tools. The model plans, calls tools to search products, inspect details and manage the cart, reads the results, and iterates until the request is satisfied. Speech-to-text in and speech synthesis out make it hands-free.",
+            "A conversational agent wired to the catalogue through seven typed tools — search, inspect a product, add to cart, wishlist, save for later, and read either list. The model never touches the database: it emits a structured request, the server validates and executes it, and a code-level grounding check means the agent can't invent a product or a price. Speech-to-text in and speech synthesis out make it hands-free.",
           points: [
-            "Typed tool schema — the LLM picks the tool and its arguments",
+            "Seven typed tools; the server, not the model, performs every database write",
+            "Grounding check rejects any product or price the catalogue didn't return",
             "Multi-turn memory, so follow-ups resolve against earlier turns",
-            "Browser speech recognition and synthesis",
-            "Feature-flagged for deployment on memory-constrained hosts",
+            "Browser speech recognition and synthesis; feature-flagged for small hosts",
           ],
         },
       ],
@@ -401,17 +401,23 @@ export const profile = {
           body: "Embeddings and reranking run in the Node process through Transformers.js rather than a hosted API — no key required, no per-query cost, no network hop. The trade-off is memory: roughly 110 MB of models load into the process, which is why this needs a persistent host rather than short-lived serverless functions, and why the reranker and visual search sit behind feature flags.",
           points: [],
         },
+        {
+          title: "Hardened for the public internet",
+          body: "A deployed demo is a public endpoint, so it is treated like one. Search and upload routes are rate-limited, image uploads are validated before anything touches a model, and security headers are set on responses. One fix is worth calling out: the app no longer ships raw embedding vectors to the browser — they stayed server-side once I realised the client never needed them. Small leak, but exactly the kind a review is supposed to catch.",
+          points: [],
+        },
       ],
       tryThis: [
         "device to call someone — returns phones with no shared words",
         "something to listen to music — semantic match to headphones",
         "book about building good habits — matches on meaning, not title",
+        "Sign in with the demo login, then ask the agent to add a watch to your cart",
       ],
       learnings: [
         "Query and corpus embeddings must come from the same model, or vector search is meaningless.",
         "Reranking is expensive, so a confidence guard decides when it's worth running at all.",
         "Evaluation harnesses change how you work — you stop guessing whether a change helped.",
-        "Model memory footprint is an architectural constraint, not a deployment detail.",
+        "A public demo is a public endpoint — rate limits, upload validation and not over-sharing data with the client are part of the build.",
       ],
     },
 
@@ -559,26 +565,27 @@ export const profile = {
       period: "2026",
       role: "Solo — MCP server, agent wiring, RAG, approval flow, evals, UI",
       blurb:
-        "An MCP server exposes GitHub as 14 tools; LangGraph agents use them to answer questions about repositories, search code semantically, triage issues and open pull requests — with a human approval gate on every write and an evaluation suite that tests for hallucination.",
+        "An MCP server exposes GitHub as 22 tools; LangGraph agents use them to explain codebases with path:line citations, triage issues, review pull requests, diagnose failing CI, and open pull requests — behind an approval gate, guardrails and usage metering, reachable from a web UI or an HTTP/SSE API.",
       problem:
-        "Letting a model act on a real GitHub account is useful and risky in equal measure. I wanted to build the whole thing the careful way: tools exposed through a proper protocol instead of ad-hoc glue, every write behind human approval, answers that cite the code they came from, and an evaluation set that checks the agent says “not found” instead of inventing a file.",
+        "Letting a model act on a real GitHub account is useful and risky in equal measure. I wanted to build the whole thing the careful way: tools exposed through a proper protocol instead of ad-hoc glue, every write behind human approval, answers that cite the code they came from, and an evaluation set that checks the agent says “not found” instead of inventing a file. Then I kept going — hybrid retrieval, read-only DevOps specialists, and a signed webhook that triages a broken build on its own.",
       repo: "https://github.com/Varshini0511/github-agent-mcp",
       repoPrivate: false,
       demo: "https://git-agent-mcp-ev2a38ht4j3yb4ungtummq.streamlit.app/",
       demoNote:
         "Streamlit Community Cloud sleeps after inactivity — click “wake” if you see a sleep screen. It runs on Groq's free tier, so Supervisor mode can occasionally pause on a rate limit.",
-      stack: ["Python", "MCP", "LangGraph", "LangChain", "Groq", "Gemini embeddings", "FAISS", "SQLite", "Streamlit"],
-      tags: ["Agents", "RAG", "MCP", "Orchestration", "Evaluation", "Safety"],
+      stack: ["Python", "MCP", "LangGraph", "LangChain", "FAISS", "BM25", "FastAPI", "Groq", "Gemini embeddings", "Streamlit"],
+      tags: ["Agents", "RAG", "MCP", "Orchestration", "Evaluation", "Safety", "Automation"],
       diagram: githubAgentDiagram as DiagramSpec,
       capabilities: [],
       highlights: [
-        "MCP server exposing 14 GitHub tools over stdio, discovered by the agents rather than hard-coded",
-        "Supervisor agent delegating to repo_qa, issue_triage and code_writer specialists — “agent as tool”",
-        "RAG over any repository: tarball → chunks → Gemini embeddings → FAISS, with path:line citations",
-        "Human-in-the-loop: the graph interrupts before every state-changing call; approve or reject in the UI",
-        "Per-conversation memory in a SQLite checkpointer, surviving restarts, with summarisation to bound context",
-        "Evaluation suite scored by deterministic checks and an LLM judge, including a hallucination guard",
-        "Offline tests that mock the GitHub API at the HTTP boundary",
+        "MCP server exposing 22 GitHub tools over stdio, discovered by the agents rather than hard-coded",
+        "Supervisor routes to five specialists — repo_qa, issue_triage, code_writer, plus read-only ci_triage and pr_reviewer",
+        "Hybrid RAG over any repository: FAISS dense + BM25 fused with Reciprocal Rank Fusion, identifier-aware, cited by path:line",
+        "Human-in-the-loop: writes freeze the graph at an interrupt; approve or reject to resume, in the UI or over the API",
+        "Guardrails: secret and PII redaction both ways, and prompt-injection quarantine of tool output",
+        "DevOps pair returns structured reports; every evidence quote is tagged [verified] or [UNVERIFIED] against the real tool output",
+        "A signed CI webhook lets a failed build trigger triage on its own; HTTP/SSE API alongside the web UI",
+        "100+ offline tests, including the real agent graph driven by a scripted fake model",
       ],
       deepDive: [
         {
@@ -588,12 +595,12 @@ export const profile = {
         },
         {
           title: "Two locks on every write",
-          body: "The seven state-changing tools are gated twice. A human-in-the-loop interrupt pauses the graph before any of them runs, and the Streamlit UI shows Approve and Reject buttons. Separately, an ALLOW_WRITES switch is checked inside the tool itself, so even an approved call does nothing unless writes are enabled. The code-writing specialist is also told never to touch the default branch: create a branch, write on it, open a pull request. Approval you can only trust in one place isn't approval.",
+          body: "The seven state-changing tools are gated twice. A human-in-the-loop interrupt pauses the graph before any of them runs, and the Streamlit UI shows Approve and Reject buttons. Separately, an ALLOW_WRITES switch is checked inside the tool itself, so even an approved call does nothing unless writes are enabled. The HTTP API is held to the same bar — a request can't mutate a repo without ALLOW_WRITES and a separate /resume approval — and there is intentionally no tool to merge, delete, force-push or change repo settings. The code-writing specialist is also told never to touch the default branch: create a branch, write on it, open a pull request. Approval you can only trust in one place isn't approval.",
           points: [],
         },
         {
           title: "Why a supervisor instead of one big agent",
-          body: "A single agent holding every tool makes each model call larger and gives smaller models more ways to choose wrongly — and one system prompt can't be good at both reviewing code and triaging issues. So three specialists each get a focused prompt and only the tools they need, and the supervisor calls each as a single tool with a task string. Specialists share no memory with the supervisor or each other, so the task string has to carry everything — repo, issue numbers, file paths — which is context engineering in its plainest form.",
+          body: "A single agent holding every tool makes each model call larger and gives smaller models more ways to choose wrongly — and one system prompt can't be good at reviewing code, triaging issues and reading CI logs all at once. So five specialists each get a focused prompt and only the tools they need — repo_qa, issue_triage, code_writer, and the read-only ci_triage and pr_reviewer — and the supervisor calls each as a single tool with a task string. Specialists share no memory with the supervisor or each other, so the task string has to carry everything — repo, issue numbers, file paths — which is context engineering in its plainest form.",
           points: [],
         },
         {
@@ -602,8 +609,18 @@ export const profile = {
           points: [],
         },
         {
-          title: "RAG over a codebase, with citations",
-          body: "A repository is far bigger than a context window, so index_repo downloads the tarball, skips dependency and build directories, splits text files into overlapping chunks, embeds them with Gemini and saves a FAISS index per repo. search_code embeds the question and returns the nearest chunks with their path and starting line, so every answer can point at the code it came from. The honest limits are a chunk cap that can leave an index partial and no incremental re-indexing yet.",
+          title: "Hybrid retrieval over a codebase",
+          body: "A repository is far bigger than a context window, so index_repo downloads the tarball, skips dependency and lock files, splits text into overlapping chunks and embeds them into a FAISS index. But dense search alone is weak on code: an exact identifier like a function name is a keyword problem, not a semantic one. So search_code also runs BM25 and fuses the two rankings with Reciprocal Rank Fusion, with identifier-aware weighting — the same fusion idea as the shopping search, applied to source. Every hit comes back with its path and starting line, so answers cite exactly where they came from.",
+          points: [],
+        },
+        {
+          title: "DevOps specialists that quote their evidence",
+          body: "ci_triage reads a failed workflow run and returns a structured report — category, root cause, verbatim log evidence, a suggested fix and a confidence — while pr_reviewer returns a structured review with findings pinned to file, line and quote. Both are deliberately read-only: they diagnose, they don't fix, and fixing still routes through code_writer with approval. The part I'm proudest of is the honesty check: every quote is verified against what the tool actually returned and tagged [verified] or [UNVERIFIED], so a plausible-sounding but invented log line is marked as such instead of trusted. Logs are shrunk to the failing step and diffs are budgeted with real line numbers, so it fits free-tier limits.",
+          points: [],
+        },
+        {
+          title: "A broken build that triages itself",
+          body: "A signed webhook endpoint lets a failed GitHub Actions run trigger ci_triage on its own, so a diagnosis is waiting before anyone asks. Safe by default: every delivery is verified with an HMAC signature, so a forged request is rejected, and because triage is read-only it can run unattended without any risk of a write. It's the difference between a tool you have to drive and one that does the first, boring step for you.",
           points: [],
         },
         {
@@ -619,17 +636,17 @@ export const profile = {
       ],
       tryThis: [
         "Where is the language model initialised in Varshini0511/multi-agent-travel-planner? — indexes the repo, answers with a file citation",
-        "What is the exact text in the README of octocat/Hello-World? — reads the real file",
         "Show me the source of src/does_not_exist_42.py in octocat/Hello-World — it should say not found, not invent code",
-        "Switch the sidebar to Supervisor team and ask it to triage the open issues on a repo",
+        "Switch the sidebar to Supervisor team and ask it to review a pull request on a repo",
+        "Ask why a workflow run failed — ci_triage returns a root cause with quoted log evidence",
         "Ask it to open an issue — nothing runs until you press Approve",
       ],
       learnings: [
         "A protocol layer like MCP separates what an agent can do from how the agent is built.",
+        "Dense search alone is weak on code — an exact identifier is a keyword problem, so hybrid retrieval wins.",
         "Approvals are only trustworthy when they're enforced in more than one place.",
-        "A blind retry repeats a systematic mistake; telling the model what was wrong fixes it.",
+        "Make an agent quote its evidence and verify the quote — a confident, invented log line is the real danger.",
         "An evaluation set should test the failure you're most afraid of — here, inventing code.",
-        "Free-tier rate limits are an architectural constraint, so they belong in the design, not a footnote.",
       ],
     },
 
