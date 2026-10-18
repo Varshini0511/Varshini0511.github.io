@@ -47,7 +47,7 @@ export default function Home() {
           index="03"
           eyebrow="Applied AI"
           title="AI systems, built end to end"
-          intro="Seven systems I designed and built over the past year while teaching myself AI engineering — six deployed and live, and one (RideSmartAgent) that runs locally because it drives real logged-in browser sessions. Each goes past the demo into what makes something production-worthy: retrieval quality, evaluation, guardrails and cost."
+          intro="Eight systems I designed and built over the past year while teaching myself AI engineering — six deployed and live, and two you run yourself: RideSmartAgent, which drives real logged-in browser sessions, and inferouter, an inference gateway. Each goes past the demo into what makes something production-worthy: retrieval quality, evaluation, guardrails and cost."
         >
           <Projects />
         </Section>

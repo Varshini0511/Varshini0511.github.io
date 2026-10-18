@@ -317,3 +317,41 @@ export const rideSmartMobileDiagram: DiagramSpec = {
     { from: "res", to: "db", sides: ["bottom", "top"] },
   ],
 };
+
+/* inferouter — cost-aware routing with a confidence cascade */
+export const inferenceRouterDiagram: DiagramSpec = {
+  width: 1100,
+  height: 460,
+  nodes: [
+    { id: "client", x: 20, y: 160, w: 120, h: 60, label: "Client", sub: "OpenAI SDK", tone: "accent" },
+    { id: "gw", x: 170, y: 50, w: 250, h: 280, label: "GATEWAY · /v1/chat/completions", tone: "group" },
+    { id: "auth", x: 190, y: 90, w: 210, h: 52, label: "Auth + tenant", sub: "thresholds · rate limit" },
+    { id: "cache", x: 190, y: 160, w: 210, h: 52, label: "Semantic cache", sub: "paraphrase-aware" },
+    { id: "route", x: 190, y: 230, w: 210, h: 52, label: "Router", sub: "heuristic · TF-IDF · LSA" },
+    { id: "tiers", x: 470, y: 50, w: 330, h: 280, label: "TIERS · CHEAP → CAPABLE", tone: "group" },
+    { id: "small", x: 490, y: 90, w: 290, h: 56, label: "Small tier", sub: "self-hosted vLLM · fixed GPU cost" },
+    { id: "mid", x: 490, y: 170, w: 290, h: 56, label: "Mid tier", sub: "optional · one config entry", tone: "muted" },
+    { id: "large", x: 490, y: 250, w: 290, h: 56, label: "Large tier", sub: "any OpenAI-compatible API", tone: "accent" },
+    { id: "met", x: 840, y: 80, w: 230, h: 56, label: "Prometheus /metrics", sub: "tier · cost · tokens · latency" },
+    { id: "cost", x: 840, y: 162, w: 230, h: 56, label: "Cost report", sub: "break-even · sensitivity" },
+    { id: "xr", x: 840, y: 244, w: 230, h: 56, label: "x_router metadata", sub: "tier · p_hard · cost" },
+    {
+      id: "band",
+      x: 20,
+      y: 372,
+      w: 1050,
+      h: 56,
+      label: "Two safety nets — cascade (quality: the serving model's own token log-probs trigger a re-ask one tier up) and fallback (availability: a tier is down)",
+      tone: "band",
+    },
+  ],
+  edges: [
+    { from: "client", to: "gw", sides: ["right", "left"] },
+    { from: "gw", to: "tiers", sides: ["right", "left"], label: "P(hard)" },
+    { from: "small", to: "mid", sides: ["bottom", "top"], label: "unsure?" },
+    { from: "mid", to: "large", sides: ["bottom", "top"], label: "unsure?" },
+    { from: "tiers", to: "met", sides: ["right", "left"] },
+    { from: "tiers", to: "cost", sides: ["right", "left"] },
+    { from: "tiers", to: "xr", sides: ["right", "left"] },
+  ],
+};

@@ -18,6 +18,7 @@ import {
   rideSmartDiagram,
   rideSmartAndroidDiagram,
   rideSmartMobileDiagram,
+  inferenceRouterDiagram,
 } from "./project-diagrams";
 
 export const profile = {
@@ -42,7 +43,7 @@ export const profile = {
     { value: "8+", label: "Years shipping production software" },
     { value: "3", label: "Enterprise platforms delivered end-to-end" },
     { value: "40%", label: "Cloud cost reduction delivered" },
-    { value: "7", label: "AI systems built from scratch" },
+    { value: "8", label: "AI systems built from scratch" },
   ],
 
   /** The spec sheet beside the hero. Dense, factual, scannable. */
@@ -315,7 +316,7 @@ export const profile = {
 
   about: [
     `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements, not nice-to-haves.`,
-    `That background shapes how I approach AI. Over the past year I've built seven AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
+    `That background shapes how I approach AI. Over the past year I've built eight AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking, a cost-aware inference router — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
     `I've led migrations from .NET Framework to .NET 8, designed event-driven Azure workflows with Durable Functions and Service Bus, cut cloud costs 40% through an AWS EC2 migration, and shipped Angular and React/Next.js front ends against secure REST APIs. I like problems where correctness matters and the debugging is genuinely hard.`,
   ],
 
@@ -647,6 +648,91 @@ export const profile = {
         "Approvals are only trustworthy when they're enforced in more than one place.",
         "Make an agent quote its evidence and verify the quote — a confident, invented log line is the real danger.",
         "An evaluation set should test the failure you're most afraid of — here, inventing code.",
+      ],
+    },
+
+    /* ---------------------------------------------------------------- */
+    {
+      id: "inference-router",
+      flagship: false,
+      kind: "ai",
+      name: "inferouter",
+      subtitle: "A cost-aware LLM inference router with a confidence cascade",
+      period: "2026",
+      role: "Solo — router, cascade, gateway, cost model, evaluation",
+      blurb:
+        "An OpenAI-compatible gateway that serves most traffic from a small self-hosted model (vLLM) and escalates only the hard requests to a larger one. A difficulty router decides up front, a confidence cascade corrects its mistakes from the model's own token log-probabilities, and a cost model says honestly when any of it pays for itself.",
+      problem:
+        "Sending every request to a frontier model is simple and expensive; most traffic is easy and a small model answers it for a fraction of the cost. But routing is a bet — the router will sometimes send a hard prompt to the small model. I wanted to build the whole production shape (gateway, router, safety nets, cache, rate limits, metrics) and, more importantly, be honest about the economics: a self-hosted GPU costs money around the clock, so savings only exist above a break-even volume.",
+      repo: "https://github.com/Varshini0511/InferenceRouting",
+      repoPrivate: false,
+      demo: null,
+      demoNote:
+        "No hosted demo: it is a gateway you run yourself. It works end to end with no GPU and no API keys — make serve starts it on deterministic mock backends — and a config file points it at real vLLM and provider endpoints.",
+      stack: ["Python", "FastAPI", "vLLM", "httpx", "Pydantic v2", "scikit-learn", "Prometheus", "Docker", "GitHub Actions"],
+      tags: ["Inference", "Evaluation", "Observability"],
+      diagram: inferenceRouterDiagram as DiagramSpec,
+      capabilities: [],
+      highlights: [
+        "OpenAI-compatible: existing clients switch by changing one base URL; every response carries an x_router block with tier, p_hard, escalation, cache hit and cost",
+        "Three interchangeable routers behind one interface — a transparent heuristic, TF-IDF + logistic regression, and an offline LSA embedding classifier — compared on accuracy, F1 and ROC-AUC",
+        "N ordered tiers: add a mid tier with one config entry and the cascade escalates one hop at a time",
+        "A confidence cascade driven by the serving model's own token log-probabilities, plus a separate availability fallback when a tier is down",
+        "Streaming over SSE, a paraphrase-aware semantic cache, token-bucket rate limiting and per-tenant thresholds",
+        "Prometheus metrics by tier: requests, cost, tokens, latency, escalations, cache hits and rate-limits",
+        "A cost report that leads with break-even volume and a volume × price sensitivity table, not one flattering number",
+        "46 tests and CI; runs with no GPU and no API keys through deterministic, capability-driven mock backends",
+      ],
+      deepDive: [
+        {
+          title: "A router is a bet, so build the net first",
+          body: "The router predicts the probability a prompt is hard from the last user turn only — a long, constant system prompt would otherwise dominate the score — and thresholds map that probability to a tier. Two tiers is a single threshold; three tiers with [0.4, 0.8] sends under 0.4 to small, under 0.8 to mid and the rest to large. Any classifier will sometimes be wrong, and a hard prompt sent to a small model is a quality failure, so the system is designed around two independent safety nets rather than around trusting the router.",
+          points: [],
+        },
+        {
+          title: "Using the model's own uncertainty",
+          body: "The cascade reads the mean token log-probability of the answer the small model just produced. If it falls below a configured floor, the request is re-asked one tier up, and that repeats while the serving model stays unsure. It catches the router's misses using signal the model already emits, with no second classifier to train; a failed escalation simply keeps the earlier answer. The limit is stated plainly: streaming skips the cascade, because judging confidence needs the full completion, and buffering the first tokens to recover it is the documented next step.",
+          points: [],
+        },
+        {
+          title: "Availability is a separate problem",
+          body: "Quality and uptime fail differently, so they get separate mechanisms. If the chosen tier errors or times out, the fallback degrades to the nearest other tier, preferring the more capable one on a tie. On the streaming path the first chunk is pulled before anything is committed to the client, so an outage is detected before a single token is sent and the request can move to another tier cleanly.",
+          points: [],
+        },
+        {
+          title: "Three routers, one interface",
+          body: "The heuristic scores reasoning verbs, code fences, maths and length through a logistic squash and needs no training; the learned router is TF-IDF with logistic regression; the third is a dense LSA embedding with the same classifier on top. All expose the same score(prompt) function, so they can be swapped by config and compared with one script. If a trained artefact is missing the system falls back to the heuristic and logs it. On the synthetic set the learned routers hit a perfect score, which mostly reflects template vocabulary; the heuristic's imperfect 87% accuracy is the more realistic signal.",
+          points: [],
+        },
+        {
+          title: "Honest economics",
+          body: "A self-hosted tier has no per-token price but a fixed, always-on GPU cost, so savings only appear above a break-even volume — fixed daily cost divided by the saving per request. That is why the report leads with break-even and a sensitivity table rather than one headline. In the repo's own simulation, at 10,000 requests a day the saving is thin (about 3%, with break-even near 9,400 a day), it grows to roughly 46% at a million a day, and at 1,000 a day the GPU costs far more than it saves. The negative cells are the point: they show where this architecture is the wrong choice.",
+          points: [],
+        },
+        {
+          title: "A production surface, not a script",
+          body: "Streaming uses OpenAI-style SSE chunks with the routing metadata on the final one. The semantic cache matches paraphrases with a hashing embedding and cosine similarity under LRU eviction, behind an interface that maps onto Redis and a real embedder. A per-tenant token bucket returns 429s, API keys carry their own thresholds so a premium tenant routes to bigger models sooner, a header can pin a tier, and a dry-run endpoint reports which tier would serve a prompt without making a model call.",
+          points: [],
+        },
+        {
+          title: "What the numbers do and don't prove",
+          body: "The workload is synthetic and the backends are mocks driven by ground-truth labels, so the simulation validates the routing, cascade and cost logic, not real-world accuracy, and \"quality retained\" is a proxy rather than a measured answer-quality score. The repository says so itself and documents the real evaluation: label a sample of traffic or use RouterBench or LMSYS-Chat, retrain the router, point the config at live vLLM and provider endpoints, and measure with the load-test script.",
+          points: [],
+        },
+      ],
+      tryThis: [
+        "make install && make test — the 46-test suite",
+        "make demo — trains the router and writes the 10,000-requests/day cost report",
+        "make eval — compares the three routers on accuracy, F1 and ROC-AUC",
+        "make serve, then call /v1/chat/completions with an easy and a hard prompt and compare x_router.tier",
+        "POST /v1/route/explain — see which tier would serve a prompt without spending anything",
+        "python scripts/simulate.py --config configs/three_tier.yaml — a three-tier run with cache, rate limit and per-tenant thresholds",
+      ],
+      learnings: [
+        "Routing is a bet; the cascade and the fallback are what make it safe to place.",
+        "A model's token log-probabilities are a free confidence signal — often enough to catch a router's misses without training another classifier.",
+        "Self-hosting changes the cost shape to zero per-token but a fixed bill, so report break-even, not a headline saving.",
+        "A synthetic benchmark that scores 100% is telling you about the data, not the model — say so, and say how to test it for real.",
       ],
     },
 

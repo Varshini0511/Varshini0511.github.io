@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { profile, type Project } from "@/data/profile";
 
-const FILTERS = ["All", "Agents", "RAG", "Vector Search", "MCP", "Multimodal", "Automation", "Full-Stack", ".NET"] as const;
+const FILTERS = ["All", "Agents", "RAG", "Vector Search", "MCP", "Inference", "Multimodal", "Automation", "Full-Stack", ".NET"] as const;
 
 function Status({ p }: { p: Project }) {
   return p.demo ? (
