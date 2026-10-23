@@ -30,7 +30,7 @@ export const profile = {
   currentCompany: "Exterro R&D",
   /** One line. States the domain, the scale, and the pivot — in that order. */
   tagline:
-    "Eight years building security-critical .NET and Azure platforms — digital forensics, energy, insurance. Now bringing that same engineering discipline to production AI systems.",
+    "I build security-critical .NET and Azure platforms across digital forensics, energy and insurance, and apply the same engineering discipline to production AI systems.",
   location: "Chennai, India",
   email: "varshinikannan2495@gmail.com",
   phone: "+91 80564 37139",
@@ -49,7 +49,7 @@ export const profile = {
   /** The spec sheet beside the hero. Dense, factual, scannable. */
   glance: [
     { k: "Role", v: "Senior Software Engineer, Exterro R&D" },
-    { k: "Experience", v: "8+ years across 3 enterprise domains" },
+    { k: "Experience", v: "Since 2018, across 3 enterprise domains" },
     { k: "Domains", v: "Digital forensics · Energy · Insurance" },
     { k: "Core", v: "C# · .NET 8 · ASP.NET Core · Azure · SQL Server" },
     { k: "Front end", v: "Angular · React / Next.js · TypeScript" },
@@ -73,7 +73,7 @@ export const profile = {
     {
       id: "A",
       title: "Secure, auditable platforms",
-      lead: "Systems where confidentiality, integrity and traceability are requirements, not features.",
+      lead: "Systems where confidentiality, integrity and traceability are requirements.",
       points: [
         "Digital forensics platform: evidence handling, certificate-based encryption, auditability across the investigative lifecycle",
         "APIs secured with OAuth 2.0, OpenID Connect and JWT; Managed Identities and Key Vault instead of stored secrets",
@@ -241,7 +241,7 @@ export const profile = {
         },
       ],
       stack: ["Azure Functions", "Durable Functions", "Blob Storage", "Service Bus", "Cosmos DB", "Key Vault", "App Configuration", "Application Insights", "SQL Server", "AKS"],
-      caption: "Simplified architecture — components as named in my work history.",
+      caption: "Simplified",
       diagramId: "azure",
       diagramTitle: "Event-driven ingestion pipeline on Azure",
       diagram: azureIngestion as DiagramSpec,
@@ -276,7 +276,7 @@ export const profile = {
         },
       ],
       stack: ["C#", ".NET 8", "ASP.NET", "Web API", "Angular 14", "EF Core", "SQL Server", "Microsoft Graph", "Google APIs"],
-      caption: "Simplified architecture — components as named in my work history.",
+      caption: "Simplified",
       diagramId: "forensics",
       diagramTitle: "Evidence collection and review pipeline",
       diagram: forensicsPlatform as DiagramSpec,
@@ -307,7 +307,7 @@ export const profile = {
         },
       ],
       stack: [".NET Framework", ".NET 4.8", ".NET 8", "SQL Server", "Windows Server", "AWS EC2"],
-      caption: "Simplified view of the migration track.",
+      caption: "Simplified",
       diagramId: "modernisation",
       diagramTitle: "Platform modernisation to .NET 8",
       diagram: modernisation as DiagramSpec,
@@ -315,9 +315,9 @@ export const profile = {
   ],
 
   about: [
-    `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements, not nice-to-haves.`,
+    `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements.`,
     `That background shapes how I approach AI. Over the past year I've built eight AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking, a cost-aware inference router — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
-    `I've led migrations from .NET Framework to .NET 8, designed event-driven Azure workflows with Durable Functions and Service Bus, cut cloud costs 40% through an AWS EC2 migration, and shipped Angular and React/Next.js front ends against secure REST APIs. I like problems where correctness matters and the debugging is genuinely hard.`,
+    `I've led migrations from .NET Framework to .NET 8, designed event-driven Azure workflows with Durable Functions and Service Bus, cut cloud costs 40% through an AWS EC2 migration, and shipped Angular and React/Next.js front ends against secure REST APIs. I am drawn to problems where correctness matters and debugging is hard.`,
   ],
 
   projects: [
@@ -333,7 +333,7 @@ export const profile = {
       blurb:
         "A full-stack shopping platform built around a real retrieval stack rather than a SQL LIKE query. Three distinct search modalities — text, image and voice — over the same Postgres + pgvector catalogue.",
       problem:
-        "Almost every shop demo searches with WHERE name ILIKE '%query%'. That fails the moment a shopper describes what they want instead of naming it — “device to call someone” matches nothing, because it shares no words with “iPhone”. I wanted to build the retrieval stack a real product would need, and then prove it worked with numbers rather than vibes.",
+        "Almost every shop demo searches with WHERE name ILIKE '%query%'. That fails the moment a shopper describes what they want instead of naming it — “device to call someone” matches nothing, because it shares no words with “iPhone”. I wanted to build the retrieval stack a real product would need, and then show it worked with measurements rather than impressions.",
       repo: "https://github.com/Varshini0511/AdviShopping1",
       repoPrivate: true,
       demo: "https://advishopping1.onrender.com/search?q=sunglass",
@@ -434,7 +434,7 @@ export const profile = {
       blurb:
         "A customer-support agent for a fictional digital bank, built end-to-end with the production lifecycle most demos skip: tracing, cost tracking, an evaluation suite and layered safety guardrails, over a real Postgres database.",
       problem:
-        "A support chatbot for a bank is the case where getting it wrong actually costs something: leaking another customer's balance, inventing a fee, or acting on a jailbreak. I wanted to build the layers that stop those things — and then write the adversarial tests that prove they hold.",
+        "A support chatbot for a bank is a case where a wrong answer has a real cost: leaking another customer's balance, inventing a fee, or acting on a jailbreak. I wanted to build the layers that stop those things — and then write the adversarial tests that prove they hold.",
       repo: "https://github.com/Varshini0511/FinTectAIProject",
       repoPrivate: false,
       demo: "https://fintectaiproject-chatassistant.streamlit.app",
@@ -502,7 +502,7 @@ export const profile = {
       blurb:
         "A LangGraph workflow that plans trips end to end: a guardrail, a planner that decomposes the request, specialised subagents that run in parallel and pick their own tools, a synthesiser, and a critic that reviews against budget and loops back for revisions.",
       problem:
-        "Trip planning is genuinely multi-domain — flights, hotels, activities and visas each need different sources and different reasoning. One prompt doing all four does all four badly. It's a natural fit for real orchestration: decompose the task, fan out to specialists, then have something check the result before the user sees it.",
+        "Trip planning spans several domains — flights, hotels, activities and visas each need different sources and different reasoning. One prompt doing all four does all four badly. It's a natural fit for real orchestration: decompose the task, fan out to specialists, then have something check the result before the user sees it.",
       repo: "https://github.com/Varshini0511/multi-agent-travel-planner",
       repoPrivate: false,
       demo: "https://multi-agent-travel-planner-85addqqurjuhryc5zjrvje.streamlit.app/",
@@ -524,7 +524,7 @@ export const profile = {
       deepDive: [
         {
           title: "Why a graph instead of a chain",
-          body: "A linear chain can't express what this workflow actually needs: four branches running at once, then joining, then a conditional edge that can send everything backwards. LangGraph makes state, nodes and edges explicit, so parallel fan-out, fan-in and the critic's loop back to the planner are all just topology rather than control-flow gymnastics.",
+          body: "A linear chain can't express what this workflow needs: four branches running at once, then joining, then a conditional edge that can send everything backwards. LangGraph makes state, nodes and edges explicit, so parallel fan-out, fan-in and the critic's loop back to the planner are all just topology rather than control-flow gymnastics.",
           points: [],
         },
         {
@@ -661,9 +661,9 @@ export const profile = {
       period: "2026",
       role: "Solo — router, cascade, gateway, cost model, evaluation",
       blurb:
-        "An OpenAI-compatible gateway that serves most traffic from a small self-hosted model (vLLM) and escalates only the hard requests to a larger one. A difficulty router decides up front, a confidence cascade corrects its mistakes from the model's own token log-probabilities, and a cost model says honestly when any of it pays for itself.",
+        "An OpenAI-compatible gateway that serves most traffic from a small self-hosted model (vLLM) and escalates only the hard requests to a larger one. A difficulty router decides up front, a confidence cascade corrects its mistakes from the model's own token log-probabilities, and a cost model states when any of it pays for itself.",
       problem:
-        "Sending every request to a frontier model is simple and expensive; most traffic is easy and a small model answers it for a fraction of the cost. But routing is a bet — the router will sometimes send a hard prompt to the small model. I wanted to build the whole production shape (gateway, router, safety nets, cache, rate limits, metrics) and, more importantly, be honest about the economics: a self-hosted GPU costs money around the clock, so savings only exist above a break-even volume.",
+        "Sending every request to a frontier model is simple and expensive; most traffic is easy and a small model answers it for a fraction of the cost. But routing is a bet — the router will sometimes send a hard prompt to the small model. I wanted to build the whole production shape (gateway, router, safety nets, cache, rate limits, metrics) and, more importantly, be precise about the economics: a self-hosted GPU costs money around the clock, so savings only exist above a break-even volume.",
       repo: "https://github.com/Varshini0511/InferenceRouting",
       repoPrivate: false,
       demo: null,
@@ -705,7 +705,7 @@ export const profile = {
           points: [],
         },
         {
-          title: "Honest economics",
+          title: "The economics",
           body: "A self-hosted tier has no per-token price but a fixed, always-on GPU cost, so savings only appear above a break-even volume — fixed daily cost divided by the saving per request. That is why the report leads with break-even and a sensitivity table rather than one headline. In the repo's own simulation, at 10,000 requests a day the saving is thin (about 3%, with break-even near 9,400 a day), it grows to roughly 46% at a million a day, and at 1,000 a day the GPU costs far more than it saves. The negative cells are the point: they show where this architecture is the wrong choice.",
           points: [],
         },
@@ -732,7 +732,7 @@ export const profile = {
         "Routing is a bet; the cascade and the fallback are what make it safe to place.",
         "A model's token log-probabilities are a free confidence signal — often enough to catch a router's misses without training another classifier.",
         "Self-hosting changes the cost shape to zero per-token but a fixed bill, so report break-even, not a headline saving.",
-        "A synthetic benchmark that scores 100% is telling you about the data, not the model — say so, and say how to test it for real.",
+        "A synthetic benchmark that scores 100% says more about the data than the model; state that, and state how to test it on real traffic.",
       ],
     },
 
@@ -805,9 +805,9 @@ export const profile = {
       period: "2026",
       role: "Solo — agent service, RAG policy check, API, dashboard",
       blurb:
-        "An expense system where the AI does more than answer: it checks company policy via RAG, decides whether an expense is compliant, and then writes it to the database itself. The agent has hands, not just a mouth.",
+        "An expense system where the AI does more than answer: it checks company policy via RAG, decides whether an expense is compliant, and then writes it to the database itself.",
       problem:
-        "Most agent demos stop at generating text. The interesting and genuinely risky step is letting a model cause a side effect — an actual INSERT — based on its own reasoning. I wanted to build that honestly: the model decides and sequences, but every real action runs through my code, where it can be validated and refused.",
+        "Most agent demos stop at generating text. The risky step is letting a model cause a side effect, an INSERT, based on its own reasoning. I wanted to build that honestly: the model decides and sequences, but every real action runs through my code, where it can be validated and refused.",
       repo: "https://github.com/Varshini0511/expense-tracker",
       repoPrivate: false,
       demo: "https://expense-tracker-chi-five-45.vercel.app/",
@@ -827,7 +827,7 @@ export const profile = {
       ],
       deepDive: [
         {
-          title: "The model is the brain, the code is the hands",
+          title: "The model proposes, the code acts",
           body: "This is the mental model the whole project is built on. When the model “calls SaveExpense”, it has only written a message saying so — nothing has happened yet. My C# code reads that intent and performs the actual INSERT. That separation is what makes an acting agent safe to build: every side effect passes through code I control, where it can be validated, logged or refused.",
           points: [],
         },
@@ -843,7 +843,7 @@ export const profile = {
         },
         {
           title: "Defending against messy model output",
-          body: "Some models emit malformed XML-style tool calls instead of clean JSON. Rather than let the loop crash, a fallback parser salvages them. It's unglamorous, and it's exactly the kind of resilience that separates something that works on your machine from something that survives real traffic.",
+          body: "Some models emit malformed XML-style tool calls instead of clean JSON. Rather than let the loop crash, a fallback parser salvages them. It is unglamorous work, and it is what separates a demo from something that survives real traffic.",
           points: [],
         },
       ],
@@ -873,12 +873,12 @@ export const profile = {
       blurb:
         "An agent that compares live prices across Uber, Ola, Rapido and Namma Yatri, decides between a cab and an auto, and then books by racing the cheapest providers against each other — first driver confirmation wins. It learns from your ride history to flag unusual prices and predict surge.",
       problem:
-        "Getting the cheapest ride in India means opening four apps, comparing by eye, and then hoping the driver you chose actually accepts. Prices move by the minute, and the cheapest quote is worthless if nobody confirms it. I wanted to automate the whole loop — compare, decide, book, and fall back — and make it smarter the more it is used.",
+        "Getting the cheapest ride in India means opening four apps, comparing by eye, and then hoping the driver you chose accepts. Prices move by the minute, and the cheapest quote is worthless if nobody confirms it. I wanted to automate the whole loop — compare, decide, book, and fall back — and make it smarter the more it is used.",
       repo: "https://github.com/Varshini0511/RideSmartAgent",
       repoPrivate: false,
       demo: null,
       demoNote:
-        "No hosted demo: it drives real, logged-in Uber and Ola browser sessions, so it runs locally on your own accounts. Happy to walk through it live.",
+        "No hosted demo: it drives real, logged-in Uber and Ola browser sessions, so it runs locally on your own accounts.",
       stack: ["Python", "Playwright", "asyncio", "Streamlit", "Groq", "SQLite", "Folium", "Pydantic"],
       tags: ["Agents", "Automation"],
       diagram: rideSmartDiagram as DiagramSpec,
@@ -914,7 +914,7 @@ export const profile = {
           points: [],
         },
         {
-          title: "Learning from history, with honest statistics",
+          title: "Learning from history with simple statistics",
           body: "Every comparison is written to a SQLite history. Price prediction averages past prices for the same route, provider and hour, widening to adjacent hours, the same weekday, then the whole route when data is thin — and the confidence it reports falls accordingly. Anomaly detection flags a quote more than two standard deviations from that route's history, and needs at least three samples before it will say anything. These are statistical methods rather than trained models, which is deliberate: with one person's ride history there isn't enough data to train anything, but there is enough for simple, explainable numbers.",
           points: [],
         },
@@ -935,7 +935,7 @@ export const profile = {
         "The least reliable component — here, scraping — should be isolated, time-boxed and expected to fail.",
         "With a single user's data, simple statistics with an explicit confidence beat a model with nothing to learn from.",
         "Fallback order is a product decision; putting it in one function with a readable reason keeps it debuggable.",
-        "Some systems can't be hosted as a demo, and saying so plainly is better than faking one.",
+        "Some systems cannot be hosted as a demo; say so instead of faking one.",
       ],
     },
 
@@ -956,7 +956,7 @@ export const profile = {
       repoPrivate: false,
       demo: null,
       demoNote:
-        "No hosted demo: it needs the ride apps installed and the Accessibility permission granted, so it is built from source on a device. Happy to walk through it live.",
+        "No hosted demo: it needs the ride apps installed and the Accessibility permission granted, so it is built from source on a device.",
       stack: ["Kotlin", "Jetpack Compose", "Material 3", "AccessibilityService", "Coroutines + Flow", "Foreground Service", "Navigation Compose"],
       tags: ["Mobile", "Android", "Automation"],
       diagram: rideSmartAndroidDiagram as DiagramSpec,
@@ -1030,7 +1030,7 @@ export const profile = {
       blurb:
         "The cross-platform sibling: an Expo and React Native app, in TypeScript, that compares estimated fares across the four ride apps and then hands off to the chosen one with the route pre-filled. One codebase configured for Android, iOS and web.",
       problem:
-        "The Android build needs a sensitive permission and only runs on Android. I wanted the same comparison somewhere it could run anywhere, with a stricter promise: estimate honestly, say it is an estimate, and leave the actual booking to the ride app rather than automating it.",
+        "The Android build needs a sensitive permission and only runs on Android. I wanted the same comparison somewhere it could run anywhere, with a stricter promise: estimate carefully, label it as an estimate, and leave the actual booking to the ride app rather than automating it.",
       repo: "https://github.com/Varshini0511/RideSmartMobile",
       repoPrivate: false,
       demo: null,
@@ -1050,7 +1050,7 @@ export const profile = {
       ],
       deepDive: [
         {
-          title: "Honest about estimating",
+          title: "Estimating without overclaiming",
           body: "Without the accessibility approach there is no way to see a live price, so this app doesn't pretend to. Fares come from per-provider fare cards, with surge and ETA sampled within time-of-day ranges, and every number is shown as a range with a note in settings saying they are estimates. The comparison is useful for ranking providers against each other; it is deliberately not presented as a quote.",
           points: [],
         },
@@ -1080,7 +1080,7 @@ export const profile = {
       learnings: [
         "An estimate labelled as an estimate is a feature; a guess dressed as a price is a bug.",
         "A deep link is a thin, durable integration compared with automating another app's UI.",
-        "Platform-specific modules keep one codebase honest about what only exists on a device.",
+        "Platform-specific modules keep one codebase clear about what only exists on a device.",
         "Choosing less capability on purpose is a design decision — this build trades live prices for reach and safety.",
       ],
     },

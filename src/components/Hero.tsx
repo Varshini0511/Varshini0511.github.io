@@ -9,7 +9,7 @@ export default function Hero() {
           <div>
             <p className="rise label flex items-center gap-2.5 text-[var(--accent)]" style={{ animationDelay: "40ms" }}>
               <span className="h-px w-8 bg-[var(--accent)]" />
-              {profile.title} · {profile.yearsExperience} years
+              {profile.title}
             </p>
 
             <h1

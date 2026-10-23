@@ -13,7 +13,7 @@ export default function Contact() {
     <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
       <div>
         <p className="text-[1.7rem] leading-[1.25] [font-family:var(--font-display)] sm:text-[2rem]">
-          If you are building something where correctness, security or scale actually matters, I would like to hear about it.
+          If you are building something where correctness, security or scale matters, I would like to hear about it.
         </p>
         <p className="label mt-6 text-[var(--faint)]">Based in {profile.location}</p>
       </div>

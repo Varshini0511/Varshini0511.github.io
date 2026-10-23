@@ -1,26 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Moon, Sun, Github, Linkedin, Menu, X } from "lucide-react";
 import { profile } from "@/data/profile";
-
-/** Root-relative so they work from project detail pages as well as the home page. */
-const LINKS = [
-  { href: "/#career", label: "Career" },
-  { href: "/#systems", label: "Systems" },
-  { href: "/#ai", label: "AI work" },
-  { href: "/#mobile", label: "Mobile" },
-  { href: "/#stack", label: "Stack" },
-  { href: "/#about", label: "About" },
-  { href: "/#contact", label: "Contact" },
-];
+import { TABS, tabFromHash } from "@/lib/tabs";
 
 export default function Nav() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("");
+  const [hashTab, setHashTab] = useState<string>("");
 
   useEffect(() => {
     const current = document.documentElement.getAttribute("data-theme");
@@ -29,31 +20,19 @@ export default function Nav() {
     const onScroll = () => setScrolled(window.scrollY > 16);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-
-    // Highlight whichever section is currently in the upper part of the viewport.
-    const sections = LINKS.map((l) => document.getElementById(l.href.replace("/#", ""))).filter(
-      (el): el is HTMLElement => el !== null,
-    );
-
-    let io: IntersectionObserver | undefined;
-    if (sections.length && typeof IntersectionObserver !== "undefined") {
-      io = new IntersectionObserver(
-        (entries) => {
-          const visible = entries
-            .filter((e) => e.isIntersecting)
-            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-          if (visible) setActive(visible.target.id);
-        },
-        { rootMargin: "-20% 0px -65% 0px" },
-      );
-      sections.forEach((s) => io!.observe(s));
-    }
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      io?.disconnect();
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // The active tab comes from the URL hash, not from scroll position.
+  useEffect(() => {
+    const read = () => setHashTab(tabFromHash(window.location.hash));
+    read();
+    window.addEventListener("hashchange", read);
+    return () => window.removeEventListener("hashchange", read);
+  }, [pathname]);
+
+  // On a project page no tab is active.
+  const active = pathname === "/" ? hashTab : "";
 
   const toggle = () => {
     const next = theme === "dark" ? "light" : "dark";
@@ -69,33 +48,34 @@ export default function Nav() {
   return (
     <header
       className={`no-print fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "border-b bg-[var(--bg)]/85 backdrop-blur-lg" : "border-b border-transparent"
+        scrolled ? "border-b bg-[var(--bg)]/90 backdrop-blur-lg" : "border-b border-transparent"
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <Link href="/" className="group flex items-center gap-2.5 text-sm font-medium tracking-tight">
+        {/* Plain anchors on purpose: a tab link is a hash change, not a router navigation. */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a href="/#overview" className="group flex items-center gap-2.5 text-sm font-medium tracking-tight">
           <span className="grid h-7 w-7 place-items-center rounded-md border border-[var(--accent-line)] bg-[var(--accent-soft)] font-mono text-[11px] font-semibold text-[var(--accent)]">
             VK
           </span>
           <span className="hidden text-[var(--text)] sm:inline">{profile.name}</span>
-        </Link>
+        </a>
 
-        <div className="hidden items-center gap-1 md:flex">
-          {LINKS.map((l) => {
-            const isActive = active === l.href.replace("/#", "");
+        <div role="tablist" aria-label="Sections" className="hidden items-center gap-0.5 lg:flex">
+          {TABS.map((t) => {
+            const isActive = active === t.id;
             return (
               <a
-                key={l.href}
-                href={l.href}
-                aria-current={isActive ? "true" : undefined}
-                className={`relative rounded-md px-3 py-2 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)] ${
+                key={t.id}
+                href={`/#${t.id}`}
+                role="tab"
+                aria-selected={isActive}
+                className={`relative rounded-md px-3 py-2 text-[0.85rem] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)] ${
                   isActive ? "text-[var(--text)]" : "text-[var(--muted)]"
                 }`}
               >
-                {l.label}
-                {isActive && (
-                  <span className="absolute inset-x-3 -bottom-px h-px bg-[var(--accent)]" />
-                )}
+                {t.label}
+                {isActive && <span className="absolute inset-x-3 -bottom-px h-px bg-[var(--accent)]" />}
               </a>
             );
           })}
@@ -131,7 +111,7 @@ export default function Nav() {
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={open}
-            className="grid h-9 w-9 place-items-center rounded-md text-[var(--muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)] md:hidden"
+            className="grid h-9 w-9 place-items-center rounded-md text-[var(--muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)] lg:hidden"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -139,16 +119,18 @@ export default function Nav() {
       </nav>
 
       {open && (
-        <div className="border-t bg-[var(--bg)]/95 backdrop-blur-lg md:hidden">
-          <div className="mx-auto flex max-w-6xl flex-col px-5 py-2 sm:px-8">
-            {LINKS.map((l) => (
+        <div className="border-t bg-[var(--bg)]/95 backdrop-blur-lg lg:hidden">
+          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-1 px-5 py-3 sm:px-8">
+            {TABS.map((t) => (
               <a
-                key={l.href}
-                href={l.href}
+                key={t.id}
+                href={`/#${t.id}`}
                 onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2.5 text-sm text-[var(--muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
+                className={`rounded-md px-3 py-2.5 text-sm transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)] ${
+                  active === t.id ? "bg-[var(--surface-2)] text-[var(--text)]" : "text-[var(--muted)]"
+                }`}
               >
-                {l.label}
+                {t.label}
               </a>
             ))}
           </div>

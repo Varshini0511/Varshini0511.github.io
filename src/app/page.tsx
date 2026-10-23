@@ -1,5 +1,6 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
+import Panel from "@/components/Panel";
 import Section from "@/components/Section";
 import CareerArc from "@/components/CareerArc";
 import Experience from "@/components/Experience";
@@ -12,83 +13,90 @@ import About from "@/components/About";
 import Contact from "@/components/Contact";
 import { profile } from "@/data/profile";
 
+/**
+ * Each tab is a panel; the nav switches between them (see TabController and the
+ * [data-panel] rules in globals.css). All panels are rendered into the HTML.
+ */
 export default function Home() {
   return (
     <>
       <Nav />
-      <main>
-        <Hero />
+      <main className="min-h-[72vh]">
+        <Panel id="overview">
+          <Hero />
+        </Panel>
 
-        <Section
-          id="career"
-          index="01"
-          eyebrow="Career"
-          title="Eight years across three enterprise domains"
-          intro="Digital forensics, energy and insurance — security-sensitive platforms where a wrong answer has a cost. The same fundamentals carried across .NET Framework, .NET Core and .NET 8, on-prem, AWS and Azure."
-        >
-          <CareerArc />
-          <div className="mt-12">
-            <Experience />
-          </div>
-        </Section>
+        <Panel id="career">
+          <Section
+            eyebrow="Career"
+            title="Eight years in enterprise engineering"
+            intro="Digital forensics, energy and insurance: security-sensitive platforms where a wrong answer has a cost. The same fundamentals carried across .NET Framework, .NET Core and .NET 8, on-prem, AWS and Azure."
+          >
+            <CareerArc />
+            <div className="mt-12">
+              <Experience />
+            </div>
+          </Section>
+        </Panel>
 
-        <Section
-          id="systems"
-          index="02"
-          eyebrow="Systems"
-          title="Enterprise systems, in detail"
-          intro="Three pieces of work told as architecture: what was built, the decisions behind it, and how it is wired. Components are limited to what is in my work history."
-        >
-          <CaseStudies />
-        </Section>
+        <Panel id="systems">
+          <Section
+            eyebrow="Systems"
+            title="Enterprise systems, in detail"
+            intro="Three engagements as architecture: what was built, the decisions behind it and how it is wired. Components are limited to those my work history names."
+          >
+            <CaseStudies />
+          </Section>
+        </Panel>
 
-        <Section
-          id="ai"
-          index="03"
-          eyebrow="Applied AI"
-          title="AI systems, built end to end"
-          intro="Eight systems I designed and built over the past year while teaching myself AI engineering — six deployed and live, and two you run yourself: RideSmartAgent, which drives real logged-in browser sessions, and inferouter, an inference gateway. Each goes past the demo into what makes something production-worthy: retrieval quality, evaluation, guardrails and cost."
-        >
-          <Projects />
-        </Section>
+        <Panel id="ai">
+          <Section
+            eyebrow="Applied AI"
+            title="AI systems"
+            intro="Eight systems built over the past year while learning AI engineering. Six are deployed and live; two run on your own machine: RideSmartAgent, which drives real logged-in browser sessions, and inferouter, an inference gateway. Each goes past the demo into retrieval quality, evaluation, guardrails and cost."
+          >
+            <Projects />
+          </Section>
+        </Panel>
 
-        <Section
-          id="mobile"
-          index="04"
-          eyebrow="Mobile"
-          title="One product, three runtimes"
-          intro="The same problem — find the cheapest ride in India — built three ways, each with a deliberately different trade-off between what it can see, what it asks of the user and where it runs. The comparison is the interesting part."
-        >
-          <Mobile />
-        </Section>
+        <Panel id="mobile">
+          <Section
+            eyebrow="Mobile"
+            title="One product, three runtimes"
+            intro="The same problem, finding the cheapest ride in India, built three ways. Each makes a different trade-off between what it can see, what it asks of the user and where it runs."
+          >
+            <Mobile />
+          </Section>
+        </Panel>
 
-        <Section
-          id="approach"
-          index="05"
-          eyebrow="Approach"
-          title="How I engineer"
-          intro="One set of habits, applied to a forensics platform and to an LLM agent alike. Each principle below points at the work that shows it."
-        >
-          <Approach />
-        </Section>
+        <Panel id="stack">
+          <Section
+            eyebrow="Technology"
+            title="Depth and continuity"
+            intro="What carried across every role, what each stage added, and where the independent work sits."
+          >
+            <TechMatrix />
+          </Section>
+        </Panel>
 
-        <Section
-          id="stack"
-          index="06"
-          eyebrow="Technology"
-          title="Depth and continuity"
-          intro="What carried across every role, what each stage added, and where the AI work sits. A technology appears against a role only where it is in that role's stack."
-        >
-          <TechMatrix />
-        </Section>
+        <Panel id="about">
+          <Section
+            eyebrow="Approach"
+            title="How I engineer"
+            intro="One set of habits, applied to a forensics platform and to an LLM agent alike. Each principle points at the work that shows it."
+          >
+            <Approach />
+          </Section>
+          <Section lead={false} eyebrow="About" title="Background">
+            <About />
+          </Section>
+        </Panel>
 
-        <Section id="about" index="07" eyebrow="About" title="Background">
-          <About />
-        </Section>
-
-        <Section id="contact" index="08" eyebrow="Contact" title="Let's talk">
-          <Contact />
-        </Section>
+        <Panel id="contact">
+          <Section eyebrow="Contact" title="Get in touch">
+            <Contact />
+          </Section>
+        </Panel>
       </main>
 
       <footer className="border-t">

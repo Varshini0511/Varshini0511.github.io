@@ -120,7 +120,7 @@ export const forensicsPlatform: DiagramSpec = {
       y: 360,
       w: 1160,
       h: 34,
-      label: "Confidentiality · integrity · auditability of evidence — requirements, not features",
+      label: "Confidentiality · integrity · auditability of evidence",
       tone: "band",
     },
   ],

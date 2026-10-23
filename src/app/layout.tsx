@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Newsreader, Inter, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/data/profile";
+import { TAB_IDS, DEFAULT_TAB } from "@/lib/tabs";
+import TabController from "@/components/TabController";
 import "./globals.css";
 
 /**
@@ -80,8 +82,23 @@ const themeScript = `
   } catch (e) {
     d.setAttribute('data-theme', 'dark');
   }
-  // Opts scroll-reveal in. Without this class every section stays visible,
-  // so a JS failure degrades to a plain page rather than a blank one.
+  // Choose the active tab from the URL hash before first paint, so a link like
+  // /#career opens on that tab with no flash of another one.
+  var tabs = ${JSON.stringify(TAB_IDS)};
+  var h = (window.location.hash || '').replace('#', '');
+  d.setAttribute('data-tab', tabs.indexOf(h) > -1 ? h : '${DEFAULT_TAB}');
+  // Switch tabs on hash changes even before React has loaded, so an early click
+  // is never ignored. TabController does the same later; both are idempotent.
+  window.addEventListener('hashchange', function () {
+    var n = (window.location.hash || '').replace('#', '');
+    n = tabs.indexOf(n) > -1 ? n : '${DEFAULT_TAB}';
+    if (d.getAttribute('data-tab') !== n) {
+      d.setAttribute('data-tab', n);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  });
+  // Opts tabs in. Without this class every panel stays visible, so a script
+  // failure degrades to a plain long page rather than a blank one.
   d.classList.add('js');
 })();
 `;
@@ -93,6 +110,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}>
+        <TabController />
         {children}
       </body>
     </html>

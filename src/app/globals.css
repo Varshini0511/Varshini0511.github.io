@@ -59,7 +59,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
   -webkit-text-size-adjust: 100%;
 }
@@ -214,21 +213,25 @@ code {
   animation: rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-/* Scroll-triggered reveal.
-   Content is visible by default and only hidden once the inline script has
-   confirmed JS is running, so a script failure can never blank the page. */
-.reveal {
-  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+/* ---------------------------------------------------------------
+   Tabs. Every panel is in the HTML; once the inline script has set
+   html.js and a data-tab, only the matching panel is shown. Without
+   JavaScript all panels stay visible, so nothing is ever blank.
+   --------------------------------------------------------------- */
+html.js [data-panel] {
+  display: none;
 }
 
-html.js .reveal {
-  opacity: 0;
-  transform: translateY(16px);
-}
-
-html.js .reveal.is-visible {
-  opacity: 1;
-  transform: none;
+html.js[data-tab="overview"] [data-panel="overview"],
+html.js[data-tab="career"] [data-panel="career"],
+html.js[data-tab="systems"] [data-panel="systems"],
+html.js[data-tab="ai"] [data-panel="ai"],
+html.js[data-tab="mobile"] [data-panel="mobile"],
+html.js[data-tab="stack"] [data-panel="stack"],
+html.js[data-tab="about"] [data-panel="about"],
+html.js[data-tab="contact"] [data-panel="contact"] {
+  display: block;
+  animation: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -236,12 +239,8 @@ html.js .reveal.is-visible {
     scroll-behavior: auto;
   }
   .rise,
-  .reveal,
-  html.js .reveal {
-    animation: none;
-    opacity: 1;
-    transform: none;
-    transition: none;
+  html.js [data-panel] {
+    animation: none !important;
   }
   * {
     transition-duration: 0.01ms !important;

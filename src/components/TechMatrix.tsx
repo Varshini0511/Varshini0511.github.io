@@ -68,7 +68,7 @@ export default function TechMatrix() {
       </div>
 
       <p className="border-t bg-[var(--surface-2)] px-5 py-3 text-[0.72rem] text-[var(--faint)]">
-        A filled square means the technology is in the stack or bullets for that role — nothing aspirational.
+        A filled square means the technology appears in the stack or responsibilities of that role.
       </p>
     </div>
   );
