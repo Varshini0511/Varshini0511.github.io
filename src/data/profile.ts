@@ -7,7 +7,7 @@
  * apply to a given project.
  */
 
-import { azureIngestion, forensicsPlatform, modernisation, type DiagramSpec } from "./diagrams";
+import type { DiagramSpec } from "./diagrams";
 import {
   advishoppingPipeline,
   nimbuspayAgent,
@@ -41,7 +41,7 @@ export const profile = {
   /** Tenure, scope, measured impact, and the pivot — one of each. */
   stats: [
     { value: "8+", label: "Years shipping production software" },
-    { value: "3", label: "Enterprise platforms delivered end-to-end" },
+    { value: "11", label: "Enterprise applications worked on" },
     { value: "40%", label: "Cloud cost reduction delivered" },
     { value: "8", label: "AI systems built from scratch" },
   ],
@@ -49,7 +49,7 @@ export const profile = {
   /** The spec sheet beside the hero. Dense, factual, scannable. */
   glance: [
     { k: "Role", v: "Senior Software Engineer, Exterro R&D" },
-    { k: "Experience", v: "Since 2018, across 3 enterprise domains" },
+    { k: "Experience", v: "Since 2018, across 11 enterprise applications" },
     { k: "Domains", v: "Digital forensics · Energy · Insurance" },
     { k: "Core", v: "C# · .NET 8 · ASP.NET Core · Azure · SQL Server" },
     { k: "Front end", v: "Angular · React / Next.js · TypeScript" },
@@ -60,13 +60,12 @@ export const profile = {
 
   /** Measured outcomes from the résumé, labelled with where they came from. */
   outcomes: [
-    { value: "−40%", label: "Cloud cost", context: "AWS EC2 migration" },
-    { value: "~35%", label: "Faster processing", context: "SQL stored-procedure and data-model tuning" },
-    { value: "−30%", label: "Response time", context: "IIS tuning on high-traffic apps" },
-    { value: "−40%", label: "System downtime", context: "100+ scheduled jobs managed in Tidal" },
-    { value: "0", label: "Plain-text secrets", context: "Managed Identity with Key Vault" },
-    { value: "100%", label: "Clean security record", context: "Reviews with the cybersecurity team" },
-  ],
+    { value: "3–6 s", label: "Job screen load time", context: "Exterro · down from 10+ minutes on a high-volume job screen" },
+    { value: "−40%", label: "Cloud cost", context: "Wipro · AWS EC2 migration" },
+    { value: "~35%", label: "Faster processing", context: "Exterro · SQL stored-procedure and data-model tuning" },
+    { value: "−30%", label: "Response time", context: "Wipro · IIS tuning on high-traffic apps" },
+    { value: "−40%", label: "System downtime", context: "Wipro · 100+ scheduled jobs managed in Tidal" },
+      ],
 
   /** Where the effort goes — three lanes, each with evidence rather than adjectives. */
   focusAreas: [
@@ -109,7 +108,7 @@ export const profile = {
     {
       title: "Secrets never live in code or config.",
       proof: [
-        "Wipro — system- and user-assigned Managed Identities across Function Apps, Blob Storage, Cosmos DB and Key Vault removed plain-text secrets and connection strings.",
+        "Wipro — system- and user-assigned Managed Identities across Function Apps, Blob Storage, Cosmos DB and Key Vault replaced stored secrets and connection strings.",
         "NimbusPay — PII is redacted with Presidio before the model, the logs or the database see it.",
       ],
     },
@@ -188,7 +187,7 @@ export const profile = {
         rows: [
           { name: "Azure platform services", note: "Functions, Durable, Service Bus, Key Vault", used: ["wipro"] },
           { name: "Docker · Kubernetes (AKS)", note: "containerised services", used: ["wipro", "ai"] },
-          { name: "CI/CD", note: "Jenkins, Urban Code Deploy", used: ["cts"] },
+          { name: "CI/CD", note: "Jenkins, Azure DevOps, Urban Code Deploy", used: ["cts", "wipro"] },
         ],
       },
       {
@@ -208,111 +207,6 @@ export const profile = {
       },
     ],
   },
-
-  /** Three engagements told as systems: what I built, why, and how it is wired. */
-  caseStudies: [
-    {
-      id: "azure-ingestion",
-      title: "Event-driven ingestion pipeline on Azure",
-      org: "Wipro · digital oilfield",
-      period: "Feb 2022 – Jul 2024",
-      summary:
-        "A file landing in Blob Storage triggers an automated pipeline that decrypts it, rejects duplicates by hash, validates and splits it, then inserts structured rows into SQL Server — orchestrated so the sequence stays consistent and every failure stays recoverable.",
-      decisions: [
-        {
-          title: "Durable orchestration for ordered, recoverable steps",
-          body: "Azure Functions with action triggers sequence the SQL insertions, coordinated by durable orchestration so the pipeline stays consistent and can resume after a failure.",
-        },
-        {
-          title: "Managed Identity instead of secrets",
-          body: "System- and user-assigned identities authenticate Function Apps to Blob Storage, Cosmos DB and Key Vault, eliminating plain-text secrets and connection strings.",
-        },
-        {
-          title: "Service Bus for fan-out, with a safety net",
-          body: "Topics and subscriptions notify downstream services and trigger email workflows; retry policies and dead-letter queues contain failures instead of losing them.",
-        },
-        {
-          title: "Cosmos DB modelled for the UI's reads",
-          body: "Container design, partitioning, indexing and request-unit tuning balance cost against query performance for the dashboards that read from it.",
-        },
-        {
-          title: "Observable and configurable by default",
-          body: "Application Insights custom telemetry, dependency tracking and KQL for proactive analysis; environment settings and feature toggles centralised in App Configuration.",
-        },
-      ],
-      stack: ["Azure Functions", "Durable Functions", "Blob Storage", "Service Bus", "Cosmos DB", "Key Vault", "App Configuration", "Application Insights", "SQL Server", "AKS"],
-      caption: "Simplified",
-      diagramId: "azure",
-      diagramTitle: "Event-driven ingestion pipeline on Azure",
-      diagram: azureIngestion as DiagramSpec,
-    },
-    {
-      id: "forensics-platform",
-      title: "Evidence collection and review for a forensics platform",
-      org: "Exterro R&D · FTKC",
-      period: "Aug 2024 – present",
-      summary:
-        "Collection from endpoints, cloud drives, mail systems and mobile devices into a digital forensics platform where confidentiality, integrity and auditability of evidence are requirements — plus the review interface analysts use on the other side.",
-      decisions: [
-        {
-          title: "Mobile collection as an orchestrated job",
-          body: "An end-to-end module automating job orchestration, secure TCP/IP-based capture and transfer, progress tracking and encrypted output generation, built for robustness and fault tolerance.",
-        },
-        {
-          title: "Integrity by construction",
-          body: "Encryption and certificate-based workflows preserve forensic data integrity and satisfy internal and external security standards.",
-        },
-        {
-          title: "Ingest from everywhere",
-          body: "Microsoft Graph, Google APIs and Export APIs across Google Drive, OneDrive, network shares, Gmail, Outlook, Exchange and Windows, Linux and macOS systems — with ingestion issues traced across cloud and on-prem.",
-        },
-        {
-          title: "macOS artifacts, reviewed in the browser",
-          body: "Apple APIs and macOS/iWork document handling enable secure, browser-based review of macOS-originated evidence.",
-        },
-        {
-          title: "Extraction that stays traceable",
-          body: "Automated entity extraction and classification — people, emails, keywords, metadata — while keeping traceability and correctness of what was extracted.",
-        },
-      ],
-      stack: ["C#", ".NET 8", "ASP.NET", "Web API", "Angular 14", "EF Core", "SQL Server", "Microsoft Graph", "Google APIs"],
-      caption: "Simplified",
-      diagramId: "forensics",
-      diagramTitle: "Evidence collection and review pipeline",
-      diagram: forensicsPlatform as DiagramSpec,
-    },
-    {
-      id: "modernisation",
-      title: "Platform modernisation to .NET 8",
-      org: "Exterro R&D, and earlier platform work",
-      period: "2018 – present",
-      summary:
-        "Leading the move of a long-lived .NET Framework platform onto .NET 8 — breaking changes, legacy refactoring, API modernisation and performance — built on earlier upgrade and migration work that cut cost and processing time.",
-      decisions: [
-        {
-          title: "Align with long-term support",
-          body: "The migration targets .NET 8 for long-term support and platform sustainability, resolving breaking changes and refactoring legacy components along the way.",
-        },
-        {
-          title: "More than a retarget",
-          body: "Modernising APIs and improving performance are part of the migration itself, not a separate phase afterwards.",
-        },
-        {
-          title: "Done before, at smaller scale",
-          body: ".NET 4.8 upgrades, a Windows Server 2012 → 2019 migration with full environment setup and validation, and a move to AWS EC2 that cut cost by 40% and improved scalability.",
-        },
-        {
-          title: "Query-level performance",
-          body: "Tuned SQL stored procedures and data models, improving correlation accuracy and reducing processing time by about 35%.",
-        },
-      ],
-      stack: [".NET Framework", ".NET 4.8", ".NET 8", "SQL Server", "Windows Server", "AWS EC2"],
-      caption: "Simplified",
-      diagramId: "modernisation",
-      diagramTitle: "Platform modernisation to .NET 8",
-      diagram: modernisation as DiagramSpec,
-    },
-  ],
 
   about: [
     `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements.`,
@@ -1151,21 +1045,22 @@ export const profile = {
       current: true,
       domain: "Digital forensics · eDiscovery",
       context:
-        "FTKC, a security-critical digital forensics platform supporting the full investigative lifecycle, with strict requirements around confidentiality, integrity and auditability of evidence.",
+        "FTK Central, Exterro's eDiscovery and digital forensics platform, used by legal teams, corporate investigators and law enforcement. I have worked across most of the application: case creation, collection, evidence processing, review and live preview.",
       impact: [
+        { value: "10 min → 3–6 s", label: "Load time of a high-volume job screen" },
+        { value: "10+", label: "Data sources, each with its own collection route" },
         { value: ".NET 8", label: "Framework migration led" },
-        { value: "10+", label: "Evidence sources integrated" },
-        { value: "E2E", label: "Mobile collection module owned" },
       ],
       stack: ["C#", ".NET 8", "ASP.NET", "Web API", "Angular 14", "EF Core", "ADO.NET", "LINQ", "SQL Server"],
       points: [
-        "Leading the migration from .NET Framework to .NET 8 — resolving breaking changes, refactoring legacy components and modernising APIs for long-term support.",
-        "Engineered an end-to-end mobile data collection module: job orchestration, secure TCP/IP-based capture and transfer, progress tracking and encrypted output, built for fault tolerance.",
-        "Integrated Apple APIs and macOS/iWork document handling, enabling secure browser-based review of macOS artifacts.",
-        "Built endpoint-adjacent collection across Google Drive, OneDrive, network shares, mobile devices, Windows/Linux/macOS, Gmail, Outlook and Exchange.",
-        "Implemented encryption and certificate-based security workflows to preserve forensic data integrity against internal and external standards.",
-        "Enabled automated entity extraction and classification — people, emails, keywords, metadata — while maintaining traceability of extracted data.",
-        "Designed Angular UI for evidence review, filtering, tagging and entity linking, with consistent API contracts and error handling.",
+        "Led the migration from .NET Framework to .NET 8.",
+        "Helped lead the redesign of evidence processing to a database-driven, horizontally scalable job model, with centralised job management, synchronised status and a case-level job screen showing alerts, errors and adjustable priority.",
+        "Implemented evidence collection from computers, mobile devices, Gmail, Outlook, Exchange, Teams, Slack, Zoom, Google Drive, OneDrive and network shares, each through its own route: agents and a site server, or the source's own APIs.",
+        "Implemented case creation, evidence processing and review, an on-demand live preview that retrieves files only when opened, and the end-to-end mobile collection integration.",
+        "Designed secure connectivity and file transfer between distributed agents and central servers across domains, networks and regions, using VPN tunnelling, dynamic address handling and HTTPS-based transfer.",
+        "Reduced the load time of a high-volume job management screen from over 10 minutes to 3–6 seconds through query, code and database optimisation.",
+        "Resolved critical production issues, including hangs under high collection concurrency, timeouts and thread contention when a remote component was unavailable, and timeouts on mail servers under heavy load; handled corrupted data from diverse sources.",
+        "Resolved client-reported collection and performance issues, including SQL tuning that cut processing time by about 35%.",
       ],
     },
     {
@@ -1175,23 +1070,22 @@ export const profile = {
       short: "Wipro",
       span: [2022.08, 2024.58] as [number, number | null],
       current: false,
-      domain: "Energy · Digital oilfield",
+      domain: "Energy · Enterprise applications",
       context:
-        "Digital oilfield solutions for Halliburton, plus HP Marcoms — drilling data processing, asset tracking and job scheduling.",
+        "Two client engagements: Halliburton (digital oilfield solutions on Azure) and HP Marcoms (enterprise web applications and platform migration).",
       impact: [
-        { value: "0", label: "Plain-text secrets, via Managed Identity" },
-        { value: "AKS", label: "Dockerised services in production" },
-        { value: "Real-time", label: "Telemetry dashboards delivered" },
+        { value: "−40%", label: "Cloud cost through an AWS EC2 migration" },
+        { value: "−30%", label: "Response time through IIS tuning" },
+        { value: "3+", label: "Applications led end to end" },
       ],
-      stack: [".NET Core", "C#", "Angular 14", "React/Next.js", "Azure", "Cosmos DB", "Docker", "AKS"],
+      stack: [".NET Core", "ASP.NET MVC", "C#", "Angular 14", "React/Next.js", "Azure Functions", "Logic Apps", "Service Bus", "Key Vault", "Azure IAM", "Cosmos DB", "SQL Server", "Docker", "AKS", "Jenkins", "Azure DevOps"],
       points: [
-        "Designed secure, event-driven workflows with Azure Blob Storage and Durable Orchestrations — file drops triggered automated decryption, hash-based duplicate detection, validation, splitting and structured SQL insertion.",
-        "Used system- and user-assigned Managed Identities across Function Apps, Blob Storage, Cosmos DB and Key Vault, eliminating plain-text secrets and connection strings.",
-        "Implemented Service Bus topics and subscriptions with retry policies and dead-letter queues for fault-tolerant downstream notification.",
-        "Modelled and tuned Cosmos DB containers — partitioning, indexing and RU tuning for cost/performance balance.",
-        "Built Angular 14 dashboards for real-time telemetry and integrated React/Next.js front ends with versioned .NET REST APIs.",
-        "Enhanced diagnostics with Application Insights — custom telemetry, dependency tracking and KQL queries for proactive analysis.",
-        "Built and supported Dockerised services on Azure Kubernetes Service for consistent, reliable deployments.",
+        "Halliburton: built digital oilfield solutions for drilling data processing, asset tracking and job scheduling, with .NET Core APIs and microservices, Angular 14 dashboards for real-time telemetry and React/Next.js front ends.",
+        "Designed event-driven Azure workflows: file drops triggered decryption, hash-based duplicate detection, validation, splitting and structured SQL insertion through Durable Orchestrations and Functions.",
+        "Secured access with Managed Identities and Key Vault; added Service Bus topics with retry policies and dead-letter queues, and tuned Cosmos DB partitioning, indexing and request units.",
+        "HP Marcoms: led end-to-end development of 3+ applications, built ASP.NET MVC/Core and React web apps, optimised SQL and stored procedures, and mentored team members on Agile delivery.",
+        "Upgraded applications to .NET 4.8, migrated Windows Server 2012 to 2019 and moved applications to AWS EC2, reducing cost by 40% and improving scalability.",
+        "Tuned IIS (response time −30%), managed 100+ scheduled jobs in Tidal (downtime −40%), automated CI/CD with Jenkins and Azure DevOps, and maintained a 100% clean security record with the cybersecurity team.",
       ],
     },
     {
@@ -1202,20 +1096,19 @@ export const profile = {
       span: [2018.08, 2022.08] as [number, number | null],
       current: false,
       domain: "Insurance · Claims & subrogation",
-      context: "Insurance platform work for Travelers — claims, subrogation and payments.",
+      context: "Insurance applications for Travelers: claims, subrogation and payments.",
       impact: [
-        { value: "30%", label: "Faster response via IIS tuning" },
-        { value: "40%", label: "Less downtime across 100+ jobs" },
-        { value: "100%", label: "Clean security record maintained" },
+        { value: "Full SDLC", label: "Requirements through production support" },
+        { value: "OAuth · JWT", label: "Secured Web APIs" },
+        { value: "Payments", label: "Secure online payment integration" },
       ],
-      stack: ["ASP.NET", "C#", "VB.NET", "Web API", "MongoDB", "DB2", "SQL Server", "Jenkins"],
+      stack: ["ASP.NET", "C#", "VB.NET", "Web API", "WCF", "ADO.NET", "LINQ", "MongoDB", "DB2", "SQL Server", "Jenkins", "Urban Code Deploy"],
       points: [
-        "Led full SDLC across requirements, design, coding, testing, deployment, support and documentation.",
-        "Built an Adverse Subrogation screen improving efficiency in managing complex legal cases, and integrated a secure online payment system for claim payments and refunds.",
-        "Secured APIs with OAuth and JWT; used MongoDB for dynamic case data with high-performance Web APIs that cut case access and update time.",
-        "Managed 100+ scheduled jobs in Tidal, optimising execution and dependencies to reduce system downtime by 40%.",
-        "Tuned IIS for high-traffic apps, improving response time by 30%; automated CI/CD via Jenkins, Urban Code Deploy and Azure DevOps.",
-        "Partnered with cybersecurity on reviews and testing, maintaining a 100% clean security record.",
+        "Led the full SDLC for insurance applications, from requirements and design through deployment, support and documentation, working to client standards.",
+        "Designed and built new UI screens from scratch, including the Adverse Subrogation screen, which improved efficiency in managing complex legal cases.",
+        "Used MongoDB for dynamic case data behind high-performance Web APIs that reduced case access and update time; secured the APIs with OAuth and JWT.",
+        "Integrated a secure online payment system for claim payments and refunds.",
+        "Built LINQ queries, WCF services and complex ASP.NET Web Forms on .NET Framework 4.0, and automated CI/CD with Jenkins and Urban Code Deploy to increase release frequency.",
       ],
     },
   ],

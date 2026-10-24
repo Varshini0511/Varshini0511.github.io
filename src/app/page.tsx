@@ -4,7 +4,7 @@ import Panel from "@/components/Panel";
 import Section from "@/components/Section";
 import CareerArc from "@/components/CareerArc";
 import Experience from "@/components/Experience";
-import CaseStudies from "@/components/CaseStudies";
+import Outcomes from "@/components/Outcomes";
 import Projects from "@/components/Projects";
 import Mobile from "@/components/Mobile";
 import Approach from "@/components/Approach";
@@ -33,19 +33,12 @@ export default function Home() {
             intro="Digital forensics, energy and insurance: security-sensitive platforms where a wrong answer has a cost. The same fundamentals carried across .NET Framework, .NET Core and .NET 8, on-prem, AWS and Azure."
           >
             <CareerArc />
+            <div className="mt-10">
+              <Outcomes />
+            </div>
             <div className="mt-12">
               <Experience />
             </div>
-          </Section>
-        </Panel>
-
-        <Panel id="systems">
-          <Section
-            eyebrow="Systems"
-            title="Enterprise systems, in detail"
-            intro="Three engagements as architecture: what was built, the decisions behind it and how it is wired. Components are limited to those my work history names."
-          >
-            <CaseStudies />
           </Section>
         </Panel>
 

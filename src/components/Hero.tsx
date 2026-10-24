@@ -28,10 +28,10 @@ export default function Hero() {
 
             <div className="rise mt-9 flex flex-wrap items-center gap-3" style={{ animationDelay: "280ms" }}>
               <a
-                href="#systems"
+                href="#ai"
                 className="group inline-flex items-center gap-2 rounded-md bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--bg)] transition-opacity hover:opacity-90"
               >
-                See the systems
+                See the work
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
