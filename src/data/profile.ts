@@ -19,6 +19,8 @@ import {
   rideSmartAndroidDiagram,
   rideSmartMobileDiagram,
   inferenceRouterDiagram,
+  aiNewsAgentDiagram,
+  ayvaBotDiagram,
 } from "./project-diagrams";
 
 export const profile = {
@@ -43,7 +45,7 @@ export const profile = {
     { value: "8+", label: "Years shipping production software" },
     { value: "11", label: "Enterprise applications worked on" },
     { value: "40%", label: "Cloud cost reduction delivered" },
-    { value: "8", label: "AI systems built from scratch" },
+    { value: "10", label: "AI systems built from scratch" },
   ],
 
   /** The spec sheet beside the hero. Dense, factual, scannable. */
@@ -210,7 +212,7 @@ export const profile = {
 
   about: [
     `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements.`,
-    `That background shapes how I approach AI. Over the past year I've built eight AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking, a cost-aware inference router — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
+    `That background shapes how I approach AI. Over the past year I've built ten AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking, a cost-aware inference router, a scheduled news agent, a personal multi-agent assistant — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
     `I've led migrations from .NET Framework to .NET 8, designed event-driven Azure workflows with Durable Functions and Service Bus, cut cloud costs 40% through an AWS EC2 migration, and shipped Angular and React/Next.js front ends against secure REST APIs. I am drawn to problems where correctness matters and debugging is hard.`,
   ],
 
@@ -225,11 +227,11 @@ export const profile = {
       period: "2026",
       role: "Solo — architecture, retrieval pipeline, evaluation, UI",
       blurb:
-        "A full-stack shopping platform built around a real retrieval stack rather than a SQL LIKE query. Three distinct search modalities — text, image and voice — over the same Postgres + pgvector catalogue.",
+        "A full-stack shopping platform built around a real retrieval stack rather than a SQL LIKE query. Three distinct search modalities — text, image and voice — over the same Postgres + pgvector catalogue, plus a document-extraction endpoint that turns invoices, receipts and datasheets into validated JSON.",
       problem:
         "Almost every shop demo searches with WHERE name ILIKE '%query%'. That fails the moment a shopper describes what they want instead of naming it — “device to call someone” matches nothing, because it shares no words with “iPhone”. I wanted to build the retrieval stack a real product would need, and then show it worked with measurements rather than impressions.",
       repo: "https://github.com/Varshini0511/AdviShopping1",
-      repoPrivate: true,
+      repoPrivate: false,
       demo: "https://advishopping1.onrender.com/search?q=sunglass",
       demoNote:
         "Hosted on Render's free tier — the first load can take up to a minute while the server wakes and loads the models.",
@@ -265,12 +267,24 @@ export const profile = {
           name: "Voice Shopping Assistant",
           hook: "A tool-calling agent that takes real actions",
           detail:
-            "A conversational agent wired to the catalogue through seven typed tools — search, inspect a product, add to cart, wishlist, save for later, and read either list. The model never touches the database: it emits a structured request, the server validates and executes it, and a code-level grounding check means the agent can't invent a product or a price. Speech-to-text in and speech synthesis out make it hands-free.",
+            "A conversational agent wired to the catalogue through eight typed tools — search, inspect a product, add to and remove from the cart, wishlist, save for later, and read either list. The model never touches the database: it emits a structured request, the server validates and executes it, and a code-level grounding check means the agent can't invent a product or a price. Speech-to-text in and speech synthesis out make it hands-free.",
           points: [
-            "Seven typed tools; the server, not the model, performs every database write",
+            "Eight typed tools; the server, not the model, performs every database write",
             "Grounding check rejects any product or price the catalogue didn't return",
             "Multi-turn memory, so follow-ups resolve against earlier turns",
             "Browser speech recognition and synthesis; feature-flagged for small hosts",
+          ],
+        },
+        {
+          name: "Document Extraction",
+          hook: "Invoices, receipts and datasheets to validated JSON",
+          detail:
+            "Upload a PDF or a photo and one multimodal model call classifies the document and extracts it. The result is checked against a per-type schema, given one bounded repair retry with the exact errors fed back, then cross-checked arithmetically — line items against the subtotal, subtotal plus tax against the total — to produce a confidence score and a needs-review flag.",
+          points: [
+            "Three document types; the file type is decided from the actual bytes, not the claimed MIME type",
+            "Documents carry their own redundancy, so many misreadings are caught without ground truth",
+            "Scored on a labelled set of 13 documents, including degraded phone photos and one deliberately wrong invoice",
+            "Nothing is stored; the document is treated as untrusted input and the model has no tools there",
           ],
         },
       ],
@@ -288,7 +302,7 @@ export const profile = {
         },
         {
           title: "Proving it works",
-          body: "An evaluation harness (npm run evaluate) scores four strategies — keyword only, semantic only, hybrid, and hybrid plus reranking — against a labelled query set using precision@k, recall@k and NDCG@k. This is the part that turns a search feature into an engineering artefact: when a weight changes, the numbers say whether it helped.",
+          body: "An evaluation harness (npm run evaluate) scores four strategies — keyword only, semantic only, hybrid, and hybrid plus reranking — against 20 labelled queries using precision@k, recall@k and NDCG@k. The measured result is candid: keyword-only reaches 58% NDCG@5 because it returns nothing for meaning-based queries, while semantic, hybrid and reranked all land at 99%. On a catalogue of about 32 products semantic search alone saturates the benchmark, so the gain from fusion and reranking is small here and would only show on a larger, noisier corpus. The harness is what makes that statement provable, and it justified switching the reranker off on the small production host, where +0.3% NDCG was not worth about 80 MB.",
           points: [],
         },
         {
@@ -297,8 +311,18 @@ export const profile = {
           points: [],
         },
         {
+          title: "Document extraction you can trust",
+          body: "A model's JSON is only a proposal. It is validated against a typed schema that also normalises US and European number formats, dates and currency symbols; a failure sends the exact errors back once, never in a loop; and arithmetic cross-checks turn the document's own redundancy into a review flag. On a labelled set of 13 documents, all 13 were extracted as labelled and the one invoice with a wrong printed total was flagged while the model left the paper's figure intact. Running it also exposed two of my own mistakes: a provider outage that looked like an accuracy failure, and a prompt that stripped the comma from “4,800 mAh”. The set is small and synthetic, and I tuned the prompt after the first run on it, so it shows the method works rather than accuracy on arbitrary paperwork.",
+          points: [],
+        },
+        {
+          title: "Tested, and watched in production",
+          body: "Seventy-two unit tests run in CI on every push: the agent's database writes against a fake client, including that the user always comes from the session and never from model arguments; the extraction engine with the model mocked; content-based file-type detection; and the rate limiter. A daily workflow visits the live site and fails if real product links are missing, which doubles as a smoke test and keeps the free-tier database from being paused for inactivity, and a health endpoint returns 503 when the database is unreachable so an uptime monitor can alert. Browser-level end-to-end tests are not written yet.",
+          points: [],
+        },
+        {
           title: "Hardened for the public internet",
-          body: "A deployed demo is a public endpoint, so it is treated like one. Search and upload routes are rate-limited, image uploads are validated before anything touches a model, and security headers are set on responses. One fix is worth calling out: the app no longer ships raw embedding vectors to the browser — they stayed server-side once I realised the client never needed them. Small leak, but exactly the kind a review is supposed to catch.",
+          body: "A deployed demo is a public endpoint, so it is treated like one. Chat, image and document routes are rate-limited per client; uploads are accepted by their actual leading bytes and size-checked before the body is buffered; a Content-Security-Policy and other security headers are set; dependencies are audited and pinned past known advisories; and a password-reset flow answers identically whether or not an address has an account. One fix is worth calling out: the app no longer ships raw embedding vectors to the browser — they stayed server-side once I realised the client never needed them. Small leak, but exactly the kind a review is supposed to catch.",
           points: [],
         },
       ],
@@ -307,12 +331,14 @@ export const profile = {
         "something to listen to music — semantic match to headphones",
         "book about building good habits — matches on meaning, not title",
         "Sign in with the demo login, then ask the agent to add a watch to your cart",
+        "Open /extract, load the sample invoice with the deliberate error and read the review flag",
       ],
       learnings: [
         "Query and corpus embeddings must come from the same model, or vector search is meaningless.",
         "Reranking is expensive, so a confidence guard decides when it's worth running at all.",
         "Evaluation harnesses change how you work — you stop guessing whether a change helped.",
         "A public demo is a public endpoint — rate limits, upload validation and not over-sharing data with the client are part of the build.",
+        "A bad result is not always a bad model: an outage and my own prompt each looked like an accuracy problem until I read the failures.",
       ],
     },
 
@@ -632,6 +658,170 @@ export const profile = {
 
     /* ---------------------------------------------------------------- */
     {
+      id: "ai-news-agent",
+      flagship: false,
+      kind: "ai",
+      name: "AI News Agent",
+      subtitle: "A scheduled agent that filters the AI news firehose",
+      period: "2026",
+      role: "Solo — feed ingestion, LLM scoring, page-change watcher, delivery, scheduling",
+      blurb:
+        "A serverless agent that watches AI blogs, release feeds, newsletters and forums, has an LLM score every new item against my own definition of relevant, and pushes only the worthwhile ones to Telegram and a rolling digest. It also watches pages that have no feed for new credit and student offers.",
+      problem:
+        "AI news moves faster than anyone can read, and the signal — a model release, an API change, a time-limited free-credit offer — is buried in hype and reposts. I wanted a filter built on my own definition of relevant, running without a machine of mine switched on, that interrupts me only for the rare item that matters.",
+      repo: "https://github.com/Varshini0511/ai-news-agent",
+      repoPrivate: false,
+      demo: null,
+      demoNote:
+        "No hosted UI: it runs as a scheduled GitHub Actions job and delivers to a private Telegram chat. Its output is the digest.md file the agent rewrites in the repository.",
+      stack: ["Python", "GitHub Actions", "feedparser", "BeautifulSoup", "PyYAML", "Telegram Bot API", "Gemini", "Groq", "Grok", "Claude"],
+      tags: ["Agents", "Automation"],
+      diagram: aiNewsAgentDiagram as DiagramSpec,
+      capabilities: [],
+      highlights: [
+        "Scores new items from 28 feeds — blogs, GitHub releases, newsletters, forums — against plain-English interests kept in a config file",
+        "Batches 25 items per model call and keeps those scoring 6 or more, each with a one-sentence reason it matters",
+        "Provider fallback across Gemini, Grok, Groq and Claude: each configured provider is tried in order and the next takes over on error or quota",
+        "Watches 8 pages that have no feed, diffs their text between runs and asks the model whether the change is a new credit, student or grant offer",
+        "Breaking items (9 and above) arrive on Telegram one by one; everything else arrives as a single bundled digest",
+        "Runs every 30 minutes on GitHub Actions with no server; seen links and page snapshots are committed back to the repository",
+        "Also keeps a rolling digest.md and can email each digest; every delivery channel is optional",
+      ],
+      deepDive: [
+        {
+          title: "Scoring a firehose with one call per 25 items",
+          body: "New items are batched, each reduced to its source, title and the first 300 characters, and sent with a system prompt that reserves 9 and 10 for the rare breaking item and rates routine posts and research 6 to 8. The model replies with a JSON list of id, score and summary. The parser slices from the first bracket to the last, and a malformed reply is logged and skipped rather than failing the run. The interests live in a YAML file in plain English, so changing what counts as relevant never touches code.",
+          points: [],
+        },
+        {
+          title: "Provider fallback instead of a single point of failure",
+          body: "Free-tier model quotas run out at inconvenient moments, and a scheduled job has nobody watching it. The same call goes to Gemini, Grok and Groq through their OpenAI-compatible endpoints, then to Claude through its own SDK. Providers without a key are skipped, the order is an environment setting, and when every provider fails the error lists each one's reason. It is a cheaper answer to quota limits than retry logic.",
+          points: [],
+        },
+        {
+          title: "Watching pages that have no feed",
+          body: "For the pages with no RSS, the agent keeps a text snapshot, diffs the new text against it and sends only the added lines to the model, which answers either “no” or a sentence on what the offer is, who is eligible and any deadline. The first run only records a baseline. Anything that passes is scored 10 and goes out as breaking.",
+          points: [],
+        },
+        {
+          title: "No server, no database",
+          body: "The schedule, the runtime and the state all live in GitHub. A workflow runs every 30 minutes, with secrets held as repository secrets, and commits the list of seen links, the page snapshots and the digest back to the repository, so the next run knows what it has already handled. The seen list is capped at the latest 5,000 links. Telegram messages fall back to plain text when Markdown parsing is rejected and are truncated to the platform's length limit.",
+          points: [],
+        },
+        {
+          title: "Known gaps, stated",
+          body: "There are no automated tests and no labelled set to measure whether the scores match my own judgement. A watched page whose text keeps changing can raise the same offer alert on consecutive runs; hashing only the relevant content is the next fix. An item is marked seen even if its Telegram or email delivery failed, so it survives only in digest.md. And Telegram is one-way for now: it pushes alerts but does not answer questions, which is the extension I would build next.",
+          points: [],
+        },
+      ],
+      tryThis: [
+        "Read digest.md in the repository — it is the agent's live output",
+        "pip install -r requirements.txt, then set one model key and, optionally, a Telegram bot token and chat id",
+        "python agent.py --test sends a test message to every configured channel",
+        "python agent.py --loop 30 runs it locally; edit sources.yaml to change the interests and feeds",
+        "Fork the repository and add the keys as repository secrets to run it on the schedule",
+      ],
+      learnings: [
+        "Free-tier model quotas will fail at the wrong moment; a provider fallback chain is cheaper than retry logic.",
+        "Treat model output as untrusted text: parse defensively, and log and skip rather than abort the run.",
+        "When state is small and its history is useful, a scheduled job can keep it in the repository itself.",
+        "A filter needs a written definition of relevance; moving it into a config file made it tunable without code changes.",
+        "Decide what happens to an item when delivery fails. Marking it seen anyway is the wrong default.",
+      ],
+    },
+
+    /* ---------------------------------------------------------------- */
+    {
+      id: "ayvabot",
+      flagship: false,
+      kind: "ai",
+      name: "AyvaBot",
+      subtitle: "A personal multi-agent assistant: one main agent, many specialists",
+      period: "2026",
+      role: "Solo — orchestration, tool layer, scheduler, desktop app, Telegram front end",
+      blurb:
+        "A personal assistant I use every day. You talk to one main agent, which hands the work to specialist agents — each defined as a markdown file — and reports back. It runs on my own machine with a desktop app and the same assistant on Telegram, and scheduled agents work on their own and leave results in an inbox.",
+      problem:
+        "Most agent demos are a single prompt with a few tools. A useful assistant has to be several things at once: some agents that run on a schedule without being asked, some that need my approval before they act, and all of them honest about what they did not manage to do. I wanted to build that orchestration layer myself, so that adding a new agent means writing a markdown file rather than code.",
+      repo: "https://github.com/Varshini0511/AyvaBot",
+      repoPrivate: true,
+      demo: null,
+      demoNote:
+        "No hosted demo: it works with my own mailbox, calendar and accounts, so it runs on my machine only. The repository is private because it holds personal data.",
+      stack: ["Python", "Anthropic", "Gemini", "Grok", "Groq", "Telegram Bot API", "IMAP / SMTP", "ICS calendar", "Vanilla JS"],
+      tags: ["Agents", "Automation"],
+      diagram: ayvaBotDiagram as DiagramSpec,
+      capabilities: [],
+      highlights: [
+        "A main agent routes each request to one of 20 specialist agents, or to several at once, and relays the specialist's answer back",
+        "Agents are markdown files: description, mode, schedule, allowed tools and instructions; edit one and it applies immediately",
+        "Three modes: ask on demand, auto on a schedule, and autonomous for multi-step goals with a planner",
+        "36 tools, each agent limited to its own allow-list; web search and fetch, GitHub, email, calendar, LinkedIn drafting, news digest, job search and memory",
+        "Anything outward-facing, such as sending an email or posting to LinkedIn, waits for my approval and shows the exact content first",
+        "Answers built from tool results go through a fact-check pass that removes claims the evidence does not support",
+        "Per-message model choice across four providers, with usage and cost per agent and a monthly budget that pauses paid models",
+        "A job hunter that reads company job feeds with no model in the loop, scores fit with rules and saves new roles to a tracker",
+      ],
+      deepDive: [
+        {
+          title: "Agents as data, not code",
+          body: "Each skill is a markdown file with a header — name, description, mode, schedule, the tools it may use, how many steps it gets — and the instructions as the body. Skills are re-read on every request, so editing one changes behaviour straight away, and adding an agent is adding a file. The main agent sees the catalogue of descriptions and decides who gets the work; delegation is itself a tool, capped at three levels deep so agents cannot call each other in circles.",
+          points: [],
+        },
+        {
+          title: "Making a weak model fail honestly",
+          body: "Cheaper models skip the tool and improvise. A skill can declare tools it must call before it answers; if the model tries to finish without one, it is sent back with the exact call to make, up to twice, and if it still does not, the run ends with an error that says nothing was produced rather than returning an invented result. When a scheduled agent's tools all report there is nothing new, it returns “no update” instead of fabricating something to say.",
+          points: [],
+        },
+        {
+          title: "Grounding and untrusted data",
+          body: "Before a long answer built from tools is shown, a second pass compares every factual claim, such as names, versions, numbers, dates and links, with what the tools actually returned, removes what is unsupported and says how many items it removed. Tool output, emails and fetched pages are wrapped as untrusted data, so text inside them cannot give the agent instructions. When a specialist has already written and checked its answer, the main agent relays it directly, which saves two model calls and most of the waiting.",
+          points: [],
+        },
+        {
+          title: "Approval and autonomy together",
+          body: "Scheduled agents run with nobody watching, so the tools that act on the world are flagged. In a live chat the user is asked, with the exact content shown. In a scheduled run the action is parked in the Inbox as a pending approval, and the agent is told not to retry. Autonomy is granted for planning and reading; consequence stays with me.",
+          points: [],
+        },
+        {
+          title: "One model layer, with a budget",
+          body: "Anthropic, Gemini, Grok and Groq sit behind one interface. Auto tries them in order and puts a rate-limited provider on a cooldown; any message can pin a specific model instead. Every call is logged with its agent, tokens and cost, and a monthly budget pauses the paid models when it is reached, leaving free ones available. Thumbs up and down on answers are fed back into that agent's prompt as examples.",
+          points: [],
+        },
+        {
+          title: "Searching jobs without a model",
+          body: "The job hunter does not ask a model to find jobs, because a model can invent a role that does not exist. It reads the public job feeds of more than fifty companies, filters for AI-engineering titles in the cities I would work in, drops anything already seen, and scores fit with plain rules for role match, seniority and location. Every result comes from the company's own feed, so it is real and open. A model is used only afterwards, to tailor a résumé or cover letter for a role.",
+          points: [],
+        },
+        {
+          title: "Running it like a service",
+          body: "A scheduler thread ticks every 30 seconds and runs whatever is due. A health check sends one Telegram alert a day if a scheduled agent keeps failing or has been blocked for a day, and a daily backup zips the data and agent definitions to a cloud folder, keeps the last 14 and never includes the API keys.",
+          points: [],
+        },
+        {
+          title: "Known gaps, stated",
+          body: "It is a single-user tool: the local server has no login because it listens only on my machine. State lives in JSON files rather than a database. There is no automated test suite, so behaviour is checked by running it. Free-tier models follow tool instructions less reliably, which is why the required-tool check exists, and a stronger model is the real fix.",
+          points: [],
+        },
+      ],
+      tryThis: [
+        "The repository is private, so there is nothing to clone; ask me for a walkthrough",
+        "Ask for an AI news roundup: the news agent reads the AI News Agent project's digest",
+        "Ask for new AI-engineering roles: the job hunter reads feeds and saves them to the tracker",
+        "Ask it to draft a LinkedIn post and watch it stop for approval before anything is sent",
+        "Open Usage to see tokens and cost per agent against the monthly budget",
+      ],
+      learnings: [
+        "An orchestrator is mostly guard rails: allow-lists, required tools, depth limits and approval gates matter more than the prompts.",
+        "Do not use a model for a job a plain feed and a few rules can do; it removes the risk of invention.",
+        "Return “no update” when there is nothing to say. An agent that always produces output will eventually make something up.",
+        "Treat everything a tool returns as data, never as instructions.",
+        "Put agent behaviour in files a person can read and edit; it makes the system easier to trust and to change.",
+      ],
+    },
+
+    /* ---------------------------------------------------------------- */
+    {
       id: "docexplainer",
       flagship: false,
       kind: "ai",
@@ -701,7 +891,7 @@ export const profile = {
       blurb:
         "An expense system where the AI does more than answer: it checks company policy via RAG, decides whether an expense is compliant, and then writes it to the database itself.",
       problem:
-        "Most agent demos stop at generating text. The risky step is letting a model cause a side effect, an INSERT, based on its own reasoning. I wanted to build that honestly: the model decides and sequences, but every real action runs through my code, where it can be validated and refused.",
+        "Most agent demos stop at generating text. The risky step is letting a model cause a side effect, an INSERT, based on its own reasoning. I wanted to build that honestly: the model decides and sequences, but every real action runs through my code, where it can be validated and checked.",
       repo: "https://github.com/Varshini0511/expense-tracker",
       repoPrivate: false,
       demo: "https://expense-tracker-chi-five-45.vercel.app/",
@@ -722,7 +912,7 @@ export const profile = {
       deepDive: [
         {
           title: "The model proposes, the code acts",
-          body: "This is the mental model the whole project is built on. When the model “calls SaveExpense”, it has only written a message saying so — nothing has happened yet. My C# code reads that intent and performs the actual INSERT. That separation is what makes an acting agent safe to build: every side effect passes through code I control, where it can be validated, logged or refused.",
+          body: "This is the mental model the whole project is built on. When the model “calls SaveExpense”, it has only written a message saying so — nothing has happened yet. My C# code reads that intent and performs the actual INSERT. That separation is what makes an acting agent safe to build: every side effect passes through code I control, where it can be validated, logged or checked.",
           points: [],
         },
         {
@@ -742,8 +932,8 @@ export const profile = {
         },
       ],
       tryThis: [
-        "Submit an expense that breaks policy — watch the agent check, then refuse",
-        "Submit a compliant one — the agent checks policy, then saves it itself",
+        "Submit an expense that breaks policy — the agent checks it, saves it and flags it as Needs Review",
+        "Submit a compliant one — the agent checks policy, then saves it itself as compliant",
         "Ask “what did I spend on travel?” — a different tool fires",
         "Edit a policy, then resubmit — the stale embedding is regenerated",
       ],
@@ -841,11 +1031,11 @@ export const profile = {
       name: "RideSmart Android",
       subtitle: "Native app that reads live fares off the ride apps' own screens",
       period: "2026",
-      role: "Solo — native Android, accessibility automation, race booking",
+      role: "Solo — native Android, accessibility screen reading, OEM-resilient design",
       blurb:
-        "A native Kotlin and Jetpack Compose app that compares live fares across Uber, Ola, Rapido and Namma Yatri by reading each app's own screen through an AccessibilityService — then races bookings across them and cancels the losers.",
+        "A native Kotlin and Jetpack Compose app that compares live fares across Uber, Ola, Rapido and Namma Yatri by reading each app's own screen through an AccessibilityService, groups them by ride category and hands the booking to the app you choose.",
       problem:
-        "On a phone the four ride apps are one tap apart, but their fares can't be compared without opening each, remembering the number and switching back — and there is no fare API to call. The phone already shows the real price on screen, so I built an app that reads it from there, and that survives the aggressive battery managers that kill most background work.",
+        "On a phone the four ride apps are one tap apart, but their fares can't be compared without opening each, remembering the number and switching back — and there is no fare API to call. The phone already shows the real price on screen, so I built an app that reads it from there. A fully automatic version failed on the aggressive battery managers that freeze background apps, so the shipped design is tap-to-read: you tap an app, RideSmart opens it on your route, reads the list and snaps back.",
       repo: "https://github.com/Varshini0511/RideSmartAndroid",
       repoPrivate: false,
       demo: null,
@@ -857,12 +1047,12 @@ export const profile = {
       capabilities: [],
       highlights: [
         "Reads live fares from Uber, Ola, Rapido and Namma Yatri off each app's own screen via an AccessibilityService",
-        "Per-app time caps — a render wait, a settle window to catch the whole list and a hard watchdog — so the loop can never hang",
-        "The scrape loop runs inside the accessibility service, so it survives RideSmart being pushed to the background",
-        "A foreground service and disk-persisted route and prices survive aggressive OEM battery managers",
-        "Race booking across up to three apps: pick the exact vehicle, tap Book, watch screen text and notifications for a driver, cancel the rest",
-        "Ranks within a category — autos against autos — as Best Price, Fastest Pickup and Best Value (60% price, 40% wait)",
-        "Live prices override estimates per app and category; the fare model fills gaps and is flagged as an estimate",
+        "Tap-to-read: user-initiated taps are never frozen by OEM battery managers, which killed the fully automatic first design",
+        "Scrolls each ride list so options below the fold are captured, and sorts vehicles into four categories",
+        "Uber and Ola open on the route by deep link; Rapido and Namma Yatri have none, so the destination is typed in",
+        "A foreground service and disk-persisted route and prices survive process kills; screen reading runs off the UI thread",
+        "Best Price and Fastest Pickup within each category, with the saving computed like for like",
+        "A built-in debug view shows exactly what was read, including the raw screen text for any app that returned nothing",
       ],
       deepDive: [
         {
@@ -871,28 +1061,28 @@ export const profile = {
           points: [],
         },
         {
-          title: "A loop that cannot hang",
-          body: "Reading another app is timing-dependent, so every step is bounded: a cap on waiting for a price list to render, a short settle window after the first price appears so the whole list is captured, and a hard watchdog per app that nothing can exceed. The coroutine scope uses a supervisor job and an exception handler, so an unexpected failure while reading someone else's screen can't take the service down.",
+          title: "Two ways to read an app's list",
+          body: "Uber and Rapido render each ride as one combined text node — name, fare and ETA together — so the extractor scans each node for every name-to-price pair. Ola puts the name and the price in separate nodes, so they are paired by sharing a screen row. Promotional lines such as “save ₹20” are filtered, and the list is scrolled so options below the fold are not missed.",
           points: [],
         },
         {
-          title: "Designing for hostile phones",
-          body: "Vivo, iQOO, Xiaomi and Oppo handsets freeze or kill background apps, which would stall a loop driven from an Activity. So the loop runs inside the accessibility service, which the OS keeps alive; a foreground service with an ongoing notification marks the work as active; and the route and captured prices are written to disk, so even a hard process kill restores the results screen without re-entering anything.",
+          title: "The design that failed, and what replaced it",
+          body: "The first version was fully hands-off: RideSmart opened all four apps itself in the background. On Vivo, iQOO, Xiaomi and Oppo handsets the OS froze or killed the app the moment it was backgrounded, so it got stuck. I changed the design rather than fighting the OS: each read is now started by a tap, which is never blocked, and the route and captured prices are written to disk so even a hard process kill restores the results screen. The old automatic loop is still in the code, unused.",
           points: [],
         },
         {
-          title: "Race booking on one screen",
-          body: "Only one app can be on screen at a time, so rides are requested one after another — open on the route, select the exact vehicle, tap Book, confirm the pickup pin — and each app then keeps searching for a driver on its own. The booker watches every app's screen text and notifications for driver-assigned patterns; the first to confirm wins and the other requests are cancelled through each app's own cancel flow, with a five-minute cap and a note for any app it couldn't drive.",
+          title: "Why it does not book for you",
+          body: "I built a booker that requested rides across several apps and cancelled the losers, then took it out of use. Automatic booking and cancelling across apps was unreliable, and risky for the rider: cancellation fees and possible account bans. Book now simply opens the chosen app on the route for you to confirm yourself. The unused code remains, documented as experimental.",
           points: [],
         },
         {
           title: "Comparing like with like",
-          body: "Comparing an auto with an SUV isn't a saving, so suggestions are computed within each ride category and the headline saving is the largest like-for-like gap. Within a category the comparator picks the cheapest, the fastest pickup, and a best-value option scored 60% on price and 40% on wait, both normalised within the category so the units can't skew it.",
+          body: "Comparing an auto with an SUV isn't a saving, so vehicle names are classified into four categories — auto, bike, mini or cab, sedan or SUV — in an order that matters (“Go Sedan” is a sedan, “Go Priority” is a mini). Suggestions and savings are then computed within each category.",
           points: [],
         },
         {
-          title: "Estimates as a labelled fallback",
-          body: "When a live price isn't available, a fare model fills the gap: per-provider, per-vehicle fare cards with a base, a per-kilometre and per-minute rate and a minimum fare, plus time-of-day surge. Every quote carries an isRealPrice flag, and live prices always win for the same app and category, so a modelled number is never silently presented as a real one.",
+          title: "The limits, stated",
+          body: "Each app needs a tap and roughly 10 to 20 seconds, and occasionally a retry; that is inherent to reading a screen and cannot be tuned away. Google Pay blocks payments while the accessibility service is on, because it looks like a scam app to Google's anti-fraud checks, so the permission must be switched off to pay; no money is at risk, it is a precautionary block. Rapido and Namma Yatri are accurate when the pickup is the current GPS location. The reliable route to an instant, official comparison is a data partnership, or ONDC for Namma Yatri, which is a business project rather than an app.",
           points: [],
         },
       ],
@@ -900,14 +1090,16 @@ export const profile = {
         "Open the project in Android Studio and run it on a device (minSdk 26, Android 8.0+)",
         "Enable RideSmart under Accessibility settings and allow Display over other apps",
         "Install the ride apps you want compared and sign in to them",
-        "Enter a pickup and drop — let it cycle the apps, or tap one to capture just its fare",
-        "Select up to three rides and start a race booking",
+        "Enter a pickup and drop, choose ride categories and tap Compare",
+        "Tap each app to read its live price; RideSmart snaps back when it has the list",
+        "Open the Debug view if an app returns nothing, then tap Book to finish in the chosen app",
       ],
       learnings: [
         "When there is no API, the screen is the interface — and then timing and failure handling are the whole job.",
         "OEM battery managers are a runtime you design for, not an edge case.",
         "Compare like with like: a saving across different vehicle classes isn't a saving.",
-        "Flag every estimate as one — silently mixing live and modelled numbers is worse than having fewer numbers.",
+        "Know what not to automate: booking and cancelling across apps carries real cost to the user.",
+        "When the platform fights the design, change the design: a user tap beat every attempt to keep a background loop alive.",
         "Reading another app's screen is powerful and sensitive; it belongs on the user's own device, with explicit permission, for their own rides.",
       ],
     },
@@ -960,7 +1152,7 @@ export const profile = {
         },
         {
           title: "Why there are two apps",
-          body: "This and the Android build make opposite trade-offs on purpose. Android sees real prices and can race bookings, at the cost of a permission and a dependence on each app's on-screen labels. This one never sees a live price, but it runs on any platform, asks for nothing sensitive and cannot break when a ride app redesigns its screens.",
+          body: "This and the Android build make opposite trade-offs on purpose. Android sees real prices, at the cost of a sensitive permission, a tap and about 10 to 20 seconds per app, and a dependence on each app's on-screen labels. This one never sees a live price, but it runs on any platform, asks for nothing sensitive and cannot break when a ride app redesigns its screens.",
           points: [],
         },
       ],
@@ -1003,7 +1195,7 @@ export const profile = {
         k: "Fare source",
         v: [
           "Live scrape of Uber and Ola web sessions; modelled fares for Rapido and Namma Yatri",
-          "Live, read off each ride app's own screen by an AccessibilityService; modelled fares as a labelled fallback",
+          "Live, read off each ride app's own screen by an AccessibilityService, one tap per app",
           "Modelled from per-provider fare cards with time-of-day surge, shown as a range",
         ],
       },
@@ -1011,7 +1203,7 @@ export const profile = {
         k: "Booking",
         v: [
           "Race — providers within ₹50 of the cheapest; first confirmed driver wins",
-          "Race — up to three apps requested in turn, every app's screen and notifications watched, losers cancelled",
+          "Hand-off — opens the chosen app on the route; you confirm the ride yourself",
           "Hand-off — deep link into the chosen app with the route pre-filled",
         ],
       },
@@ -1019,7 +1211,7 @@ export const profile = {
         k: "Intelligence",
         v: [
           "SQLite history: price prediction, z-score anomalies, surge probability, Groq assistant",
-          "Best Price, Fastest Pickup and Best Value scoring within each ride category",
+          "Best Price and Fastest Pickup within each ride category, with a debug view of what was read",
           "On-device history and per-provider price stats; best-quote highlight and savings banner",
         ],
       },
@@ -1027,7 +1219,7 @@ export const profile = {
         k: "Trade-off",
         v: [
           "Needs a desktop and logged-in browser sessions",
-          "Needs the Accessibility permission and depends on each ride app's on-screen labels",
+          "Needs the Accessibility permission, about 10 to 20 seconds per app, and blocks Google Pay while enabled",
           "Never sees a live price — it is an estimate, and says so",
         ],
       },

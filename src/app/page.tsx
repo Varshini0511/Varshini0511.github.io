@@ -46,7 +46,7 @@ export default function Home() {
           <Section
             eyebrow="Applied AI"
             title="AI systems"
-            intro="Eight systems built over the past year while learning AI engineering. Six are deployed and live; two run on your own machine: RideSmartAgent, which drives real logged-in browser sessions, and inferouter, an inference gateway. Each goes past the demo into retrieval quality, evaluation, guardrails and cost."
+            intro="Ten systems built over the past year while learning AI engineering. Seven are live, one of them as a scheduled job; three run on my own machine: RideSmartAgent, which drives real logged-in browser sessions, inferouter, an inference gateway, and AyvaBot, a personal assistant that works with my own accounts. Each goes past the demo into retrieval quality, evaluation, guardrails and cost."
           >
             <Projects />
           </Section>
