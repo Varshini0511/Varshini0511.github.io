@@ -30,11 +30,20 @@ export default function Nav() {
   }, []);
 
   // The active tab comes from the URL hash, not from scroll position.
+  // Any navigation also closes the mobile menu: Back, the logo, a footer link.
   useEffect(() => {
-    const read = () => setHashTab(tabFromHash(window.location.hash));
+    const read = () => {
+      setHashTab(tabFromHash(window.location.hash));
+      setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     read();
     window.addEventListener("hashchange", read);
-    return () => window.removeEventListener("hashchange", read);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("hashchange", read);
+      window.removeEventListener("keydown", onKey);
+    };
   }, [pathname]);
 
   // On a project page no tab is active.
