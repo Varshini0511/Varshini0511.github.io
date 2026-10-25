@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://varshini0511.github.io/sitemap.xml
