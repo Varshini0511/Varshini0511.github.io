@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
+import TechMarquee from "@/components/TechMarquee";
+import AiStats from "@/components/AiStats";
+import AiLifecycle from "@/components/AiLifecycle";
 import Clients from "@/components/Clients";
 import HomeBlock from "@/components/HomeBlock";
 import Bridge from "@/components/Bridge";
@@ -25,6 +28,7 @@ export const metadata: Metadata = {
 };
 
 const aiCount = profile.projects.filter((p) => p.kind === "ai").length;
+const techniqueCount = profile.aiToolkit.reduce((n, g) => n + g.items.length, 0);
 
 /**
  * Each tab is a panel; the nav switches between them (see TabController and the
@@ -41,6 +45,7 @@ export default function Home() {
       <main className="min-h-[72vh]">
         <Panel id="overview">
           <Hero />
+          <TechMarquee />
           <Clients />
           <HomeBlock
             label="Why the combination matters"
@@ -52,7 +57,7 @@ export default function Home() {
           <HomeBlock
             label="Selected AI work"
             title="Built past the demo: evaluated, guarded and costed."
-            more={{ href: "/#ai", text: `All ${aiCount} AI systems` }}
+            more={{ href: "/#ai", text: `All ${aiCount} AI systems and ${techniqueCount} techniques` }}
           >
             <SelectedWork />
           </HomeBlock>
@@ -79,9 +84,20 @@ export default function Home() {
           <Section
             eyebrow="Applied AI"
             title="AI systems"
-            intro={`${aiCount} systems built in 2026, alongside a full-time senior role, to take eight years of engineering into AI. Seven are live, one of them as a scheduled job; three run on my own machine because they drive real browser sessions, act as an inference gateway or work with my own accounts. Each goes past the demo into retrieval quality, evaluation, guardrails and cost.`}
+            intro={`${aiCount} systems built in 2026, alongside a full-time senior role: RAG and hybrid retrieval, multi-agent orchestration on LangGraph and MCP, inference routing, multimodal search, evaluation harnesses and guardrails. Each goes past the demo into retrieval quality, evaluation, safety and cost. Explore the toolkit below to see which techniques each one uses.`}
           >
-            <Projects />
+            <AiStats />
+            <div className="mt-8">
+              <Projects />
+            </div>
+          </Section>
+          <Section
+            lead={false}
+            eyebrow="How I build"
+            title="One lifecycle, every AI system"
+            intro="The projects add up to one way of building with language models: ground it, give it tools, bound it, measure it, then run it like a service. Each stage links to the work that shows it."
+          >
+            <AiLifecycle />
           </Section>
           <Section
             lead={false}

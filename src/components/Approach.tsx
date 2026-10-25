@@ -6,15 +6,15 @@ export default function Approach() {
       {/* Three lanes */}
       <div className="grid gap-px overflow-hidden rounded-lg border bg-[var(--border)] lg:grid-cols-3">
         {profile.focusAreas.map((f) => (
-          <section key={f.id} className="bg-[var(--surface)] p-6 sm:p-7">
+          <section key={f.id} data-reveal className="bg-[var(--surface)] p-6 sm:p-7">
             <p className="label text-[var(--accent)]">Focus {f.id}</p>
             <h3 className="mt-3 text-[1.4rem] leading-tight">{f.title}</h3>
-            <p className="mt-3 text-[0.85rem] leading-[1.65] text-[var(--muted)]">{f.lead}</p>
+            <p className="mt-3 text-[0.92rem] leading-[1.65] text-[var(--muted)]">{f.lead}</p>
             <ul className="mt-5 space-y-2.5 border-t pt-5">
               {f.points.map((pt) => (
                 <li
                   key={pt}
-                  className="relative pl-4 text-[0.82rem] leading-[1.65] text-[var(--muted)] before:absolute before:left-0 before:top-[0.72em] before:h-px before:w-2 before:bg-[var(--accent)]"
+                  className="relative pl-4 text-[0.92rem] leading-[1.65] text-[var(--muted)] before:absolute before:left-0 before:top-[0.72em] before:h-px before:w-2 before:bg-[var(--accent)]"
                 >
                   {pt}
                 </li>
@@ -29,7 +29,7 @@ export default function Approach() {
         <p className="label text-[var(--faint)]">Principles, and the evidence for them</p>
         <ol className="mt-5 divide-y border-y">
           {profile.principles.map((p, i) => (
-            <li key={p.title} className="grid gap-4 py-7 lg:grid-cols-[3rem_1fr_1.5fr] lg:gap-10">
+            <li key={p.title} data-reveal className="grid gap-4 py-7 lg:grid-cols-[3rem_1fr_1.5fr] lg:gap-10">
               <span className="numeral text-[1.4rem] leading-none text-[var(--accent)]">
                 {String(i + 1).padStart(2, "0")}
               </span>
@@ -38,10 +38,10 @@ export default function Approach() {
                 {p.proof.map((line) => {
                   const [head, ...rest] = line.split(" — ");
                   return (
-                    <li key={line} className="text-[0.85rem] leading-[1.65] text-[var(--muted)]">
+                    <li key={line} className="text-[0.92rem] leading-[1.65] text-[var(--muted)]">
                       {rest.length > 0 ? (
                         <>
-                          <span className="font-mono text-[0.7rem] text-[var(--text)]">{head}</span>
+                          <span className="font-mono text-[0.76rem] text-[var(--text)]">{head}</span>
                           <span className="text-[var(--faint)]"> — </span>
                           {rest.join(" — ")}
                         </>

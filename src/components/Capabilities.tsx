@@ -39,10 +39,10 @@ export default function Capabilities({ capabilities }: { capabilities: readonly 
       </div>
 
       <div className="p-6 sm:p-7">
-        <p className="text-[0.925rem] leading-[1.75] text-[var(--muted)]">{cap.detail}</p>
+        <p className="text-[1rem] leading-[1.75] text-[var(--muted)]">{cap.detail}</p>
         <ul className="mt-5 space-y-2.5">
           {cap.points.map((pt) => (
-            <li key={pt} className="flex gap-2.5 text-[0.875rem] leading-relaxed text-[var(--muted)]">
+            <li key={pt} className="flex gap-2.5 text-[0.92rem] leading-relaxed text-[var(--muted)]">
               <Check size={15} className="mt-[3px] shrink-0 text-[var(--accent)]" />
               <span>{pt}</span>
             </li>

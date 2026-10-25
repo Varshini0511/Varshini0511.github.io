@@ -5,15 +5,15 @@ import { profile } from "@/data/profile";
 export default function CallToAction() {
   return (
     <section className="mx-auto max-w-6xl px-5 pb-20 pt-16 sm:px-8 sm:pt-20">
-      <div className="card cta-bg grid gap-8 overflow-hidden p-6 sm:p-8 lg:grid-cols-[1.4fr_1fr] lg:items-center lg:gap-12">
+      <div data-reveal className="card cta-bg grid gap-8 overflow-hidden p-6 sm:p-8 lg:grid-cols-[1.4fr_1fr] lg:items-center lg:gap-12">
         <div>
           <p className="label inline-flex items-center gap-1.5 text-[var(--ok)]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--ok)]" /> Open to roles
+            <span className="live-dot h-1.5 w-1.5 rounded-full bg-[var(--ok)]" /> Open to roles
           </p>
-          <h2 className="mt-3 text-[1.4rem] leading-[1.25] sm:text-[1.7rem]">
+          <h2 className="mt-3 text-[1.6rem] leading-[1.22] sm:text-[2rem]">
             Looking for a senior engineer who can take AI <span className="emph">to production?</span>
           </h2>
-          <p className="mt-3 max-w-xl text-[0.87rem] leading-[1.7] text-[var(--muted)]">
+          <p className="mt-3 max-w-xl text-[0.92rem] leading-[1.7] text-[var(--muted)]">
             Senior and AI engineering roles where correctness, security or scale matter. I bring {profile.yearsExperience}{" "}
             years of enterprise delivery, and the AI work to show I can apply it.
           </p>

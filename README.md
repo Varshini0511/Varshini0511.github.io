@@ -25,6 +25,9 @@ Common edits:
 | Client wordmarks on the home tab | `profile.clients` |
 | "Why the combination matters" rows | `profile.bridge` |
 | The four home-page project cards | `profile.selectedWork` |
+| AI toolkit (techniques → projects) | `profile.aiToolkit` — also feeds the chips on every project card and the home-page tech band |
+| "One lifecycle, every AI system" | `profile.aiLifecycle` |
+| Enterprise row of the tech band | `profile.enterpriseStack` |
 | A project's bullets | that project's `highlights` |
 | The three AdviShopping panels | `projects[0].capabilities` |
 | Filter chips | `FILTERS` in `src/components/Projects.tsx` |
@@ -71,3 +74,7 @@ Notes:
 - The link-preview image is generated at build time by `src/app/og.png/route.tsx`
   from `profile.headline` and `profile.stats`, so it never goes stale.
 - `sitemap.xml`, `robots.txt` and schema.org `Person` data are generated too.
+- Scroll motion lives in `src/components/ScrollEffects.tsx`: add `data-reveal`
+  to fade an element in, `data-reveal="grow"` to draw a bar or line, and
+  `data-count` to count a number up. All of it is skipped without JavaScript
+  and under `prefers-reduced-motion`.

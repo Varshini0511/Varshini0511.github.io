@@ -164,6 +164,169 @@ export const profile = {
     },
   ],
 
+  /**
+   * Every AI technique and tool across the projects, grouped, each with the
+   * projects that use it. Drives the clickable toolkit on the Applied AI tab
+   * (click a technique to see where it is used) and the technique chips on
+   * each project card. Only list a project where its own case study shows it.
+   */
+  aiToolkit: [
+    {
+      group: "Agents & orchestration",
+      icon: "agents",
+      items: [
+        { name: "Tool calling", projects: ["advishopping", "nimbuspay", "travel-planner", "github-agent", "ayvabot", "docexplainer", "expense-tracker"] },
+        { name: "Multi-agent systems", projects: ["travel-planner", "github-agent", "ayvabot"] },
+        { name: "LangGraph", projects: ["travel-planner", "github-agent"] },
+        { name: "MCP (Model Context Protocol)", projects: ["github-agent"] },
+        { name: "Supervisor + specialists", projects: ["github-agent", "ayvabot"] },
+        { name: "ReAct loop", projects: ["docexplainer"] },
+        { name: "Reflection / critic loop", projects: ["travel-planner"] },
+        { name: "Agent memory", projects: ["advishopping", "travel-planner", "ayvabot"] },
+        { name: "Proactive & scheduled agents", projects: ["ai-news-agent", "ayvabot"] },
+      ],
+    },
+    {
+      group: "Retrieval & RAG",
+      icon: "retrieval",
+      items: [
+        { name: "RAG", projects: ["advishopping", "nimbuspay", "github-agent", "docexplainer", "expense-tracker"] },
+        { name: "Hybrid search", projects: ["advishopping", "github-agent"] },
+        { name: "Reciprocal Rank Fusion", projects: ["advishopping", "github-agent"] },
+        { name: "Cross-encoder reranking", projects: ["advishopping"] },
+        { name: "BM25 · full-text search", projects: ["advishopping", "github-agent"] },
+        { name: "pgvector", projects: ["advishopping", "travel-planner", "docexplainer", "expense-tracker"] },
+        { name: "FAISS", projects: ["github-agent"] },
+        { name: "Embeddings", projects: ["advishopping", "travel-planner", "github-agent", "docexplainer", "expense-tracker"] },
+        { name: "Chunking", projects: ["github-agent", "docexplainer"] },
+        { name: "Semantic cache", projects: ["inference-router"] },
+      ],
+    },
+    {
+      group: "Models & inference",
+      icon: "models",
+      items: [
+        { name: "Groq", projects: ["advishopping", "nimbuspay", "travel-planner", "github-agent", "ai-news-agent", "ayvabot", "docexplainer", "expense-tracker", "ridesmart"] },
+        { name: "Gemini", projects: ["travel-planner", "github-agent", "ai-news-agent", "ayvabot", "docexplainer", "expense-tracker"] },
+        { name: "Claude", projects: ["ai-news-agent", "ayvabot"] },
+        { name: "Grok", projects: ["ai-news-agent", "ayvabot"] },
+        { name: "vLLM", projects: ["inference-router"] },
+        { name: "On-device models · Transformers.js", projects: ["advishopping"] },
+        { name: "Provider fallback chains", projects: ["travel-planner", "ai-news-agent", "ayvabot", "inference-router"] },
+        { name: "Cost-aware model routing", projects: ["inference-router", "ayvabot"] },
+        { name: "Confidence cascade · log-probs", projects: ["inference-router"] },
+        { name: "Streaming · SSE", projects: ["inference-router", "docexplainer", "github-agent"] },
+        { name: "Structured outputs · JSON schema", projects: ["advishopping", "github-agent", "ai-news-agent", "expense-tracker"] },
+      ],
+    },
+    {
+      group: "Evaluation",
+      icon: "evaluation",
+      items: [
+        { name: "Golden datasets", projects: ["nimbuspay", "github-agent"] },
+        { name: "LLM-as-judge", projects: ["nimbuspay", "travel-planner", "github-agent"] },
+        { name: "DeepEval", projects: ["nimbuspay"] },
+        { name: "precision@k · recall@k · NDCG@k", projects: ["advishopping"] },
+        { name: "F1 · ROC-AUC", projects: ["inference-router"] },
+        { name: "Adversarial & failure-mode tests", projects: ["nimbuspay", "github-agent"] },
+        { name: "Latency benchmarking", projects: ["ayvabot"] },
+      ],
+    },
+    {
+      group: "Safety & guardrails",
+      icon: "safety",
+      items: [
+        { name: "Human-in-the-loop approval", projects: ["nimbuspay", "travel-planner", "github-agent", "ayvabot"] },
+        { name: "Tool-layer authorization", projects: ["advishopping", "nimbuspay", "github-agent"] },
+        { name: "PII redaction · Presidio", projects: ["nimbuspay", "github-agent"] },
+        { name: "Prompt-injection defence", projects: ["nimbuspay", "github-agent", "ayvabot"] },
+        { name: "Grounding & fact checks", projects: ["advishopping", "github-agent", "ayvabot", "docexplainer"] },
+        { name: "Output guardrails", projects: ["nimbuspay"] },
+        { name: "Rate limiting", projects: ["advishopping", "inference-router"] },
+      ],
+    },
+    {
+      group: "Observability & cost",
+      icon: "observability",
+      items: [
+        { name: "Tracing · LangSmith", projects: ["nimbuspay"] },
+        { name: "Token & cost tracking", projects: ["nimbuspay", "github-agent", "inference-router", "ayvabot"] },
+        { name: "Prometheus metrics", projects: ["inference-router"] },
+        { name: "Break-even cost modelling", projects: ["inference-router"] },
+        { name: "Budget caps", projects: ["ayvabot"] },
+      ],
+    },
+    {
+      group: "Multimodal",
+      icon: "multimodal",
+      items: [
+        { name: "CLIP visual search", projects: ["advishopping"] },
+        { name: "Voice agent · speech in and out", projects: ["advishopping"] },
+        { name: "Vision document extraction", projects: ["advishopping", "ayvabot"] },
+      ],
+    },
+    {
+      group: "Automation & platforms",
+      icon: "automation",
+      items: [
+        { name: "Browser automation · Playwright", projects: ["ridesmart"] },
+        { name: "Event & schedule triggers", projects: ["ai-news-agent", "github-agent", "ayvabot"] },
+        { name: "Telegram bots", projects: ["ai-news-agent", "ayvabot"] },
+        { name: "LLM apps in C# · .NET 8", projects: ["docexplainer", "expense-tracker"] },
+        { name: "FastAPI services", projects: ["github-agent", "inference-router"] },
+      ],
+    },
+  ],
+
+  /** Automated tests across the AI projects: AdviShopping 72 + GitHub Agent 100+ + inferouter 46. */
+  aiTests: "218+",
+
+  /** How the projects add up to one way of building an AI system, stage by stage. */
+  aiLifecycle: [
+    {
+      step: "Ground",
+      title: "Ground it in real data",
+      text: "Retrieval an answer can be traced to: keyword and vector search fused by rank, reranked, and cited by source.",
+      tech: ["Hybrid search", "RRF", "Reranking", "pgvector", "FAISS"],
+      projects: ["advishopping", "github-agent", "docexplainer"],
+    },
+    {
+      step: "Orchestrate",
+      title: "Give it tools and a plan",
+      text: "Typed tools, ReAct loops and LangGraph supervisors with specialists, exposed through MCP where a protocol beats glue.",
+      tech: ["Tool calling", "ReAct", "LangGraph", "MCP"],
+      projects: ["github-agent", "travel-planner", "ayvabot"],
+    },
+    {
+      step: "Guard",
+      title: "Bound what it can do",
+      text: "Authorization in code, PII redaction, prompt-injection quarantine and a human approval on every state-changing action.",
+      tech: ["Tool-layer auth", "Presidio", "Injection defence", "HITL"],
+      projects: ["nimbuspay", "github-agent", "ayvabot"],
+    },
+    {
+      step: "Evaluate",
+      title: "Measure before claiming",
+      text: "Golden sets, LLM-as-judge and ranking metrics, with runners that exit non-zero so they can gate CI.",
+      tech: ["Golden sets", "LLM-as-judge", "NDCG@k", "DeepEval"],
+      projects: ["advishopping", "nimbuspay", "inference-router"],
+    },
+    {
+      step: "Operate",
+      title: "Run it like a service",
+      text: "Traces, token and cost accounting, provider fallback and cost-aware routing, so it stays up and stays affordable.",
+      tech: ["Tracing", "Cost tracking", "Fallback", "Routing"],
+      projects: ["nimbuspay", "inference-router", "ai-news-agent"],
+    },
+  ],
+
+  /** The enterprise half of the scrolling tech band on the home page. */
+  enterpriseStack: [
+    "C#", ".NET 8", "ASP.NET Core", "Web API", "Entity Framework Core", "SQL Server", "Azure Functions",
+    "Durable Functions", "Service Bus", "Cosmos DB", "Key Vault", "Managed Identity", "Application Insights",
+    "Docker", "AKS", "Azure DevOps", "Angular", "React", "Next.js", "TypeScript", "OAuth 2.0", "OpenID Connect",
+  ],
+
   /** Measured outcomes from the résumé, labelled with where they came from. */
   outcomes: [
     { value: "3–6 s", label: "Job screen load time", context: "Exterro · down from 10+ minutes on a high-volume job screen" },
@@ -309,6 +472,10 @@ export const profile = {
           { name: "RAG · hybrid & vector search", note: "RRF, reranking, FAISS", used: ["ai"] },
           { name: "Agents · tool calling · MCP", note: "LangGraph, supervisors", used: ["ai"] },
           { name: "Evals · guardrails · tracing", note: "LLM-as-judge, PII redaction", used: ["ai"] },
+          { name: "LLM providers & fallback", note: "Groq, Gemini, Claude, Grok", used: ["ai"] },
+          { name: "Inference · vLLM · routing", note: "OpenAI-compatible gateway, cascades", used: ["ai"] },
+          { name: "Multimodal", note: "CLIP image search, vision extraction, voice", used: ["ai"] },
+          { name: "Observability & cost", note: "Prometheus, token and cost tracking", used: ["ai"] },
         ],
       },
     ],

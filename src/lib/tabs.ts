@@ -5,7 +5,7 @@
 export const TABS = [
   { id: "overview", label: "Home" },
   { id: "career", label: "Experience" },
-  { id: "ai", label: "AI work" },
+  { id: "ai", label: "Applied AI" },
   { id: "stack", label: "Stack" },
   { id: "about", label: "About" },
   { id: "contact", label: "Contact" },

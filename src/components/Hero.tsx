@@ -13,14 +13,14 @@ export default function Hero() {
             </p>
 
             <h1
-              className="rise mt-5 text-[1.9rem] leading-[1.12] sm:text-[2.3rem] lg:text-[2.6rem]"
+              className="rise mt-5 text-[2.1rem] leading-[1.1] sm:text-[2.6rem] lg:text-[3rem]"
               style={{ animationDelay: "120ms" }}
             >
               {profile.headline[0]} <span className="emph">{profile.headline[1]}</span>
             </h1>
 
             <p
-              className="rise mt-5 max-w-[34rem] text-[0.93rem] leading-[1.75] text-[var(--muted)] sm:text-[0.97rem]"
+              className="rise mt-5 max-w-[34rem] text-[1rem] leading-[1.75] text-[var(--muted)] sm:text-[1rem]"
               style={{ animationDelay: "200ms" }}
             >
               {profile.tagline}
@@ -68,7 +68,7 @@ export default function Hero() {
             <div className="flex items-center justify-between border-b bg-[var(--surface-2)] px-5 py-3">
               <span className="label text-[var(--faint)]">Profile</span>
               <span className="label flex items-center gap-1.5 text-[var(--ok)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--ok)]" /> Open to roles
+                <span className="live-dot h-1.5 w-1.5 rounded-full bg-[var(--ok)]" /> Open to roles
               </span>
             </div>
             <dl>
@@ -78,7 +78,7 @@ export default function Hero() {
                   className="grid grid-cols-[6.25rem_1fr] gap-4 border-t px-5 py-2.5 first:border-t-0"
                 >
                   <dt className="label pt-0.5 text-[var(--faint)]">{row.k}</dt>
-                  <dd className="text-[0.85rem] leading-snug text-[var(--text)]">{row.v}</dd>
+                  <dd className="text-[0.92rem] leading-snug text-[var(--text)]">{row.v}</dd>
                 </div>
               ))}
             </dl>
@@ -95,8 +95,8 @@ export default function Hero() {
               key={s.label}
               className="border-l pl-4 first:border-l-0 first:pl-0 sm:pl-6"
             >
-              <dt className="numeral text-[1.6rem] leading-none text-[var(--text)] sm:text-[1.9rem]">{s.value}</dt>
-              <dd className="mt-2 text-[0.74rem] leading-snug text-[var(--muted)]">{s.label}</dd>
+              <dt data-count className="numeral text-[2rem] leading-none text-[var(--text)] sm:text-[2.3rem]">{s.value}</dt>
+              <dd className="mt-2 text-[0.82rem] leading-snug text-[var(--muted)]">{s.label}</dd>
             </div>
           ))}
         </dl>

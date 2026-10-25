@@ -61,7 +61,7 @@ export default function CareerArc() {
   const ticks = Array.from({ length: RANGE + 1 }, (_, i) => AXIS_START + i);
 
   return (
-    <figure className="card p-5 sm:p-7" aria-label="Career timeline, 2018 to present">
+    <figure data-reveal className="card p-5 sm:p-7" aria-label="Career timeline, 2018 to present">
       {/* Year axis */}
       <div className="grid sm:grid-cols-[10.5rem_1fr] sm:gap-6">
         <div className="hidden sm:block" />
@@ -70,7 +70,7 @@ export default function CareerArc() {
             <span
               key={t}
               // Every other year on narrow screens, or the labels run together.
-              className={`label absolute text-[0.62rem] text-[var(--faint)] ${
+              className={`label absolute text-[0.68rem] text-[var(--faint)] ${
                 (t - AXIS_START) % 2 === 1 ? "max-sm:hidden" : ""
               }`}
               style={{ left: `${pct(t)}%` }}
@@ -89,7 +89,7 @@ export default function CareerArc() {
           >
             <div>
               <p className="font-[family-name:var(--font-display)] text-[1.1rem] leading-tight">{l.name}</p>
-              <p className="label mt-1 text-[0.62rem] text-[var(--faint)]">{l.role}</p>
+              <p className="label mt-1 text-[0.68rem] text-[var(--faint)]">{l.role}</p>
             </div>
 
             <div>
@@ -109,6 +109,7 @@ export default function CareerArc() {
                   return (
                     <>
                       <div
+                        data-reveal="grow"
                         className={`absolute inset-y-1 flex items-center overflow-hidden rounded-[3px] border ${
                           roomy ? "px-2.5" : ""
                         } ${
@@ -118,11 +119,11 @@ export default function CareerArc() {
                         }`}
                         style={{ left: `${pct(l.start)}%`, width: `${width}%` }}
                       >
-                        {roomy && <span className={`label whitespace-nowrap text-[0.62rem] ${tone}`}>{text}</span>}
+                        {roomy && <span className={`label whitespace-nowrap text-[0.68rem] ${tone}`}>{text}</span>}
                       </div>
                       {!roomy && (
                         <span
-                          className={`label absolute top-1/2 -translate-y-1/2 whitespace-nowrap pr-2 text-right text-[0.62rem] ${tone}`}
+                          className={`label absolute top-1/2 -translate-y-1/2 whitespace-nowrap pr-2 text-right text-[0.68rem] ${tone}`}
                           style={{ right: `${100 - pct(l.start)}%` }}
                         >
                           {text}
@@ -134,12 +135,12 @@ export default function CareerArc() {
               </div>
               {/* On wide screens the tech line sits under its own bar. */}
               <p
-                className="mt-2 hidden font-mono text-[0.72rem] leading-snug text-[var(--faint)] sm:block"
+                className="mt-2 hidden font-mono text-[0.76rem] leading-snug text-[var(--faint)] sm:block"
                 style={{ paddingLeft: `${Math.min(pct(l.start), 50)}%` }}
               >
                 {l.eras}
               </p>
-              <p className="mt-2 font-mono text-[0.72rem] leading-snug text-[var(--faint)] sm:hidden">{l.eras}</p>
+              <p className="mt-2 font-mono text-[0.76rem] leading-snug text-[var(--faint)] sm:hidden">{l.eras}</p>
             </div>
           </div>
         ))}

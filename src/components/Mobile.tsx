@@ -13,7 +13,7 @@ export default function Mobile() {
   return (
     <div>
       {/* Side-by-side */}
-      <div className="card overflow-hidden">
+      <div data-reveal className="card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] border-collapse text-left">
             <thead>
@@ -31,7 +31,7 @@ export default function Mobile() {
                         className="text-[var(--faint)] transition-all group-hover:translate-x-0.5 group-hover:text-[var(--accent)]"
                       />
                     </Link>
-                    <span className="label mt-1 block text-[0.58rem] font-normal text-[var(--faint)]">{c.runtime}</span>
+                    <span className="label mt-1 block text-[0.68rem] font-normal text-[var(--faint)]">{c.runtime}</span>
                   </th>
                 ))}
               </tr>
@@ -39,11 +39,11 @@ export default function Mobile() {
             <tbody>
               {rows.map((r) => (
                 <tr key={r.k} className="border-b align-top last:border-b-0">
-                  <th scope="row" className="label px-5 py-4 text-left text-[0.62rem] font-medium text-[var(--accent)]">
+                  <th scope="row" className="label px-5 py-4 text-left text-[0.68rem] font-medium text-[var(--accent)]">
                     {r.k}
                   </th>
                   {r.v.map((cell, i) => (
-                    <td key={i} className="px-5 py-4 text-[0.82rem] leading-[1.6] text-[var(--muted)]">
+                    <td key={i} className="px-5 py-4 text-[0.92rem] leading-[1.6] text-[var(--muted)]">
                       {cell}
                     </td>
                   ))}
@@ -57,11 +57,11 @@ export default function Mobile() {
       {/* The two mobile builds in detail */}
       <div className="mt-10 grid gap-6 md:grid-cols-2">
         {mobile.map((p) => (
-          <Link key={p.id} href={`/projects/${p.id}`} className="card card-hover group flex flex-col p-6 sm:p-7">
+          <Link key={p.id} href={`/projects/${p.id}`} data-reveal className="card card-hover group flex flex-col p-6 sm:p-7">
             <p className="label text-[var(--accent)]">{p.tags[0]}</p>
             <h3 className="mt-3 text-[1.5rem] leading-tight">{p.name}</h3>
-            <p className="mt-1.5 text-[0.9rem] text-[var(--accent)]">{p.subtitle}</p>
-            <p className="mt-4 text-[0.86rem] leading-[1.7] text-[var(--muted)]">{p.blurb}</p>
+            <p className="mt-1.5 text-[0.92rem] text-[var(--accent)]">{p.subtitle}</p>
+            <p className="mt-4 text-[0.92rem] leading-[1.7] text-[var(--muted)]">{p.blurb}</p>
 
             <ul className="mt-5 flex flex-wrap gap-1.5">
               {p.stack.slice(0, 6).map((t) => (

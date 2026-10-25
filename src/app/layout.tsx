@@ -3,6 +3,7 @@ import { Newsreader, Inter, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/data/profile";
 import { TAB_IDS, TAB_ALIASES, DEFAULT_TAB } from "@/lib/tabs";
 import TabController from "@/components/TabController";
+import ScrollEffects from "@/components/ScrollEffects";
 import "./globals.css";
 
 /**
@@ -146,6 +147,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}>
         <TabController />
+        <ScrollEffects />
         {children}
       </body>
     </html>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Moon, Sun, Github, Linkedin, Menu, X, FileText } from "lucide-react";
 import { profile } from "@/data/profile";
@@ -12,12 +12,18 @@ export default function Nav() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [open, setOpen] = useState(false);
   const [hashTab, setHashTab] = useState<string>("");
+  const progress = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const current = document.documentElement.getAttribute("data-theme");
     setTheme(current === "light" ? "light" : "dark");
 
-    const onScroll = () => setScrolled(window.scrollY > 16);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 16);
+      // Reading progress, written straight to the DOM so scrolling never re-renders.
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.current?.style.setProperty("--progress", String(max > 0 ? Math.min(1, window.scrollY / max) : 0));
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -51,6 +57,7 @@ export default function Nav() {
         scrolled ? "border-b bg-[var(--bg)]/90 backdrop-blur-lg" : "border-b border-transparent"
       }`}
     >
+      <div ref={progress} className="scroll-progress" aria-hidden />
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
         {/* Plain anchors on purpose: a tab link is a hash change, not a router navigation. */}
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
@@ -70,7 +77,7 @@ export default function Nav() {
                 href={`/#${t.id}`}
                 role="tab"
                 aria-selected={isActive}
-                className={`relative rounded-md px-3 py-2 text-[0.85rem] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)] ${
+                className={`relative rounded-md px-3 py-2 text-[0.92rem] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--text)] ${
                   isActive ? "text-[var(--text)]" : "text-[var(--muted)]"
                 }`}
               >
@@ -86,7 +93,7 @@ export default function Nav() {
             href="/Varchini-Devi-K-Resume.pdf"
             target="_blank"
             rel="noreferrer noopener"
-            className="mr-1.5 hidden items-center gap-1.5 rounded-md border border-[var(--border-strong)] px-3 py-1.5 text-[0.8rem] font-medium text-[var(--text)] transition-colors hover:border-[var(--accent-line)] hover:text-[var(--accent)] sm:inline-flex"
+            className="mr-1.5 hidden items-center gap-1.5 rounded-md border border-[var(--border-strong)] px-3 py-1.5 text-[0.82rem] font-medium text-[var(--text)] transition-colors hover:border-[var(--accent-line)] hover:text-[var(--accent)] sm:inline-flex"
           >
             <FileText size={14} /> Résumé
           </a>

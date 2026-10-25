@@ -23,7 +23,7 @@ export function RepoLinks({
   /** Leave out the hosting note, for tight spaces such as the side rail. */
   hideNote?: boolean;
 }) {
-  const pad = size === "sm" ? "px-3 py-1.5 text-[0.75rem]" : "px-3.5 py-2 text-[0.8rem]";
+  const pad = size === "sm" ? "px-3 py-1.5 text-[0.82rem]" : "px-3.5 py-2 text-[0.82rem]";
 
   return (
     <div className="flex flex-col gap-2">
@@ -59,7 +59,7 @@ export function RepoLinks({
       </div>
 
       {p.demoNote && !hideNote && (
-        <p className="flex max-w-md gap-1.5 text-[0.72rem] leading-snug text-[var(--faint)]">
+        <p className="flex max-w-md gap-1.5 text-[0.76rem] leading-snug text-[var(--faint)]">
           <Clock size={12} className="mt-[2px] shrink-0" />
           <span>{p.demoNote}</span>
         </p>
