@@ -59,7 +59,10 @@ export const profile = {
     { k: "Domains", v: "Digital forensics · Energy · Insurance" },
     { k: "Core", v: "C# · .NET 8 · ASP.NET Core · Azure · SQL Server" },
     { k: "Front end", v: "Angular · React / Next.js · TypeScript" },
-    { k: "Applied AI", v: "RAG · agents · MCP · evals · guardrails" },
+    {
+      k: "Applied AI",
+      v: "RAG · hybrid search · reranking · multi-agent LangGraph · MCP · tool calling · agent memory · LLM-as-judge evals · guardrails · PII redaction · human-in-the-loop · inference routing · semantic cache · multimodal (CLIP, voice, vision) · tracing & cost tracking",
+    },
     { k: "Mobile", v: "Kotlin · Jetpack Compose · React Native / Expo" },
     { k: "Based in", v: "Chennai, India" },
   ],

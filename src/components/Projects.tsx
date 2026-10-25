@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Activity,
+  ArrowDown,
   ArrowRight,
+  ArrowUpRight,
   Bot,
   Cpu,
   Database,
@@ -44,6 +46,9 @@ const techniquesByProject = (() => {
 
 const CHIP_LIMIT = 9;
 
+/** How many matching projects the toolkit's result bar names before "+N more". */
+const BAR_LIMIT = 5;
+
 function Status({ p }: { p: Project }) {
   return p.demo ? (
     <span className="label inline-flex items-center gap-1.5 text-[0.68rem] text-[var(--ok)]">
@@ -76,11 +81,21 @@ function TechniqueChips({ names, highlight }: { names: readonly string[]; highli
 /* Toolkit                                                             */
 /* ------------------------------------------------------------------ */
 
-function Toolkit({ selection, onSelect }: { selection: Selection; onSelect: (s: Selection) => void }) {
+function Toolkit({
+  selection,
+  onSelect,
+  onShowResults,
+}: {
+  selection: Selection;
+  onSelect: (s: Selection) => void;
+  onShowResults: () => void;
+}) {
   const total = profile.aiToolkit.reduce((n, g) => n + g.items.length, 0);
+  const matches = selection ? profile.projects.filter((p) => p.kind === "ai" && selection.ids.has(p.id)) : [];
 
   return (
-    <div className="card overflow-hidden" data-reveal>
+    // overflow-clip rather than hidden, so the result bar can stick to the viewport.
+    <div className="card overflow-clip" data-reveal>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-[var(--surface-2)] px-5 py-3.5 sm:px-6">
         <p className="label text-[var(--accent)]">AI toolkit · {total} techniques and tools</p>
         <p className="text-[0.82rem] text-[var(--faint)]">Click any technique, or a group, to see the projects that use it.</p>
@@ -152,6 +167,54 @@ function Toolkit({ selection, onSelect }: { selection: Selection; onSelect: (s: 
             </section>
           );
         })}
+      </div>
+
+      {/*
+        The answer to a click, kept in view while the toolkit is on screen. The
+        cards themselves are below the toolkit, often off-screen, so without
+        this a click looked like it did nothing.
+      */}
+      <div aria-live="polite" className="sticky bottom-0 z-10">
+        {selection && (
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-[var(--accent-line)] bg-[var(--surface-2)]/95 px-5 py-3.5 backdrop-blur sm:px-6">
+            <p className="text-[0.92rem] text-[var(--muted)]">
+              <span className="text-[var(--accent)]">{selection.label}</span> · used in {matches.length}{" "}
+              {matches.length === 1 ? "project" : "projects"}
+            </p>
+            <ul className="hidden flex-wrap gap-1.5 sm:flex">
+              {matches.slice(0, BAR_LIMIT).map((p) => (
+                <li key={p.id}>
+                  <Link
+                    href={`/projects/${p.id}`}
+                    className="chip hover:border-[var(--accent-line)] hover:text-[var(--text)]"
+                  >
+                    {p.name} <ArrowUpRight size={11} />
+                  </Link>
+                </li>
+              ))}
+              {matches.length > BAR_LIMIT && (
+                <li className="chip border-dashed">+{matches.length - BAR_LIMIT} more</li>
+              )}
+            </ul>
+            <div className="ml-auto flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onShowResults}
+                className="inline-flex items-center gap-1.5 rounded-md bg-[var(--accent)] px-3 py-1.5 text-[0.82rem] font-medium text-[var(--bg)] transition-opacity hover:opacity-90"
+              >
+                Show {matches.length === 1 ? "the card" : `all ${matches.length} cards`} <ArrowDown size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={() => onSelect(null)}
+                aria-label="Clear filter"
+                className="grid h-8 w-8 place-items-center rounded-md border border-[var(--border-strong)] text-[var(--muted)] transition-colors hover:text-[var(--text)]"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -276,6 +339,11 @@ function ProjectCard({ p, n, highlight }: { p: Project; n: string; highlight: Re
 
 export default function Projects() {
   const [selection, setSelection] = useState<Selection>(null);
+  const results = useRef<HTMLDivElement>(null);
+  const showResults = () => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    results.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  };
 
   // Only the AI projects live here; the mobile builds have their own section.
   // Numbering follows the data order, so a project keeps its number under any filter.
@@ -295,11 +363,11 @@ export default function Projects() {
   return (
     <>
       <div className="no-print">
-        <Toolkit selection={selection} onSelect={setSelection} />
+        <Toolkit selection={selection} onSelect={setSelection} onShowResults={showResults} />
       </div>
 
       {/* What the list is showing, and a way back. */}
-      <div className="mb-6 mt-10 flex flex-wrap items-center justify-between gap-3" aria-live="polite">
+      <div ref={results} className="mb-6 mt-10 flex flex-wrap items-center justify-between gap-3">
         <p className="label text-[var(--faint)]">
           {selection ? (
             <>
