@@ -4,7 +4,7 @@ import { profile } from "@/data/profile";
 export default function Hero() {
   return (
     <section id="top" className="hero-bg relative overflow-hidden border-b">
-      <div className="relative z-10 mx-auto max-w-6xl px-5 pb-14 pt-28 sm:px-8 sm:pb-20 sm:pt-36">
+      <div className="relative z-10 mx-auto max-w-6xl px-5 pb-12 pt-28 sm:px-8 sm:pb-16 sm:pt-32">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-16">
           <div>
             <p className="rise label flex items-center gap-2.5 text-[var(--accent)]" style={{ animationDelay: "40ms" }}>
@@ -13,20 +13,20 @@ export default function Hero() {
             </p>
 
             <h1
-              className="rise mt-6 text-[2.4rem] leading-[1.06] sm:text-[3rem] lg:text-[3.5rem]"
+              className="rise mt-5 text-[1.9rem] leading-[1.12] sm:text-[2.3rem] lg:text-[2.6rem]"
               style={{ animationDelay: "120ms" }}
             >
               {profile.headline[0]} <span className="emph">{profile.headline[1]}</span>
             </h1>
 
             <p
-              className="rise mt-6 max-w-[36rem] text-[1rem] leading-[1.75] text-[var(--muted)] sm:text-[1.06rem]"
+              className="rise mt-5 max-w-[34rem] text-[0.93rem] leading-[1.75] text-[var(--muted)] sm:text-[0.97rem]"
               style={{ animationDelay: "200ms" }}
             >
               {profile.tagline}
             </p>
 
-            <div className="rise mt-9 flex flex-wrap items-center gap-3" style={{ animationDelay: "280ms" }}>
+            <div className="rise mt-8 flex flex-wrap items-center gap-3" style={{ animationDelay: "280ms" }}>
               <a
                 href="#ai"
                 className="group inline-flex items-center gap-2 rounded-md bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--bg)] transition-opacity hover:opacity-90"
@@ -87,16 +87,16 @@ export default function Hero() {
 
         {/* Metrics strip */}
         <dl
-          className="rise mt-14 grid grid-cols-2 gap-y-8 border-y py-7 sm:grid-cols-4"
+          className="rise mt-12 grid grid-cols-3 border-y py-6"
           style={{ animationDelay: "420ms" }}
         >
           {profile.stats.map((s) => (
             <div
               key={s.label}
-              className="border-l pl-5 max-sm:odd:border-l-0 max-sm:odd:pl-0 sm:first:border-l-0 sm:first:pl-0"
+              className="border-l pl-4 first:border-l-0 first:pl-0 sm:pl-6"
             >
-              <dt className="numeral text-[2.2rem] leading-none text-[var(--text)] sm:text-[2.6rem]">{s.value}</dt>
-              <dd className="mt-2.5 text-[0.78rem] leading-snug text-[var(--muted)]">{s.label}</dd>
+              <dt className="numeral text-[1.6rem] leading-none text-[var(--text)] sm:text-[1.9rem]">{s.value}</dt>
+              <dd className="mt-2 text-[0.74rem] leading-snug text-[var(--muted)]">{s.label}</dd>
             </div>
           ))}
         </dl>

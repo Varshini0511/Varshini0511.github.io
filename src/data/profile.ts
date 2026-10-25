@@ -45,11 +45,10 @@ export const profile = {
   github: "https://github.com/Varshini0511",
   githubUser: "Varshini0511",
 
-  /** Tenure, scope, measured impact, and the pivot — one of each. */
+  /** Tenure, scope and the pivot. */
   stats: [
     { value: "8+", label: "Years shipping production software" },
     { value: "11", label: "Enterprise applications worked on" },
-    { value: "40%", label: "Cloud cost reduction delivered" },
     { value: "10", label: "AI systems built from scratch" },
   ],
 
@@ -115,8 +114,8 @@ export const profile = {
     {
       theme: "Measurement",
       enterprise: {
-        where: "Wipro",
-        text: "Cloud cost cut 40% through an AWS EC2 migration, tracked as a number rather than claimed.",
+        where: "Exterro",
+        text: "SQL stored-procedure and data-model tuning that cut processing time by about 35%, tracked as a number rather than claimed.",
       },
       ai: {
         where: "AdviShopping · inferouter",

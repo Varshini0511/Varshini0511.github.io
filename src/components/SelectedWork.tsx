@@ -12,7 +12,7 @@ export default function SelectedWork() {
   return (
     <div className="grid gap-5 md:grid-cols-2">
       {items.map(({ p, focus, proof }) => (
-        <Link key={p.id} href={`/projects/${p.id}`} className="card card-hover group flex flex-col p-6 sm:p-7">
+        <Link key={p.id} href={`/projects/${p.id}`} className="card card-hover group flex flex-col p-5 sm:p-6">
           <div className="flex items-center justify-between gap-3">
             <span className="label text-[0.62rem] text-[var(--accent)]">{focus}</span>
             {p.demo ? (
@@ -27,19 +27,19 @@ export default function SelectedWork() {
             )}
           </div>
 
-          <h3 className="mt-4 flex items-start justify-between gap-3 text-[1.6rem] leading-tight">
+          <h3 className="mt-3 flex items-start justify-between gap-3 text-[1.3rem] leading-tight">
             <span className="transition-colors group-hover:text-[var(--accent)]">{p.name}</span>
             <ArrowUpRight
               size={19}
               className="mt-1.5 shrink-0 text-[var(--faint)] transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--accent)]"
             />
           </h3>
-          <p className="mb-6 mt-1.5 text-[0.88rem] leading-snug text-[var(--muted)]">{p.subtitle}</p>
+          <p className="mb-5 mt-1 text-[0.84rem] leading-snug text-[var(--muted)]">{p.subtitle}</p>
 
           <dl className="mt-auto grid grid-cols-3 gap-4 border-t pt-5">
             {proof.map((m) => (
               <div key={m.l}>
-                <dt className="numeral text-[1.55rem] leading-none text-[var(--text)]">{m.v}</dt>
+                <dt className="numeral text-[1.25rem] leading-none text-[var(--text)]">{m.v}</dt>
                 <dd className="mt-1.5 text-[0.7rem] leading-snug text-[var(--faint)]">{m.l}</dd>
               </div>
             ))}
