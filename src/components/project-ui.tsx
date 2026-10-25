@@ -13,7 +13,16 @@ export function StackRow({ stack }: { stack: readonly string[] }) {
   );
 }
 
-export function RepoLinks({ p, size = "md" }: { p: Project; size?: "sm" | "md" }) {
+export function RepoLinks({
+  p,
+  size = "md",
+  hideNote = false,
+}: {
+  p: Project;
+  size?: "sm" | "md";
+  /** Leave out the hosting note, for tight spaces such as the side rail. */
+  hideNote?: boolean;
+}) {
   const pad = size === "sm" ? "px-3 py-1.5 text-[0.75rem]" : "px-3.5 py-2 text-[0.8rem]";
 
   return (
@@ -24,7 +33,7 @@ export function RepoLinks({ p, size = "md" }: { p: Project; size?: "sm" | "md" }
             href={p.demo}
             target="_blank"
             rel="noreferrer noopener"
-            className={`inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent)] font-medium text-[var(--bg)] transition-opacity hover:opacity-90 ${pad}`}
+            className={`inline-flex items-center gap-1.5 rounded-md bg-[var(--accent)] font-medium text-[var(--bg)] transition-opacity hover:opacity-90 ${pad}`}
           >
             <ExternalLink size={14} /> Live demo
           </a>
@@ -33,7 +42,7 @@ export function RepoLinks({ p, size = "md" }: { p: Project; size?: "sm" | "md" }
         {p.repoPrivate ? (
           <span
             title="This repository is private — ask me for access or a walkthrough."
-            className={`inline-flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface-2)] font-medium text-[var(--faint)] ${pad}`}
+            className={`inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] bg-[var(--surface-2)] font-medium text-[var(--faint)] ${pad}`}
           >
             <Lock size={14} /> Private repo
           </span>
@@ -42,14 +51,14 @@ export function RepoLinks({ p, size = "md" }: { p: Project; size?: "sm" | "md" }
             href={p.repo}
             target="_blank"
             rel="noreferrer noopener"
-            className={`inline-flex items-center gap-1.5 rounded-lg border border-[var(--border-strong)] bg-[var(--surface)] font-medium text-[var(--text)] transition-colors hover:bg-[var(--surface-2)] ${pad}`}
+            className={`inline-flex items-center gap-1.5 rounded-md border border-[var(--border-strong)] bg-[var(--surface)] font-medium text-[var(--text)] transition-colors hover:bg-[var(--surface-2)] ${pad}`}
           >
             <Github size={14} /> Source
           </a>
         )}
       </div>
 
-      {p.demoNote && (
+      {p.demoNote && !hideNote && (
         <p className="flex max-w-md gap-1.5 text-[0.72rem] leading-snug text-[var(--faint)]">
           <Clock size={12} className="mt-[2px] shrink-0" />
           <span>{p.demoNote}</span>

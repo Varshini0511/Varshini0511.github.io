@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Moon, Sun, Github, Linkedin, Menu, X } from "lucide-react";
+import { Moon, Sun, Github, Linkedin, Menu, X, FileText } from "lucide-react";
 import { profile } from "@/data/profile";
 import { TABS, tabFromHash } from "@/lib/tabs";
 
@@ -82,6 +82,14 @@ export default function Nav() {
         </div>
 
         <div className="flex items-center gap-1">
+          <a
+            href="/Varchini-Devi-K-Resume.pdf"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="mr-1.5 hidden items-center gap-1.5 rounded-md border border-[var(--border-strong)] px-3 py-1.5 text-[0.8rem] font-medium text-[var(--text)] transition-colors hover:border-[var(--accent-line)] hover:text-[var(--accent)] sm:inline-flex"
+          >
+            <FileText size={14} /> Résumé
+          </a>
           <a
             href={profile.github}
             target="_blank"

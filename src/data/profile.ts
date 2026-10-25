@@ -30,9 +30,14 @@ export const profile = {
   yearsExperience: "8+",
   currentRole: "Senior Software Engineer",
   currentCompany: "Exterro R&D",
-  /** One line. States the domain, the scale, and the pivot — in that order. */
+  /** The hero headline: tenure first, then the move into AI. The part after the break is set in italics. */
+  headline: ["Eight years of enterprise rigour,", "now applied to AI."],
+  /** Two sentences under the headline: the career, then the AI work. */
   tagline:
-    "I build security-critical .NET and Azure platforms across digital forensics, energy and insurance, and apply the same engineering discipline to production AI systems.",
+    "I'm a Senior Software Engineer at Exterro, building digital forensics software in C#, .NET 8 and Azure, after earlier platforms for Halliburton, HP and Travelers. In 2026 I have built ten AI systems — RAG, multi-agent orchestration, MCP, evaluation — and engineered them the way production software has to be: bounded, observable and measured.",
+  /** Short form for meta descriptions and link previews. */
+  summary:
+    "Senior Software Engineer with 8+ years on secure .NET and Azure platforms for digital forensics, energy and insurance, now building production-grade AI systems: RAG, tool-calling agents, MCP, evaluation and guardrails.",
   location: "Chennai, India",
   email: "varshinikannan2495@gmail.com",
   phone: "+91 80564 37139",
@@ -58,6 +63,106 @@ export const profile = {
     { k: "Applied AI", v: "RAG · agents · MCP · evals · guardrails" },
     { k: "Mobile", v: "Kotlin · Jetpack Compose · React Native / Expo" },
     { k: "Based in", v: "Chennai, India" },
+  ],
+
+  /** The platforms and clients behind the eight years, by employer. Names only, no logos. */
+  clients: [
+    { name: "FTK Central", via: "Exterro", note: "Digital forensics · eDiscovery" },
+    { name: "Halliburton", via: "Wipro", note: "Digital oilfield on Azure" },
+    { name: "HP Marcoms", via: "Wipro", note: "Enterprise web · platform migration" },
+    { name: "Travelers", via: "Cognizant", note: "Insurance claims · subrogation" },
+  ],
+
+  /**
+   * The argument of the whole site: each habit from the enterprise years,
+   * and where the same habit shows up in the AI work. Every line is backed
+   * by an experience bullet or a project deep dive further down.
+   */
+  bridge: [
+    {
+      theme: "Security",
+      enterprise: {
+        where: "Exterro · Wipro",
+        text: "Evidence integrity and certificate-based encryption on a forensics platform; Managed Identities and Key Vault in place of stored secrets.",
+      },
+      ai: {
+        where: "NimbusPay · GitHub Agent",
+        text: "Authorization enforced at the tool layer, PII redacted before the model sees it, and every write behind an approval gate.",
+      },
+    },
+    {
+      theme: "Resilience",
+      enterprise: {
+        where: "Wipro",
+        text: "Service Bus retry policies and dead-letter queues around every downstream notification in event-driven Azure workflows.",
+      },
+      ai: {
+        where: "inferouter · AI News Agent",
+        text: "Provider fallback chains, failover between model tiers, and time-boxed tools that fail without sinking the run.",
+      },
+    },
+    {
+      theme: "Performance",
+      enterprise: {
+        where: "Exterro",
+        text: "A high-volume job screen taken from over 10 minutes to 3–6 seconds through query, code and database work.",
+      },
+      ai: {
+        where: "AyvaBot",
+        text: "Every agent timed before tuning; a 171-second greeting traced to a design bug and brought down to 8 seconds.",
+      },
+    },
+    {
+      theme: "Measurement",
+      enterprise: {
+        where: "Wipro",
+        text: "Cloud cost cut 40% through an AWS EC2 migration, tracked as a number rather than claimed.",
+      },
+      ai: {
+        where: "AdviShopping · inferouter",
+        text: "Retrieval scored on NDCG@k against labelled queries; routing savings reported as a break-even volume, not a headline.",
+      },
+    },
+  ],
+
+  /** The four projects on the home page, each with three numbers from its own case study. */
+  selectedWork: [
+    {
+      id: "advishopping",
+      focus: "Retrieval · Evaluation",
+      proof: [
+        { v: "6", l: "stage hybrid retrieval pipeline" },
+        { v: "99%", l: "NDCG@5, vs 58% keyword-only" },
+        { v: "72", l: "unit tests in CI" },
+      ],
+    },
+    {
+      id: "github-agent",
+      focus: "MCP · Multi-agent",
+      proof: [
+        { v: "22", l: "GitHub tools over MCP" },
+        { v: "5", l: "specialist agents under a supervisor" },
+        { v: "100+", l: "offline tests" },
+      ],
+    },
+    {
+      id: "nimbuspay",
+      focus: "Safety · Observability",
+      proof: [
+        { v: "6", l: "typed tools, scoped to the signed-in customer" },
+        { v: "3", l: "layers of output guardrails" },
+        { v: "HITL", l: "approval on state-changing actions" },
+      ],
+    },
+    {
+      id: "inference-router",
+      focus: "Inference · Cost",
+      proof: [
+        { v: "3", l: "interchangeable routers, one interface" },
+        { v: "46", l: "tests and CI, no GPU needed" },
+        { v: "~9.4k", l: "requests/day break-even, stated" },
+      ],
+    },
   ],
 
   /** Measured outcomes from the résumé, labelled with where they came from. */
@@ -212,7 +317,7 @@ export const profile = {
 
   about: [
     `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements.`,
-    `That background shapes how I approach AI. Over the past year I've built ten AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking, a cost-aware inference router, a scheduled news agent, a personal multi-agent assistant — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
+    `That background shapes how I approach AI. In 2026, alongside my full-time role, I've built ten AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking, a cost-aware inference router, a scheduled news agent, a personal multi-agent assistant — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
     `I've led migrations from .NET Framework to .NET 8, designed event-driven Azure workflows with Durable Functions and Service Bus, cut cloud costs 40% through an AWS EC2 migration, and shipped Angular and React/Next.js front ends against secure REST APIs. I am drawn to problems where correctness matters and debugging is hard.`,
   ],
 

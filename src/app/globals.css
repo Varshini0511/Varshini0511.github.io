@@ -195,6 +195,32 @@ code {
   letter-spacing: 0.16em;
 }
 
+/* Italic serif emphasis inside a heading: the second half of the hero line. */
+.emph {
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* A hairline label with a rule running to the right edge. */
+.rule-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.rule-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Soft accent wash for the closing call to action. */
+.cta-bg {
+  background:
+    radial-gradient(700px 260px at 0% 0%, var(--accent-soft), transparent 70%),
+    var(--surface);
+}
+
 /* ---------------------------------------------------------------
    Motion
    --------------------------------------------------------------- */
@@ -225,7 +251,6 @@ html.js [data-panel] {
 html.js[data-tab="overview"] [data-panel="overview"],
 html.js[data-tab="career"] [data-panel="career"],
 html.js[data-tab="ai"] [data-panel="ai"],
-html.js[data-tab="mobile"] [data-panel="mobile"],
 html.js[data-tab="stack"] [data-panel="stack"],
 html.js[data-tab="about"] [data-panel="about"],
 html.js[data-tab="contact"] [data-panel="contact"] {

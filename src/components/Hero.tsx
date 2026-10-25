@@ -9,18 +9,18 @@ export default function Hero() {
           <div>
             <p className="rise label flex items-center gap-2.5 text-[var(--accent)]" style={{ animationDelay: "40ms" }}>
               <span className="h-px w-8 bg-[var(--accent)]" />
-              {profile.title}
+              {profile.name} · {profile.title}
             </p>
 
             <h1
-              className="rise mt-6 text-[2.5rem] leading-[1.04] sm:text-[3rem] lg:text-[3.4rem]"
+              className="rise mt-6 text-[2.4rem] leading-[1.06] sm:text-[3rem] lg:text-[3.5rem]"
               style={{ animationDelay: "120ms" }}
             >
-              {profile.name}
+              {profile.headline[0]} <span className="emph">{profile.headline[1]}</span>
             </h1>
 
             <p
-              className="rise mt-6 max-w-[34rem] text-[1.05rem] leading-[1.7] text-[var(--muted)] sm:text-[1.12rem]"
+              className="rise mt-6 max-w-[36rem] text-[1rem] leading-[1.75] text-[var(--muted)] sm:text-[1.06rem]"
               style={{ animationDelay: "200ms" }}
             >
               {profile.tagline}

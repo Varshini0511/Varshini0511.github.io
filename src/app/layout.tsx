@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Newsreader, Inter, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/data/profile";
-import { TAB_IDS, DEFAULT_TAB } from "@/lib/tabs";
+import { TAB_IDS, TAB_ALIASES, DEFAULT_TAB } from "@/lib/tabs";
 import TabController from "@/components/TabController";
 import "./globals.css";
 
@@ -36,34 +36,59 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
-const description = `${profile.title} with ${profile.yearsExperience} years building secure .NET and Next.js platforms, now building production-grade AI systems — RAG, tool-calling agents, hybrid search and multi-agent orchestration.`;
+const description = profile.summary;
+const siteTitle = `${profile.name} — ${profile.title} · .NET, Azure & Applied AI`;
+const siteUrl = "https://varshini0511.github.io";
+/** Built from src/app/og.png/route.tsx. */
+const ogImage = { url: "/og.png", width: 1200, height: 630, alt: `${profile.name} — ${profile.title}` };
+
+/** Structured data, so search engines can show the name, role and profiles. */
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: profile.title,
+  worksFor: { "@type": "Organization", name: profile.currentCompany },
+  url: siteUrl,
+  email: `mailto:${profile.email}`,
+  address: { "@type": "PostalAddress", addressLocality: "Chennai", addressCountry: "IN" },
+  alumniOf: { "@type": "CollegeOrUniversity", name: profile.education.school },
+  sameAs: [profile.linkedin, profile.github],
+  knowsAbout: [
+    "C#", ".NET", "ASP.NET Core", "Azure", "SQL Server", "Angular", "React", "Next.js",
+    "Retrieval-augmented generation", "LLM agents", "Model Context Protocol", "LLM evaluation",
+  ],
+};
 
 export const metadata: Metadata = {
   // Real address of the deployed site, so link previews resolve correctly.
   // Change this if you move to a custom domain.
-  metadataBase: new URL("https://varshini0511.github.io"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: `${profile.name} — ${profile.title}`,
+    default: siteTitle,
     template: `%s · ${profile.name}`,
   },
   description,
   keywords: [
     ".NET", "C#", "ASP.NET Core", "Next.js", "Angular", "Azure",
-    "AI Engineer", "RAG", "LLM agents", "pgvector", "LangGraph", "Full-Stack Engineer",
+    "AI Engineer", "RAG", "LLM agents", "MCP", "pgvector", "LangGraph", "Full-Stack Engineer",
+    "Senior Software Engineer", "Chennai",
   ],
   authors: [{ name: profile.name, url: profile.linkedin }],
   creator: profile.name,
   openGraph: {
-    type: "website",
-    title: `${profile.name} — ${profile.title}`,
+    type: "profile",
+    title: siteTitle,
     description,
     siteName: profile.name,
+    images: [ogImage],
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${profile.name} — ${profile.title}`,
+    title: siteTitle,
     description,
+    images: [ogImage.url],
   },
   robots: { index: true, follow: true },
 };
@@ -85,13 +110,19 @@ const themeScript = `
   // Choose the active tab from the URL hash before first paint, so a link like
   // /#career opens on that tab with no flash of another one.
   var tabs = ${JSON.stringify(TAB_IDS)};
-  var h = (window.location.hash || '').replace('#', '');
-  d.setAttribute('data-tab', tabs.indexOf(h) > -1 ? h : '${DEFAULT_TAB}');
+  var aliases = ${JSON.stringify(TAB_ALIASES)};
+  function pick() {
+    var h = (window.location.hash || '').replace('#', '');
+    if (aliases.hasOwnProperty(h)) return aliases[h];
+    return tabs.indexOf(h) > -1 ? h : '${DEFAULT_TAB}';
+  }
+  d.setAttribute('data-tab', pick());
   // Switch tabs on hash changes even before React has loaded, so an early click
   // is never ignored. TabController does the same later; both are idempotent.
   window.addEventListener('hashchange', function () {
-    var n = (window.location.hash || '').replace('#', '');
-    n = tabs.indexOf(n) > -1 ? n : '${DEFAULT_TAB}';
+    // Only the home page has tabs; elsewhere a hash is an ordinary in-page link.
+    if (window.location.pathname !== '/') return;
+    var n = pick();
     if (d.getAttribute('data-tab') !== n) {
       d.setAttribute('data-tab', n);
       window.scrollTo({ top: 0, behavior: 'instant' });
@@ -108,6 +139,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
       </head>
       <body className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}>
         <TabController />

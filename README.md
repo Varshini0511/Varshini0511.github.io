@@ -1,8 +1,8 @@
 # Varchini Devi K — Portfolio
 
-Personal portfolio site. Static Next.js App Router build, deployed to Vercel.
+Personal portfolio site. Static Next.js App Router build, deployed to GitHub Pages.
 
-**Live:** _add your Vercel URL here after the first deploy_
+**Live:** https://varshini0511.github.io/
 
 ---
 
@@ -18,8 +18,13 @@ Common edits:
 
 | Want to change | Edit |
 |---|---|
-| Headline / tagline | `profile.tagline` |
+| Hero headline (second half is italic) | `profile.headline` |
+| Paragraph under the headline | `profile.tagline` |
+| Meta description / link previews | `profile.summary` |
 | The four hero stat tiles | `profile.stats` |
+| Client wordmarks on the home tab | `profile.clients` |
+| "Why the combination matters" rows | `profile.bridge` |
+| The four home-page project cards | `profile.selectedWork` |
 | A project's bullets | that project's `highlights` |
 | The three AdviShopping panels | `projects[0].capabilities` |
 | Filter chips | `FILTERS` in `src/components/Projects.tsx` |
@@ -36,6 +41,15 @@ npm run dev
 ```
 
 Then open http://localhost:3000.
+
+## Deploy
+
+```bash
+npm run deploy
+```
+
+Builds the static site and force-pushes `out/` to the `gh-pages` branch,
+which GitHub Pages serves at the URL above.
 
 ## Build
 
@@ -54,3 +68,6 @@ Notes:
   `globals.css` and a `data-theme` attribute on `<html>`. A tiny inline script
   in `layout.tsx` applies the stored theme before paint to avoid a flash.
 - No external requests at runtime — fonts are self-hosted by `next/font`.
+- The link-preview image is generated at build time by `src/app/og.png/route.tsx`
+  from `profile.headline` and `profile.stats`, so it never goes stale.
+- `sitemap.xml`, `robots.txt` and schema.org `Person` data are generated too.

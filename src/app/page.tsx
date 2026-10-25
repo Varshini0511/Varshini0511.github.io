@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
+import Clients from "@/components/Clients";
+import HomeBlock from "@/components/HomeBlock";
+import Bridge from "@/components/Bridge";
+import SelectedWork from "@/components/SelectedWork";
+import CallToAction from "@/components/CallToAction";
 import Panel from "@/components/Panel";
 import Section from "@/components/Section";
 import CareerArc from "@/components/CareerArc";
@@ -11,11 +17,22 @@ import Approach from "@/components/Approach";
 import TechMatrix from "@/components/TechMatrix";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 import { profile } from "@/data/profile";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
+const aiCount = profile.projects.filter((p) => p.kind === "ai").length;
 
 /**
  * Each tab is a panel; the nav switches between them (see TabController and the
  * [data-panel] rules in globals.css). All panels are rendered into the HTML.
+ *
+ * The home tab is the whole pitch in one scroll — positioning, clients, the
+ * enterprise-to-AI argument, selected work and a call to action — so a visitor
+ * who never clicks a tab still sees the essentials.
  */
 export default function Home() {
   return (
@@ -24,11 +41,27 @@ export default function Home() {
       <main className="min-h-[72vh]">
         <Panel id="overview">
           <Hero />
+          <Clients />
+          <HomeBlock
+            label="Why the combination matters"
+            title="The habits that keep enterprise systems safe are the ones AI systems need."
+            more={{ href: "/#about", text: "How I engineer" }}
+          >
+            <Bridge />
+          </HomeBlock>
+          <HomeBlock
+            label="Selected AI work"
+            title="Built past the demo: evaluated, guarded and costed."
+            more={{ href: "/#ai", text: `All ${aiCount} AI systems` }}
+          >
+            <SelectedWork />
+          </HomeBlock>
+          <CallToAction />
         </Panel>
 
         <Panel id="career">
           <Section
-            eyebrow="Career"
+            eyebrow="Experience"
             title="Eight years in enterprise engineering"
             intro="Digital forensics, energy and insurance: security-sensitive platforms where a wrong answer has a cost. The same fundamentals carried across .NET Framework, .NET Core and .NET 8, on-prem, AWS and Azure."
           >
@@ -46,17 +79,15 @@ export default function Home() {
           <Section
             eyebrow="Applied AI"
             title="AI systems"
-            intro="Ten systems built over the past year while learning AI engineering. Seven are live, one of them as a scheduled job; three run on my own machine: RideSmartAgent, which drives real logged-in browser sessions, inferouter, an inference gateway, and AyvaBot, a personal assistant that works with my own accounts. Each goes past the demo into retrieval quality, evaluation, guardrails and cost."
+            intro={`${aiCount} systems built in 2026, alongside a full-time senior role, to take eight years of engineering into AI. Seven are live, one of them as a scheduled job; three run on my own machine because they drive real browser sessions, act as an inference gateway or work with my own accounts. Each goes past the demo into retrieval quality, evaluation, guardrails and cost.`}
           >
             <Projects />
           </Section>
-        </Panel>
-
-        <Panel id="mobile">
           <Section
-            eyebrow="Mobile"
+            lead={false}
+            eyebrow="Also built · Mobile"
             title="One product, three runtimes"
-            intro="The same problem, finding the cheapest ride in India, built three ways. Each makes a different trade-off between what it can see, what it asks of the user and where it runs."
+            intro="The same problem, finding the cheapest ride in India, built three ways: Python automation, native Kotlin and cross-platform Expo. Each makes a different trade-off between what it can see, what it asks of the user and where it runs."
           >
             <Mobile />
           </Section>
@@ -92,14 +123,7 @@ export default function Home() {
         </Panel>
       </main>
 
-      <footer className="border-t">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-8 text-xs text-[var(--faint)] sm:flex-row sm:px-8">
-          <p>
-            © {new Date().getFullYear()} {profile.name}
-          </p>
-          <p className="font-mono">Next.js · TypeScript · Tailwind</p>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }

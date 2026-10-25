@@ -15,6 +15,8 @@ export default function TabController() {
   // Hash changes on the same page (clicking a tab).
   useEffect(() => {
     const apply = () => {
+      // Only the home page has tabs; on a project page a hash is an in-page link.
+      if (window.location.pathname !== "/") return;
       const next = tabFromHash(window.location.hash);
       const root = document.documentElement;
       if (root.getAttribute("data-tab") !== next) {
