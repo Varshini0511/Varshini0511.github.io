@@ -21,6 +21,7 @@ import {
   inferenceRouterDiagram,
   aiNewsAgentDiagram,
   ayvaBotDiagram,
+  agentCustodyDiagram,
 } from "./project-diagrams";
 
 export const profile = {
@@ -49,7 +50,7 @@ export const profile = {
   stats: [
     { value: "8+", label: "Years shipping production software" },
     { value: "11", label: "Enterprise applications worked on" },
-    { value: "10", label: "AI systems built from scratch" },
+    { value: "11", label: "AI systems built from scratch" },
   ],
 
   /** The spec sheet beside the hero. Dense, factual, scannable. */
@@ -349,6 +350,7 @@ export const profile = {
         "Digital forensics platform: evidence handling, certificate-based encryption, auditability across the investigative lifecycle",
         "APIs secured with OAuth 2.0, OpenID Connect and JWT; Managed Identities and Key Vault instead of stored secrets",
         "Encrypted, fault-tolerant collection from endpoints, cloud drives, mail systems and mobile devices",
+        "AgentCustody: the same chain of custody applied to AI agents, as a signed, hash-chained log of every tool call",
       ],
     },
     {
@@ -390,6 +392,7 @@ export const profile = {
         "NimbusPay — every session is scoped to the signed-in customer at the tool layer, so a jailbroken model still cannot read another account.",
         "GitHub Agent — writes sit behind an approval interrupt and an ALLOW_WRITES switch.",
         "ExpenseTracker — the model proposes; the C# layer performs the INSERT.",
+        "AgentCustody — block and approve rules are applied by a proxy before a call reaches the tool server, whatever the model decides.",
       ],
     },
     {
@@ -486,7 +489,7 @@ export const profile = {
 
   about: [
     `I'm a Senior Software Engineer with over eight years building and sustaining high-performance, security-sensitive enterprise platforms. My day job is deep backend work: C#, ASP.NET Core/.NET 8, Web API, and cloud-native architecture on Azure — currently on a digital forensics platform where confidentiality, data integrity, and auditability of evidence are hard requirements.`,
-    `That background shapes how I approach AI. In 2026, alongside my full-time role, I've built ten AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking, a cost-aware inference router, a scheduled news agent, a personal multi-agent assistant — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
+    `That background shapes how I approach AI. In 2026, alongside my full-time role, I've built eleven AI systems from the ground up — RAG pipelines, tool-calling agents, hybrid retrieval, multi-agent orchestration, an MCP server, browser-automation booking, a cost-aware inference router, a scheduled news agent, a personal multi-agent assistant, a tamper-evident audit proxy for agent tool calls — and I kept building the parts most demos skip: evaluation harnesses, tracing and cost tracking, PII redaction, and layered guardrails. The engineering discipline transfers directly; an agent that can write to a database needs the same rigour as a forensics pipeline.`,
     `I've led migrations from .NET Framework to .NET 8, designed event-driven Azure workflows with Durable Functions and Service Bus, cut cloud costs 40% through an AWS EC2 migration, and shipped Angular and React/Next.js front ends against secure REST APIs. I am drawn to problems where correctness matters and debugging is hard.`,
   ],
 
@@ -613,6 +616,94 @@ export const profile = {
         "Evaluation harnesses change how you work — you stop guessing whether a change helped.",
         "A public demo is a public endpoint — rate limits, upload validation and not over-sharing data with the client are part of the build.",
         "A bad result is not always a bad model: an outage and my own prompt each looked like an accuracy problem until I read the failures.",
+      ],
+    },
+
+    /* ---------------------------------------------------------------- */
+    {
+      id: "agentcustody",
+      flagship: false,
+      kind: "ai",
+      name: "AgentCustody",
+      subtitle: "A tamper-evident chain of custody for AI agent tool calls",
+      period: "2026",
+      role: "Solo — proxy, log format, signing, verifier, policy and approvals, CLI, Python writer, tests",
+      blurb:
+        "A proxy that sits between an AI agent and its MCP tools, writes every tool call down before it runs, and makes that record impossible to change quietly: edit, delete, insert, reorder or cut off one record and custody verify names the line. Per-tool rules allow a call, block it, or hold it until a person approves.",
+      problem:
+        "AI agents now write files, send email and act on real accounts. When something goes wrong, the first question is what exactly the agent did and who allowed it, and an ordinary log cannot answer that with confidence, because anyone with access can edit it. On the forensics platform I work on, evidence is worthless unless you can prove nobody changed it since it was collected. I wanted to apply that same chain of custody to what agents do, in .NET, and make it cheap enough to sit in front of every tool call.",
+      repo: "https://github.com/Varshini0511/AgentCustody",
+      repoPrivate: false,
+      demo: null,
+      demoNote:
+        "No hosted demo: it is a command-line tool you install with the .NET SDK. The repository has a Claude Code demo and a tamper lab that run on any machine.",
+      stack: ["C#", ".NET 8", "MCP", "ECDSA P-256", "SHA-256", "xUnit", "Python", "GitHub Actions"],
+      tags: ["Agents", "MCP", ".NET", "Safety"],
+      diagram: agentCustodyDiagram as DiagramSpec,
+      capabilities: [],
+      highlights: [
+        "A stdio MCP proxy: put custody proxy in front of any server's command and it works with Claude Code, Claude Desktop or any MCP client",
+        "Every tool call is recorded before it runs and every result before the agent sees it; if a record cannot be written, the call does not run",
+        "Three layers of protection: a SHA-256 hash chain, an ECDSA P-256 signature on every record, and a witness file kept in a separate folder",
+        "custody verify reports the kind of change and the exact line: edited, deleted, inserted, reordered, truncated or forged",
+        "Rules per tool: allow, block, or hold the call until a person runs custody approve or deny from any terminal; no answer in time means no",
+        "Secrets are masked before they reach the log, by key name and by known formats such as sk-, ghp_ and AKIA",
+        "Fingerprints every tool definition and warns when a server quietly changes one between sessions, a known MCP attack",
+        "Exports a signed evidence bundle (logs, witness, public key and a signed manifest) that anyone can verify",
+        "A one-file Python writer with the same format, used by AyvaBot to record every tool its agents run",
+        "49 tests on Windows and Linux CI, including end-to-end runs through the real proxy and Python ↔ .NET interop",
+      ],
+      deepDive: [
+        {
+          title: "Chain of custody, applied to agents",
+          body: "In digital forensics an item of evidence carries a record of everyone who handled it, and any gap makes it inadmissible. AgentCustody treats an agent's actions the same way. Each session starts with a record of who, where, which signing key and the hash of the policy in force; then every tool list, call, approval and result is appended; and the session ends with a seal. A reviewer can later prove which rules applied and that nothing was changed since.",
+          points: [],
+        },
+        {
+          title: "Three layers, each catching what the last can't",
+          body: "Each record stores the SHA-256 of the one before it, so editing, deleting, inserting or reordering a record breaks the chain. A careful attacker could edit a record and recompute every hash, so each record is also signed with an ECDSA P-256 key the attacker does not have. Neither catches records simply cut off the end, so after every record its sequence number and hash are also written to a witness file in a separate folder, which also shows when a whole session's log has been deleted.",
+          points: [],
+        },
+        {
+          title: "Hash the bytes, not the object",
+          body: "The hash covers the exact bytes written to the line, minus the final hash and signature fields, and verification never re-serialises the JSON. Two JSON libraries can disagree on spacing, escaping or number formats, and that would make an honest log look tampered. Hashing bytes is why a Python writer and the .NET verifier agree on every line, and the test suite checks it by running the real Python writer and verifying its output in .NET.",
+          points: [],
+        },
+        {
+          title: "Fail closed, record first",
+          body: "The proxy forwards raw JSON-RPC rather than using an MCP SDK, so every method and protocol version passes through untouched and only tools/call and tools/list are inspected. Batched requests are split, so no call inside a batch can skip the rules. A call is recorded before it reaches the server and a result before it reaches the agent; if recording fails, the call is dropped. A blocked call returns a clear error telling the agent the attempt was recorded and not to retry.",
+          points: [],
+        },
+        {
+          title: "A person in the loop, from any terminal",
+          body: "A rule can hold a call until someone decides. The request appears in a small file-based queue: custody approvals lists what is waiting and custody approve or deny answers it, while the agent waits. If nobody answers within the time limit the call is refused. The log records the decision, who made it and how long it took, so an approval is evidence too, not just a click.",
+          points: [],
+        },
+        {
+          title: "Measured",
+          body: "A built-in tamper lab runs six attacks on copies of a real log, and all six are caught. Without the public key, the witness alone still catches all six; without the witness, cutting off the end is reported as a warning, never as intact. Over 1,000 calls through the proxy the added latency was 0.74 ms at p50 and 0.99 ms at p95, including hashing, signing, the witness write and the extra process hop, and the resulting 2,102-record log verified intact.",
+          points: [],
+        },
+        {
+          title: "Known gaps, stated",
+          body: "Someone holding the private key can forge a whole new log; the key sits in the user profile, and moving it to Azure Key Vault or a TPM is the next step. The witness is on the same machine by default, which raises the bar but is not independent storage. Rules match tool names, not argument values. And a proxy only sees what passes through it: in my own testing Claude Code used its built-in file tool and skipped the proxy entirely, so those tools have to be turned off, or recorded through Claude Code's hooks, which is planned next.",
+          points: [],
+        },
+      ],
+      tryThis: [
+        "custody tamper <log> all — six attacks on copies of a real log, each caught and explained",
+        "Copy a log, change one word in Notepad, then run custody verify on the copy — it names the line",
+        "From demo/workspace, start Claude Code with ../claude-mcp.json, ask it to write and then rename a file, approve the write with custody approve and watch the rename get blocked",
+        "custody show — the session as a table: what ran, what was blocked and who approved",
+        "custody bench --calls 1000 — measure the added latency on your own machine",
+        "dotnet test — the 49-test suite",
+      ],
+      learnings: [
+        "A log that matters needs the same chain of custody as forensic evidence: hash it, sign it and keep a witness somewhere else.",
+        "Hash the exact bytes you wrote; re-serialising JSON to check it is how two languages quietly disagree.",
+        "Fail closed: an action that could not be recorded should not happen.",
+        "The safe default for an approval nobody answers is no.",
+        "A proxy only protects what goes through it; state that boundary and test it, because an agent will happily use another door.",
       ],
     },
 
@@ -1037,6 +1128,7 @@ export const profile = {
         "Answers built from web, news, email or GitHub content go through a fact-check pass that removes claims the evidence does not support",
         "Free model tiers first, then the Claude Code CLI on my own subscription, with usage and cost logged per agent against a monthly budget",
         "A job hunter that reads company job feeds with no model in the loop, scores fit with rules, saves roles to a tracker and chases follow-ups",
+        "Every tool its agents run is written to a signed, tamper-evident AgentCustody log, and the weekly report checks it",
       ],
       deepDive: [
         {

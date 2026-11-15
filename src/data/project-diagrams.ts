@@ -430,3 +430,37 @@ export const ayvaBotDiagram: DiagramSpec = {
     { from: "tl", to: "llm", sides: ["right", "left"] },
   ],
 };
+
+/* AgentCustody — a recording, rule-enforcing proxy between an agent and its tools */
+export const agentCustodyDiagram: DiagramSpec = {
+  width: 1180,
+  height: 360,
+  nodes: [
+    { id: "agent", x: 20, y: 70, w: 160, h: 64, label: "AI agent", sub: "Claude Code · AyvaBot", tone: "accent" },
+    { id: "person", x: 20, y: 180, w: 160, h: 56, label: "A person", sub: "custody approve · deny" },
+    { id: "px", x: 230, y: 40, w: 310, h: 220, label: "CUSTODY PROXY", tone: "group" },
+    { id: "pol", x: 246, y: 80, w: 278, h: 52, label: "Rules", sub: "allow · block · ask a person", tone: "accent" },
+    { id: "rec", x: 246, y: 148, w: 278, h: 52, label: "Record first", sub: "fail closed · secrets masked" },
+    { id: "fp", x: 246, y: 206, w: 278, h: 44, label: "Tool fingerprints", sub: "rug-pull warning" },
+    { id: "srv", x: 600, y: 40, w: 250, h: 64, label: "MCP server", sub: "files · GitHub · email" },
+    { id: "ev", x: 600, y: 130, w: 560, h: 130, label: "EVIDENCE", tone: "group" },
+    { id: "log", x: 616, y: 170, w: 170, h: 64, label: "Signed log", sub: "SHA-256 chain · ECDSA" },
+    { id: "wit", x: 802, y: 170, w: 170, h: 64, label: "Witness", sub: "separate folder" },
+    { id: "ver", x: 988, y: 170, w: 156, h: 64, label: "custody verify", sub: "names the line", tone: "accent" },
+    {
+      id: "band",
+      x: 20,
+      y: 292,
+      w: 1140,
+      h: 44,
+      label: "Six attacks on a real log (edit, delete, insert, reorder, truncate, rewrite): all caught, for about 0.7 ms added per tool call",
+      tone: "band",
+    },
+  ],
+  edges: [
+    { from: "agent", to: "px", sides: ["right", "left"], label: "tool call" },
+    { from: "person", to: "px", sides: ["right", "left"], label: "approve" },
+    { from: "px", to: "srv", sides: ["right", "left"], label: "if allowed" },
+    { from: "px", to: "ev", sides: ["right", "left"], label: "every step" },
+  ],
+};
